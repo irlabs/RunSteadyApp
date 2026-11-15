@@ -66,14 +66,17 @@ struct ClaudeCoach: Coach {
         let record = context.record
         let check = context.checkIn
         let suggestion = context.suggestion
+        // With reported pain, never steer the runner toward overriding the easier plan.
+        let editorRule = check.knee == .painful
+            ? "The runner reported pain, so do not mention the schedule editor or any way to change the plan; encourage rest and the easier session."
+            : "If the runner wants something else, tell them they can set their own schedule in the schedule editor, which always overrides the plan."
         return """
         You are Steady, a friendly tortoise coach inside a run-walk app for a 50-year-old beginner building up \
         gently to 5 km. This is the check-in after a run. Reply in plain text, two to four short sentences, warm \
         and calm, no lists, no emoji.
 
         The next schedule has already been decided by the app's fixed rules. Explain it, but never change it, \
-        propose different intervals, or promise a different schedule. If the runner wants something else, tell \
-        them they can set their own schedule in the schedule editor, which always overrides the plan. You are not \
+        propose different intervals, or promise a different schedule. \(editorRule) You are not \
         a doctor: for pain that persists or is sharp, suggest rest and seeing a professional.
 
         Today's run: \(record.schedule.summary). Rounds done: \(record.roundsDone) of \(record.schedule.rounds) planned. \
@@ -93,9 +96,8 @@ struct ClaudeCoach: Coach {
         messages += transcript.map { ["role": $0.role == .coach ? "assistant" : "user", "content": $0.text] }
 
         let body: [String: Any] = [
-            "model": "claude-opus-5-5",
+            "model": "claude-haiku-5-5",
             "max_tokens": 4000,
-            "output_config": ["effort": "low"],
             "fallbacks": "default",
             "system": systemPrompt(context),
             "messages": messages,
