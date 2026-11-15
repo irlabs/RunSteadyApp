@@ -27,10 +27,10 @@ Principle: code computes the facts, taps give the reasons, Haiku asks and talks.
 
 ## Steps
 
-- [ ] 1. `RunSteady/Coach.swift`: drop `fallbacks` and the `server-side-fallback` beta header. Haiku 5.5 has no server-side fallback.
-- [ ] 2. Rule fixes in `Progression.swift` (TDD): the gap clock counts from the last session of any kind; manual sessions don't count toward progress or move the week; pain on any session counts.
-- [ ] 3. Run analysis in RunSteadyKit (TDD): per-run deviations from `SegmentRecord`s (run extended, walk extended, extra rounds, stopped early, easier than plan), each with a stable id. Apply the noise threshold.
-- [ ] 4. `DeviationReason` enum, plus reasons stored on `CheckIn` as an optional field so existing stored check-ins still load. Mark each reason incidental or physical.
+- [x] 1. `RunSteady/Coach.swift`: drop `fallbacks` and the `server-side-fallback` beta header. Haiku 5.5 has no server-side fallback.
+- [x] 2. Rule fixes in `Progression.swift` (TDD): the gap clock counts from the last session of any kind; manual sessions don't count toward progress or move the week; pain on any session counts.
+- [x] 3. Run analysis in RunSteadyKit (TDD): per-run deviations from `SegmentRecord`s (run extended, walk extended, extra rounds, stopped early, easier than plan), each with a stable id. Apply the noise threshold.
+- [x] 4. `DeviationReason` enum, plus reasons stored on `CheckIn` as an optional field so existing stored check-ins still load. Mark each reason incidental or physical.
 - [ ] 5. Structural walking rule (TDD). **The core function is for Dirk to write.** Scaffold and tests first.
 - [ ] 6. Early step-up `.advanceEarly` (TDD). Give `suggestion(...)` a `hasOpenInjury` input. Treat `.advanceEarly` like `.advance` in the gap handling. Track the dates of the last step-back and the last early step-up for the cooldown.
 - [ ] 7. Check-in UI (`CheckInView.swift`): after the three fixed questions, ask about at most 2 notable deviations with reason buttons; after an easier manual run, ask "One-off or keep it easier?".

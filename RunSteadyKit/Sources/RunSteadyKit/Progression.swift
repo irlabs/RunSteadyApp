@@ -94,23 +94,26 @@ public enum ProgressionRules {
     ) -> Suggestion {
         let plan = ProgressionPlan.fiveK
         let lastStage = plan.count - 1
-        let planned = history.filter { $0.stageIndex != nil }.sorted { $0.date < $1.date }
+        let sessions = history.sorted { $0.date < $1.date }
 
-        guard let last = planned.last else {
+        // Manual sessions never start the plan; the gap clock counts from any session.
+        guard sessions.contains(where: { $0.stageIndex != nil }), let last = sessions.last else {
             return Suggestion(stageIndex: 0, sessionInStage: 1, decision: .start,
                               reason: "Start easy: short runs with generous walk breaks.")
         }
 
         // Fold the history into (stage, sessions banked at that stage).
+        // Manual sessions only count for pain; they never bank progress or move the week.
         var stage = 0
         var banked = 0
         var decision = Decision.start
         var reason = ""
-        for outcome in planned {
+        for outcome in sessions {
             if let s = outcome.stageIndex, s != stage {
                 stage = min(max(0, s), lastStage)
                 banked = 0
             }
+            let isManual = outcome.stageIndex == nil
             let check = outcome.checkIn
             if check?.knee == .painful {
                 stage = max(0, stage - 1)
@@ -120,6 +123,8 @@ public enum ProgressionRules {
             } else if check?.knee == .mild {
                 decision = .repeatSession
                 reason = "A little soreness: repeat this session until it feels fine before adding more."
+            } else if isManual {
+                continue
             } else if check?.feeling == .tough || check?.comfortable == false {
                 decision = .repeatSession
                 reason = "That one felt hard. Repeating it lets your body catch up."
@@ -146,7 +151,7 @@ public enum ProgressionRules {
             }
         }
 
-        // Gap handling, measured from the last planned session.
+        // Gap handling, measured from the last session of any kind.
         let gapDays = Int(now.timeIntervalSince(last.date) / 86_400)
         if gapDays >= policy.stepBackTwoAfterDays {
             stage = max(0, stage - 2)

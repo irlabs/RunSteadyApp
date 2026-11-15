@@ -106,12 +106,43 @@ public enum PainLevel: String, Codable, Sendable, CaseIterable {
     }
 }
 
+/// Why a run differed from the schedule, answered with a tap in the check-in.
+public enum DeviationReason: String, Codable, Sendable, CaseIterable {
+    case traffic, terrain, withSomeone, feltGood
+    case neededRest, discomfort
+
+    public enum Category: Sendable { case incidental, physical }
+
+    /// Incidental reasons never count toward rules; physical ones do.
+    public var category: Category {
+        switch self {
+        case .traffic, .terrain, .withSomeone, .feltGood: .incidental
+        case .neededRest, .discomfort: .physical
+        }
+    }
+
+    public var isPhysical: Bool { category == .physical }
+
+    public var title: String {
+        switch self {
+        case .traffic: "Traffic"
+        case .terrain: "Hill or terrain"
+        case .withSomeone: "Ran with someone"
+        case .feltGood: "Felt good"
+        case .neededRest: "Needed the rest"
+        case .discomfort: "Discomfort"
+        }
+    }
+}
+
 public struct CheckIn: Codable, Hashable, Sendable {
     public var feeling: Feeling
     public var comfortable: Bool
     public var knee: PainLevel
     public var note: String?
     public var date: Date
+    /// Reasons per `Deviation.id`. Optional so check-ins stored before this field still decode.
+    public var reasons: [Deviation.ID: DeviationReason]?
 
     public init(feeling: Feeling, comfortable: Bool, knee: PainLevel, note: String? = nil, date: Date = .now) {
         self.feeling = feeling

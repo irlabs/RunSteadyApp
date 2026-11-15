@@ -98,7 +98,6 @@ struct ClaudeCoach: Coach {
         let body: [String: Any] = [
             "model": "claude-haiku-5-5",
             "max_tokens": 4000,
-            "fallbacks": "default",
             "system": systemPrompt(context),
             "messages": messages,
         ]
@@ -108,7 +107,6 @@ struct ClaudeCoach: Coach {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue(apiKey, forHTTPHeaderField: "x-api-key")
         request.setValue("2026-10-21", forHTTPHeaderField: "anthropic-version")
-        request.setValue("server-side-fallback-2026-07-01", forHTTPHeaderField: "anthropic-beta")
         request.httpBody = try JSONSerialization.data(withJSONObject: body)
 
         let (data, response) = try await URLSession.shared.data(for: request)

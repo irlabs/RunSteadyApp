@@ -99,10 +99,67 @@ private func outcome(
     }
 
     @Test func manualSessionsDoNotMoveTheProgression() {
-        let h = [outcome(daysAfterStart: 0, stage: 1), outcome(daysAfterStart: 2, stage: nil, knee: .painful)]
+        let h = [outcome(daysAfterStart: 0, stage: 1), outcome(daysAfterStart: 2, stage: nil)]
         let s = ProgressionRules.suggestion(history: h, now: t0.addingTimeInterval(3 * day))
         #expect(s.stageIndex == 1)
         #expect(s.sessionInStage == 2)
+        #expect(s.decision == .proceed)
+    }
+
+    @Test func manualSessionsDoNotCountTowardAStepUp() {
+        let h = [
+            outcome(daysAfterStart: 0, stage: 1), outcome(daysAfterStart: 2, stage: 1),
+            outcome(daysAfterStart: 4, stage: nil), outcome(daysAfterStart: 5, stage: nil),
+        ]
+        let s = ProgressionRules.suggestion(history: h, now: t0.addingTimeInterval(6 * day))
+        #expect(s.stageIndex == 1)
+        #expect(s.sessionInStage == 3)
+    }
+
+    @Test func toughOrIncompleteManualSessionIsIgnored() {
+        for manual in [
+            outcome(daysAfterStart: 2, stage: nil, feeling: .tough),
+            outcome(daysAfterStart: 2, stage: nil, comfortable: false),
+            outcome(daysAfterStart: 2, stage: nil, completed: false),
+        ] {
+            let s = ProgressionRules.suggestion(history: [outcome(daysAfterStart: 0, stage: 1), manual],
+                                                now: t0.addingTimeInterval(3 * day))
+            #expect(s.stageIndex == 1)
+            #expect(s.sessionInStage == 2)
+            #expect(s.decision == .proceed)
+        }
+    }
+
+    @Test func painOnManualSessionStepsBack() {
+        let h = [outcome(daysAfterStart: 0, stage: 3), outcome(daysAfterStart: 2, stage: nil, knee: .painful)]
+        let s = ProgressionRules.suggestion(history: h, now: t0.addingTimeInterval(3 * day))
+        #expect(s.stageIndex == 2)
+        #expect(s.sessionInStage == 1)
+        #expect(s.decision == .stepBack)
+    }
+
+    @Test func soreOnManualSessionRepeats() {
+        let h = [outcome(daysAfterStart: 0, stage: 3), outcome(daysAfterStart: 2, stage: nil, knee: .mild)]
+        let s = ProgressionRules.suggestion(history: h, now: t0.addingTimeInterval(3 * day))
+        #expect(s.stageIndex == 3)
+        #expect(s.sessionInStage == 2)
+        #expect(s.decision == .repeatSession)
+    }
+
+    @Test func gapClockCountsFromManualSessions() {
+        // Last planned run 14 days ago, but a manual run 3 days ago: no gap step-back.
+        let h = [outcome(daysAfterStart: 0, stage: 4), outcome(daysAfterStart: 11, stage: nil)]
+        let s = ProgressionRules.suggestion(history: h, now: t0.addingTimeInterval(14 * day))
+        #expect(s.stageIndex == 4)
+        #expect(s.sessionInStage == 2)
+        #expect(s.decision == .proceed)
+    }
+
+    @Test func gapClockStillRunsWhenManualSessionIsOld() {
+        let h = [outcome(daysAfterStart: 0, stage: 4), outcome(daysAfterStart: 1, stage: nil)]
+        let s = ProgressionRules.suggestion(history: h, now: t0.addingTimeInterval(14 * day))
+        #expect(s.stageIndex == 3)
+        #expect(s.decision == .stepBackAfterGap)
     }
 
     @Test func missingCheckInCountsWhenRoundsCompleted() {
