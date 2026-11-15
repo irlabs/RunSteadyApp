@@ -52,11 +52,45 @@ final class StoredPlan {
     }
 }
 
+/// Something the runner told the coach, kept so the coach can remember and ask about it later.
+@Model
+final class CoachNote {
+    @Attribute(.unique) var id: UUID
+    var text: String
+    var kindRaw: String
+    var isOpen: Bool
+    /// The coach should ask about it once; cleared after it asked.
+    var followUp: Bool
+    var createdAt: Date
+    var lastMentionedAt: Date
+    /// The session whose check-in produced the note.
+    var sessionID: UUID?
+
+    init(text: String, kind: CoachNoteKind, followUp: Bool, sessionID: UUID?, date: Date = .now) {
+        id = UUID()
+        self.text = text
+        kindRaw = kind.rawValue
+        isOpen = true
+        self.followUp = followUp
+        createdAt = date
+        lastMentionedAt = date
+        self.sessionID = sessionID
+    }
+
+    var kind: CoachNoteKind {
+        get { CoachNoteKind(rawValue: kindRaw) ?? .other }
+        set { kindRaw = newValue.rawValue }
+    }
+
+    /// Short id the language model sees and refers back to.
+    var shortID: String { String(id.uuidString.prefix(8)).lowercased() }
+}
+
 enum Store {
     static func container(inMemory: Bool) -> ModelContainer {
         let config = ModelConfiguration(isStoredInMemoryOnly: inMemory)
         do {
-            return try ModelContainer(for: StoredSession.self, StoredPlan.self, configurations: config)
+            return try ModelContainer(for: StoredSession.self, StoredPlan.self, CoachNote.self, configurations: config)
         } catch {
             fatalError("Could not open the data store: \(error)")
         }
@@ -68,6 +102,48 @@ enum Store {
         let created = StoredPlan(.initial)
         context.insert(created)
         return created
+    }
+
+    @MainActor
+    static func openNotes(in context: ModelContext) -> [CoachNote] {
+        let descriptor = FetchDescriptor<CoachNote>(predicate: #Predicate { $0.isOpen },
+                                                    sortBy: [SortDescriptor(\.createdAt)])
+        return (try? context.fetch(descriptor)) ?? []
+    }
+
+    /// Notes resolve after about three weeks without a mention.
+    @MainActor
+    static func resolveStaleNotes(in context: ModelContext, now: Date = .now) {
+        for note in openNotes(in: context) where CoachNotes.isStale(lastMentioned: note.lastMentionedAt, now: now) {
+            note.isOpen = false
+        }
+        try? context.save()
+    }
+
+    /// A sore or painful knee answer opens an injury note, or counts as a mention of the open one.
+    @MainActor
+    static func noteKnee(_ knee: PainLevel, sessionID: UUID, in context: ModelContext, now: Date = .now) {
+        guard let text = CoachNotes.injuryText(for: knee) else { return }
+        if let open = openNotes(in: context).last(where: { $0.kind == .injury }) {
+            open.lastMentionedAt = now
+        } else {
+            context.insert(CoachNote(text: text, kind: .injury, followUp: true, sessionID: sessionID, date: now))
+        }
+        try? context.save()
+    }
+
+    /// Apply what the note extractor found in a chat message, within the rules in `CoachNotes.apply`.
+    @MainActor
+    static func apply(_ extraction: NoteExtraction, sessionID: UUID, in context: ModelContext, now: Date = .now) {
+        let open = openNotes(in: context)
+        let byID = Dictionary(open.map { ($0.shortID, $0) }, uniquingKeysWith: { a, _ in a })
+        let changes = CoachNotes.apply(extraction, openNotes: byID.mapValues(\.kind))
+        for id in changes.resolve { byID[id]?.isOpen = false }
+        for id in changes.mention { byID[id]?.lastMentionedAt = now }
+        for note in changes.new {
+            context.insert(CoachNote(text: note.text, kind: note.kind, followUp: note.followUp, sessionID: sessionID, date: now))
+        }
+        try? context.save()
     }
 
     @MainActor
@@ -85,8 +161,9 @@ extension Suggestion {
 }
 
 extension Array where Element == StoredSession {
-    func suggestion(now: Date = .now, structuralDeclinedAt: Date? = nil) -> Suggestion {
+    func suggestion(now: Date = .now, structuralDeclinedAt: Date? = nil, hasOpenInjury: Bool = false) -> Suggestion {
         let outcomes = compactMap { stored in stored.record.map { SessionOutcome($0, checkIn: stored.checkIn) } }
-        return ProgressionRules.suggestion(history: outcomes, now: now, structuralDeclinedAt: structuralDeclinedAt)
+        return ProgressionRules.suggestion(history: outcomes, now: now, structuralDeclinedAt: structuralDeclinedAt,
+                                           hasOpenInjury: hasOpenInjury)
     }
 }

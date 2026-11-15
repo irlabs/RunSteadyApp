@@ -2,8 +2,9 @@ import RunSteadyKit
 import SwiftData
 import SwiftUI
 
-/// Post-run check-in as a short chat. The three structured answers feed the rule layer;
-/// the coach (language model or scripted fallback) only words the wrap-up and answers follow-ups.
+/// Post-run check-in as a short chat. The structured answers (three fixed questions, reasons for
+/// deviations, one-off or not) feed the rule layer; the coach (language model or scripted fallback)
+/// only words the wrap-up and answers follow-ups.
 struct CheckInView: View {
     @EnvironmentObject private var model: AppModel
     @Environment(\.dismiss) private var dismiss
@@ -12,11 +13,18 @@ struct CheckInView: View {
     @Query private var plans: [StoredPlan]
     let session: StoredSession
 
-    private enum Step { case feeling, comfort, knee, wrapUp, chat }
+    private enum Step: Equatable { case feeling, comfort, knee, reason(Deviation), easier, wrapUp, chat }
     @State private var step = Step.feeling
     @State private var messages: [ChatMessage] = []
     @State private var feeling = Feeling.okay
     @State private var comfortable = true
+    @State private var knee = PainLevel.none
+    /// Today's notable deviations, and those still to ask about.
+    @State private var deviations: [Deviation] = []
+    @State private var questions: [Deviation] = []
+    @State private var reasons: [Deviation.ID: DeviationReason] = [:]
+    @State private var askEasier = false
+    @State private var keepEasier: Bool?
     @State private var thinking = false
     @State private var draft = ""
     @State private var coachContext: CoachContext?
@@ -66,6 +74,7 @@ struct CheckInView: View {
 
     private func begin() {
         guard messages.isEmpty, let record = session.record else { return }
+        Store.resolveStaleNotes(in: context)
         var intro = "Welcome back! \(record.roundsDone) rounds, \(Format.km(meters: record.distanceMeters)) km in \(Format.clock(record.duration))."
         if record.extraRounds > 0 { intro += " That's \(record.extraRounds) more than planned." }
         say(intro)
@@ -94,28 +103,79 @@ struct CheckInView: View {
         step = .knee
     }
 
-    private func choose(knee: PainLevel) {
-        answer(knee.title)
+    private func choose(knee value: PainLevel) {
+        knee = value
+        answer(value.title)
         guard let record = session.record else { return }
-        let checkIn = CheckIn(feeling: feeling, comfortable: comfortable, knee: knee)
+        // A manual run is compared with what the plan would have run, to spot an easier one.
+        let planned = record.stageIndex == nil ? others.suggestion(structuralDeclinedAt: declinedAt).schedule : nil
+        deviations = RunAnalysis.deviations(in: record, plannedSchedule: planned)
+        questions = CheckInQuestions.select(deviations)
+        askEasier = CheckInQuestions.asksEasier(deviations)
+        askNext()
+    }
+
+    private func choose(reason: DeviationReason?, for deviation: Deviation) {
+        answer(reason?.title ?? "Skip")
+        reasons[deviation.id] = reason
+        askNext()
+    }
+
+    private func choose(keepEasier value: Bool) {
+        answer(value ? "Keep it easier" : "One-off")
+        keepEasier = value
+        askNext()
+    }
+
+    /// At most two reason questions, then "One-off or keep it easier?" after an easier manual run.
+    private func askNext() {
+        if !questions.isEmpty {
+            let next = questions.removeFirst()
+            say(CheckInQuestions.prompt(for: next))
+            step = .reason(next)
+        } else if askEasier, let easier = deviations.first(where: { $0.kind == .easierThanPlan }) {
+            askEasier = false
+            say(CheckInQuestions.prompt(for: easier))
+            step = .easier
+        } else {
+            finish()
+        }
+    }
+
+    private func finish() {
+        guard let record = session.record else { return }
+        var checkIn = CheckIn(feeling: feeling, comfortable: comfortable, knee: knee)
+        checkIn.reasons = reasons.isEmpty ? nil : reasons
         session.checkIn = checkIn
         try? context.save()
+        Store.noteKnee(knee, sessionID: session.id, in: context)
 
         // The rule layer decides; the coach explains.
-        let suggestion = sessions.suggestion(structuralDeclinedAt: plans.first?.structuralDeclinedAt)
-        let coachContext = CoachContext(record: record, checkIn: checkIn, suggestion: suggestion)
-        self.coachContext = coachContext
+        let suggestion = currentSuggestion()
+        switch keepEasier {
+        case true?: model.keepCurrent(insteadOf: suggestion, staying: true)
+        case false?: model.apply(ActivePlan(suggestion))
+        case nil: break
+        }
+        let notes = Store.openNotes(in: context)
+        let asking = notes.filter { $0.followUp && $0.sessionID != session.id }
+        let coachContext = CoachContext(
+            record: record, checkIn: checkIn, suggestion: suggestion, deviations: deviations,
+            notes: notes.map { brief($0, askNow: asking.contains($0)) },
+            recentRuns: RunSummary.recent(others.compactMap { s in s.record.map { ($0, s.checkIn) } }, now: .now),
+            keepEasier: keepEasier)
         step = .wrapUp
         Task {
             await coachReply(coachContext)
-            let current = plans.first?.plan ?? .initial
-            if ActivePlan(suggestion) != current {
-                if !current.isManual, suggestion.schedule == current.schedule {
-                    model.apply(ActivePlan(suggestion))
-                } else {
-                    withAnimation(.snappy) { offer = suggestion }
-                }
+            // Follow-up notes are asked about once.
+            for note in asking { note.followUp = false }
+            try? context.save()
+            if keepEasier == nil, model.followSilently(suggestion) {
+                withAnimation(.snappy) { offer = suggestion }
             }
+            var chat = coachContext
+            chat.isWrapUp = false
+            self.coachContext = chat
             step = .chat
         }
     }
@@ -123,6 +183,7 @@ struct CheckInView: View {
     private func send() {
         let text = draft.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty, let coachContext else { return }
+        let previous = messages.last(where: { $0.role == .coach })?.text
         draft = ""
         answer(text)
         if var checkIn = session.checkIn {
@@ -131,6 +192,25 @@ struct CheckInView: View {
             try? context.save()
         }
         Task { await coachReply(coachContext) }
+        // A second, separate call: what's worth remembering from this message.
+        let open = Store.openNotes(in: context).map { brief($0, askNow: false) }
+        Task {
+            guard let extraction = await model.coach.extractNotes(from: text, previous: previous, openNotes: open) else { return }
+            Store.apply(extraction, sessionID: session.id, in: context)
+            refreshSuggestion()
+        }
+    }
+
+    /// A newly noted injury can withdraw an early step-up that's on the table.
+    private func refreshSuggestion() {
+        guard var coachContext, keepEasier == nil else { return }
+        let updated = currentSuggestion()
+        guard updated.key != coachContext.suggestion.key else { return }
+        coachContext.suggestion = updated
+        self.coachContext = coachContext
+        guard offer != nil else { return }
+        let needsDecision = model.followSilently(updated)
+        withAnimation(.snappy) { offer = needsDecision ? updated : nil }
     }
 
     private func coachReply(_ coachContext: CoachContext) async {
@@ -138,6 +218,22 @@ struct CheckInView: View {
         let reply = await model.coach.reply(context: coachContext, transcript: messages)
         thinking = false
         say(reply)
+    }
+
+    // MARK: Helpers
+
+    /// All sessions except this one.
+    private var others: [StoredSession] { sessions.filter { $0.id != session.id } }
+    private var declinedAt: Date? { plans.first?.structuralDeclinedAt }
+
+    private func currentSuggestion() -> Suggestion {
+        let injury = Store.openNotes(in: context).contains { $0.kind == .injury }
+        return sessions.suggestion(structuralDeclinedAt: declinedAt, hasOpenInjury: injury)
+    }
+
+    private func brief(_ note: CoachNote, askNow: Bool) -> NoteBrief {
+        let days = Calendar.current.dateComponents([.day], from: note.createdAt, to: .now).day ?? 0
+        return NoteBrief(id: note.shortID, kind: note.kind, text: note.text, ageDays: max(0, days), askNow: askNow)
     }
 
     // MARK: Input
@@ -167,6 +263,24 @@ struct CheckInView: View {
                             .buttonStyle(ReplyStyle(color: value.color))
                             .accessibilityIdentifier("knee-\(value.rawValue)")
                     }
+                }
+            case .reason(let deviation):
+                LazyVGrid(columns: [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)], spacing: 8) {
+                    ForEach(CheckInQuestions.reasons(for: deviation.kind), id: \.self) { reason in
+                        Button(reason.title) { choose(reason: reason, for: deviation) }
+                            .buttonStyle(ReplyStyle(color: reason.isPhysical ? .warmColor : .brand))
+                            .accessibilityIdentifier("reason-\(reason.rawValue)")
+                    }
+                    Button("Skip") { choose(reason: nil, for: deviation) }
+                        .buttonStyle(ReplyStyle(color: .secondary))
+                        .accessibilityIdentifier("reason-skip")
+                }
+            case .easier:
+                HStack(spacing: 8) {
+                    Button("One-off") { choose(keepEasier: false) }
+                        .buttonStyle(ReplyStyle(color: .brand)).accessibilityIdentifier("easier-oneoff")
+                    Button("Keep it easier") { choose(keepEasier: true) }
+                        .buttonStyle(ReplyStyle(color: .coolColor)).accessibilityIdentifier("easier-keep")
                 }
             case .wrapUp:
                 EmptyView()

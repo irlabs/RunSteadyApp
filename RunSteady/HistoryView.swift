@@ -28,6 +28,12 @@ struct HistoryView: View {
             }
             .background(Color.pageBackground)
             .navigationTitle("History")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink { CoachNotesView() } label: { Label("Coach notes", systemImage: "note.text") }
+                        .accessibilityIdentifier("coachNotesButton")
+                }
+            }
             .navigationDestination(for: UUID.self) { id in
                 if let session = sessions.first(where: { $0.id == id }) {
                     SessionDetailView(session: session)

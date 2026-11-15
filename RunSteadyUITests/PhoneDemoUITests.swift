@@ -31,6 +31,14 @@ final class PhoneDemoUITests: XCTestCase {
         app.buttons["comfort-yes"].tap()
         pause(1.5)
         app.buttons["knee-none"].tap()
+        // Up to two "what happened?" questions about how the run differed from the plan.
+        for _ in 0..<2 {
+            pause(1.5)
+            let skip = app.buttons["reason-skip"]
+            guard skip.exists else { break }
+            let feltGood = app.buttons["reason-feltGood"]
+            (feltGood.exists ? feltGood : skip).tap()
+        }
         // The same offer also appears on Today underneath the sheet; tap the one in the chat.
         let offers = app.buttons.matching(identifier: "useSuggestionButton")
         XCTAssertTrue(offers.firstMatch.waitForExistence(timeout: 30))
@@ -77,5 +85,12 @@ final class PhoneDemoUITests: XCTestCase {
         pause(2.5)
         app.swipeUp()
         pause(2)
+
+        // Coach notes: the sore-knee note from the seeded history
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        XCTAssertTrue(app.buttons["coachNotesButton"].waitForExistence(timeout: 5))
+        app.buttons["coachNotesButton"].tap()
+        XCTAssertTrue(app.staticTexts["Left knee a bit stiff afterwards."].waitForExistence(timeout: 5))
+        pause(2.5)
     }
 }

@@ -112,7 +112,7 @@ struct ScheduleSummary: View {
 extension Decision {
     var color: Color {
         switch self {
-        case .start, .proceed, .advance, .maintain: .brand
+        case .start, .proceed, .advance, .advanceEarly, .maintain: .brand
         case .repeatSession, .repeatAfterGap: .warmColor
         case .stepBack, .stepBackAfterGap, .stepBackStructural: .coolColor
         }
@@ -123,6 +123,7 @@ extension Decision {
         case .start: "play.fill"
         case .proceed: "checkmark"
         case .advance: "arrow.up.right"
+        case .advanceEarly: "hare.fill"
         case .maintain: "equal"
         case .repeatSession, .repeatAfterGap: "arrow.triangle.2.circlepath"
         case .stepBack, .stepBackAfterGap, .stepBackStructural: "arrow.down.right"

@@ -62,6 +62,8 @@ public enum Decision: String, Codable, Sendable {
     case start, proceed, advance, repeatSession, stepBack, repeatAfterGap, stepBackAfterGap, maintain
     /// Walk breaks keep running long: offered, never applied automatically.
     case stepBackStructural
+    /// Runs extended because they felt good: step up after two sessions instead of three. Offered only.
+    case advanceEarly
 
     public var title: String {
         switch self {
@@ -74,6 +76,7 @@ public enum Decision: String, Codable, Sendable {
         case .stepBackAfterGap: "Rebuild gently"
         case .maintain: "Hold steady"
         case .stepBackStructural: "Settle in"
+        case .advanceEarly: "Ready early"
         }
     }
 }
@@ -83,11 +86,18 @@ public struct Suggestion: Hashable, Sendable {
     public var sessionInStage: Int
     public var decision: Decision
     public var reason: String
-    /// What "Keep mine" applies instead: the normal plan. Only set for offers with a fallback
-    /// (`.stepBackStructural`).
+    /// What "Keep mine" / "Stay steady" applies instead: the normal plan. Only set for offers with a
+    /// fallback (`.stepBackStructural`, `.advanceEarly`).
     public var alternative: ActivePlan? = nil
     public var schedule: Schedule { ProgressionPlan.fiveK[stageIndex].schedule }
     public var stage: Stage { ProgressionPlan.fiveK[stageIndex] }
+
+    /// Where the runner stands. An early step-up is only an offer (staying steady is the default),
+    /// so it doesn't move them to the next week until they try it.
+    public var position: Suggestion {
+        guard decision == .advanceEarly, let stay = alternative, let stage = stay.stageIndex else { return self }
+        return Suggestion(stageIndex: stage, sessionInStage: stay.sessionInStage ?? 1, decision: .proceed, reason: reason)
+    }
 }
 
 /// Tunable thresholds for the rule layer.
@@ -101,6 +111,11 @@ public struct ProgressionPolicy: Sendable {
     /// Structural walking: a walk extended in `structuralCount` of the last `structuralWindow` planned sessions.
     public var structuralWindow = 5
     public var structuralCount = 3
+    /// Early step-up: runs extended with "Felt good" in `earlyCount` of the last `earlyWindow` planned sessions.
+    public var earlyWindow = 3
+    public var earlyCount = 2
+    /// No early step-up within this many days of a step-back or of a hard run right after an early step-up.
+    public var earlyCooldownDays = 14
 
     public init() {}
     public static let standard = ProgressionPolicy()
@@ -108,11 +123,13 @@ public struct ProgressionPolicy: Sendable {
 
 /// Deterministic hold / repeat / step-back logic. The language model never decides any of this.
 public enum ProgressionRules {
-    /// - Parameter structuralDeclinedAt: when the runner last declined a structural step-back;
-    ///   only later sessions count toward a new pattern.
+    /// - Parameters:
+    ///   - structuralDeclinedAt: when the runner last declined a structural step-back;
+    ///     only later sessions count toward a new pattern.
+    ///   - hasOpenInjury: an open injury note blocks an early step-up. It can only make the plan more careful.
     public static func suggestion(
         history: [SessionOutcome], now: Date, policy: ProgressionPolicy = .standard,
-        structuralDeclinedAt: Date? = nil
+        structuralDeclinedAt: Date? = nil, hasOpenInjury: Bool = false
     ) -> Suggestion {
         let plan = ProgressionPlan.fiveK
         let lastStage = plan.count - 1
@@ -132,20 +149,31 @@ public enum ProgressionRules {
         var reason = ""
         // Planned sessions since the last step-back, for the structural walking rule.
         var sinceStepBack: [SessionOutcome] = []
+        // For the early step-up cooldowns and limits.
+        var lastStepBack: Date?
+        var lastHardAfterEarly: Date?
+        var weeksLeftEarly: Set<Int> = []
         for outcome in sessions {
+            var isFirstAfterEarly = false
             if let s = outcome.stageIndex, s != stage {
                 // A lower week than the fold reached means a step-back was applied (gap or accepted offer).
-                if s < stage { sinceStepBack = [] }
+                if s < stage { sinceStepBack = []; lastStepBack = outcome.date }
+                // A higher one means an accepted early step-up: the fold advances on its own after three.
+                if s > stage { weeksLeftEarly.insert(stage); isFirstAfterEarly = true }
                 stage = min(max(0, s), lastStage)
                 banked = 0
             }
             if outcome.stageIndex != nil { sinceStepBack.append(outcome) }
             let isManual = outcome.stageIndex == nil
             let check = outcome.checkIn
+            if isFirstAfterEarly, let check, check.feeling == .tough || !check.comfortable || check.knee != .none {
+                lastHardAfterEarly = outcome.date
+            }
             if check?.knee == .painful {
                 stage = max(0, stage - 1)
                 banked = 0
                 sinceStepBack = []
+                lastStepBack = outcome.date
                 decision = .stepBack
                 reason = "You reported pain, so the next session is an easier one. Pain is a signal to back off, not push through."
             } else if check?.knee == .mild {
@@ -211,6 +239,23 @@ public enum ProgressionRules {
                 reason: "Your walk breaks ran long \(runs). A week back lets the running catch up. "
                     + "Prefer to carry on with week \(stage + 1)? Tap Keep mine.")
             offer.alternative = ActivePlan(normal)
+            return offer
+        }
+
+        // Two comfortable runs that went long because they felt good: offer the next week now.
+        // Checked after the gap handling, so a gap undoes it just like a normal step-up.
+        let planned = sessions.filter { $0.stageIndex != nil }
+        let cooldownStart = now.addingTimeInterval(-Double(policy.earlyCooldownDays) * 86_400)
+        if decision == .proceed, banked == ProgressionPlan.sessionsPerStage - 1, stage + 1 < lastStage,
+           !hasOpenInjury, !weeksLeftEarly.contains(stage),
+           (lastStepBack ?? .distantPast) < cooldownStart, (lastHardAfterEarly ?? .distantPast) < cooldownStart,
+           EarlyStepUp.isReady(planned.suffix(policy.earlyWindow), policy: policy) {
+            var offer = Suggestion(
+                stageIndex: stage + 1, sessionInStage: 1, decision: .advanceEarly,
+                reason: "You kept running because it felt good, and nothing hurt. You could start week \(stage + 2) now, "
+                    + "or stay steady and finish week \(stage + 1) first.")
+            offer.alternative = ActivePlan(Suggestion(stageIndex: stage, sessionInStage: banked + 1,
+                                                      decision: decision, reason: reason))
             return offer
         }
 

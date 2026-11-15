@@ -24,7 +24,14 @@ enum DemoData {
             var dated = checkIn
             dated?.date = date.addingTimeInterval(3600)
             context.insert(StoredSession(record, checkIn: dated))
+            if checkIn?.knee == .mild, let note = checkIn?.note {
+                context.insert(CoachNote(text: note, kind: .injury, followUp: true, sessionID: record.id,
+                                         date: date.addingTimeInterval(3600)))
+            }
         }
+        // Older than three weeks without a mention: resolved on launch.
+        context.insert(CoachNote(text: "Busy month at work, runs may slip.", kind: .life, followUp: false,
+                                 sessionID: nil, date: ago(days: 25)))
         context.insert(StoredPlan(ActivePlan(schedule: ProgressionPlan.fiveK[1].schedule, stageIndex: 1, sessionInStage: 3)))
         try? context.save()
     }

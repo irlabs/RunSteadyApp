@@ -6,16 +6,24 @@ struct TodayView: View {
     @EnvironmentObject private var model: AppModel
     @Query(sort: \StoredSession.startedAt, order: .reverse) private var sessions: [StoredSession]
     @Query private var plans: [StoredPlan]
+    @Query(filter: #Predicate<CoachNote> { $0.isOpen }) private var openNotes: [CoachNote]
     @State private var editing = false
     @State private var checkInSession: StoredSession?
 
     private var plan: ActivePlan { plans.first?.plan ?? .initial }
     private var declinedAt: Date? { plans.first?.structuralDeclinedAt }
-    private var suggestion: Suggestion { sessions.suggestion(structuralDeclinedAt: declinedAt) }
+    /// An open injury note only ever makes the plan more careful (no early step-up).
+    private var hasOpenInjury: Bool { openNotes.contains { $0.kind == .injury } }
+    private var suggestion: Suggestion {
+        sessions.suggestion(structuralDeclinedAt: declinedAt, hasOpenInjury: hasOpenInjury)
+    }
 
     /// Where the user stands. A run that still awaits its check-in does not count yet.
     private var position: Suggestion {
-        pending == nil ? suggestion : Array(sessions.dropFirst()).suggestion(structuralDeclinedAt: declinedAt)
+        (pending == nil
+            ? suggestion
+            : Array(sessions.dropFirst()).suggestion(structuralDeclinedAt: declinedAt, hasOpenInjury: hasOpenInjury))
+            .position
     }
 
     /// The latest run, if it still needs its check-in.
@@ -53,12 +61,8 @@ struct TodayView: View {
         .task(id: suggestion.key + "\(pending == nil)") { followPlanSilently() }
     }
 
-    /// On the automatic plan, moving to the next session with identical intervals needs no decision.
     private func followPlanSilently() {
-        let next = ActivePlan(suggestion)
-        if pending == nil, !plan.isManual, next != plan, next.schedule == plan.schedule {
-            model.apply(next)
-        }
+        if pending == nil { model.followSilently(suggestion) }
     }
 
     private var header: some View {
@@ -216,18 +220,20 @@ struct SuggestionCard: View {
             ScheduleSummary(schedule: suggestion.schedule)
             Text(suggestion.reason).font(.subheadline).foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
+            // An early step-up defaults to staying steady, so that button gets the emphasis.
+            let early = suggestion.decision == .advanceEarly
             HStack(spacing: 10) {
-                Button("Keep mine") {
+                Button(early ? "Stay steady" : "Keep mine") {
                     model.keepCurrent(insteadOf: suggestion)
                     onDecided()
                 }
-                .buttonStyle(PillButtonStyle(color: .secondary, filled: false))
+                .buttonStyle(early ? PillButtonStyle() : PillButtonStyle(color: .secondary, filled: false))
                 .accessibilityIdentifier("keepMineButton")
-                Button("Use this") {
+                Button(early ? "Try it" : "Use this") {
                     model.apply(ActivePlan(suggestion))
                     onDecided()
                 }
-                .buttonStyle(PillButtonStyle())
+                .buttonStyle(early ? PillButtonStyle(color: .secondary, filled: false) : PillButtonStyle())
                 .accessibilityIdentifier("useSuggestionButton")
             }
         }

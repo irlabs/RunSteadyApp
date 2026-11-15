@@ -29,6 +29,7 @@ final class AppModel: ObservableObject {
         container = Store.container(inMemory: isDemo)
         coach = ClaudeCoach.fromBundledSecrets() ?? ScriptedCoach()
         if isDemo { DemoData.seed(into: container.mainContext) }
+        Store.resolveStaleNotes(in: container.mainContext)
 
         Connectivity.shared.onSession = { [weak self] record in self?.receive(record) }
         Connectivity.shared.activate()
@@ -48,15 +49,35 @@ final class AppModel: ObservableObject {
         Connectivity.shared.send(plan)
     }
 
-    func keepCurrent(insteadOf suggestion: Suggestion) {
-        // An offer with a fallback (structural step-back): carry on with the normal plan and restart its window.
-        if let alternative = suggestion.alternative {
-            storedPlan.structuralDeclinedAt = .now
-            apply(alternative)
-            return
+    /// - Parameter staying: keep the active plan exactly as it is (e.g. "Keep it easier" after a manual run),
+    ///   rather than falling back to the normal plan for an offer.
+    func keepCurrent(insteadOf suggestion: Suggestion, staying: Bool = false) {
+        // An offer with a fallback: carry on with the normal plan. Declining "Settle in" also restarts its window.
+        if !staying, let alternative = suggestion.alternative {
+            if suggestion.decision == .stepBackStructural { storedPlan.structuralDeclinedAt = .now }
+            if alternative != storedPlan.plan { apply(alternative) }
         }
         storedPlan.dismissedSuggestion = suggestion.key
         try? container.mainContext.save()
+    }
+
+    /// On the automatic plan, moving on with identical intervals needs no decision. For an offer with a
+    /// fallback, the fallback is applied quietly, so ignoring the card means "Keep mine" / "Stay steady".
+    /// - Returns: whether the suggestion still needs the runner's decision.
+    @discardableResult
+    func followSilently(_ suggestion: Suggestion) -> Bool {
+        let current = storedPlan.plan
+        let next = ActivePlan(suggestion)
+        guard next != current else { return false }
+        guard !current.isManual else { return true }
+        if next.schedule == current.schedule {
+            apply(next)
+            return false
+        }
+        if let fallback = suggestion.alternative, fallback != current, fallback.schedule == current.schedule {
+            apply(fallback)
+        }
+        return true
     }
 
     /// A session arrived from the watch (it is back in range): store it and prompt the check-in.

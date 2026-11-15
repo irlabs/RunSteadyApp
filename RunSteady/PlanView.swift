@@ -6,9 +6,11 @@ import SwiftUI
 struct PlanView: View {
     @Query(sort: \StoredSession.startedAt, order: .reverse) private var sessions: [StoredSession]
     @Query private var plans: [StoredPlan]
+    @Query(filter: #Predicate<CoachNote> { $0.isOpen }) private var openNotes: [CoachNote]
 
     var body: some View {
-        let suggestion = sessions.suggestion(structuralDeclinedAt: plans.first?.structuralDeclinedAt)
+        let suggestion = sessions.suggestion(structuralDeclinedAt: plans.first?.structuralDeclinedAt,
+                                             hasOpenInjury: openNotes.contains { $0.kind == .injury }).position
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 4) {
