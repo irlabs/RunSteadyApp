@@ -28,7 +28,12 @@ Run Steady: iPhone + standalone Apple Watch app for run-walk progression. Produc
 ## Build & test
 - Claude builds and runs tests via `xcodebuild` CLI.
 - Shared package: `swift test` from the package directory.
-- App targets: `xcodebuild test -scheme <Scheme> -destination '<simulator>'` — fill in exact schemes/destinations once the project exists.
+- App targets (each scheme also runs its XCUITest demo walkthrough):
+  - `xcodebuild test -project RunSteady.xcodeproj -scheme RunSteady -derivedDataPath build/dd -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=18.3.1'`
+  - `xcodebuild test -project RunSteady.xcodeproj -scheme RunSteadyWatch -derivedDataPath build/dd -destination 'platform=watchOS Simulator,name=Apple Watch Series 10 (46mm)'`
+- Project file is generated: `python3 Config/generate_project.py` (only needed when targets/build settings change; source folders are synchronized groups).
+- Launch arguments: phone `-demoSeed YES` (in-memory sample history); watch `-timeScale <n>` (fast-forward), `-demoStage <i> -demoSession <n>`, `-inMemory YES`, `-useHealthKit YES` (Simulator defaults to simulated sensors).
+- LLM coach: copy `RunSteady/Secrets.example.plist` to `Secrets.plist` (gitignored) and add the key; without it a scripted coach is used.
 
 ## Workflow
 - Keep overhead low. No GitHub issues needed.

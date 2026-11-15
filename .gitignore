@@ -7,3 +7,9 @@
 # Promptcellar.io
 # ===========================================================================
 .prompts
+# Build output and secrets
+build/
+xcuserdata/
+*.xcuserstate
+Secrets.plist
+.build/
