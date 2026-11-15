@@ -34,22 +34,34 @@ public struct SessionOutcome: Hashable, Sendable {
     public var stageIndex: Int?
     public var completedPlannedRounds: Bool
     public var checkIn: CheckIn?
+    /// Notable deviations from the schedule, as found by `RunAnalysis`.
+    public var deviations: Set<Deviation.Kind>
 
-    public init(date: Date, stageIndex: Int?, completedPlannedRounds: Bool, checkIn: CheckIn?) {
+    public init(date: Date, stageIndex: Int?, completedPlannedRounds: Bool, checkIn: CheckIn?,
+                deviations: Set<Deviation.Kind> = []) {
         self.date = date
         self.stageIndex = stageIndex
         self.completedPlannedRounds = completedPlannedRounds
         self.checkIn = checkIn
+        self.deviations = deviations
     }
 
     public init(_ record: SessionRecord, checkIn: CheckIn?) {
         self.init(date: record.startedAt, stageIndex: record.stageIndex,
-                  completedPlannedRounds: record.completedPlannedRounds, checkIn: checkIn)
+                  completedPlannedRounds: record.completedPlannedRounds, checkIn: checkIn,
+                  deviations: Set(RunAnalysis.deviations(in: record).map(\.kind)))
+    }
+
+    /// The tapped reason for a deviation, or nil when it wasn't answered.
+    public func reason(for kind: Deviation.Kind) -> DeviationReason? {
+        checkIn?.reasons?[kind.rawValue]
     }
 }
 
 public enum Decision: String, Codable, Sendable {
     case start, proceed, advance, repeatSession, stepBack, repeatAfterGap, stepBackAfterGap, maintain
+    /// Walk breaks keep running long: offered, never applied automatically.
+    case stepBackStructural
 
     public var title: String {
         switch self {
@@ -61,6 +73,7 @@ public enum Decision: String, Codable, Sendable {
         case .repeatAfterGap: "Welcome back"
         case .stepBackAfterGap: "Rebuild gently"
         case .maintain: "Hold steady"
+        case .stepBackStructural: "Settle in"
         }
     }
 }
@@ -70,6 +83,9 @@ public struct Suggestion: Hashable, Sendable {
     public var sessionInStage: Int
     public var decision: Decision
     public var reason: String
+    /// What "Keep mine" applies instead: the normal plan. Only set for offers with a fallback
+    /// (`.stepBackStructural`).
+    public var alternative: ActivePlan? = nil
     public var schedule: Schedule { ProgressionPlan.fiveK[stageIndex].schedule }
     public var stage: Stage { ProgressionPlan.fiveK[stageIndex] }
 }
@@ -82,6 +98,9 @@ public struct ProgressionPolicy: Sendable {
     public var stepBackAfterDays = 12
     /// A gap of at least this many days steps back two stages.
     public var stepBackTwoAfterDays = 24
+    /// Structural walking: a walk extended in `structuralCount` of the last `structuralWindow` planned sessions.
+    public var structuralWindow = 5
+    public var structuralCount = 3
 
     public init() {}
     public static let standard = ProgressionPolicy()
@@ -89,8 +108,11 @@ public struct ProgressionPolicy: Sendable {
 
 /// Deterministic hold / repeat / step-back logic. The language model never decides any of this.
 public enum ProgressionRules {
+    /// - Parameter structuralDeclinedAt: when the runner last declined a structural step-back;
+    ///   only later sessions count toward a new pattern.
     public static func suggestion(
-        history: [SessionOutcome], now: Date, policy: ProgressionPolicy = .standard
+        history: [SessionOutcome], now: Date, policy: ProgressionPolicy = .standard,
+        structuralDeclinedAt: Date? = nil
     ) -> Suggestion {
         let plan = ProgressionPlan.fiveK
         let lastStage = plan.count - 1
@@ -108,16 +130,22 @@ public enum ProgressionRules {
         var banked = 0
         var decision = Decision.start
         var reason = ""
+        // Planned sessions since the last step-back, for the structural walking rule.
+        var sinceStepBack: [SessionOutcome] = []
         for outcome in sessions {
             if let s = outcome.stageIndex, s != stage {
+                // A lower week than the fold reached means a step-back was applied (gap or accepted offer).
+                if s < stage { sinceStepBack = [] }
                 stage = min(max(0, s), lastStage)
                 banked = 0
             }
+            if outcome.stageIndex != nil { sinceStepBack.append(outcome) }
             let isManual = outcome.stageIndex == nil
             let check = outcome.checkIn
             if check?.knee == .painful {
                 stage = max(0, stage - 1)
                 banked = 0
+                sinceStepBack = []
                 decision = .stepBack
                 reason = "You reported pain, so the next session is an easier one. Pain is a signal to back off, not push through."
             } else if check?.knee == .mild {
@@ -168,6 +196,22 @@ public enum ProgressionRules {
             banked = max(0, banked - 1)
             decision = .repeatAfterGap
             reason = "It's been \(gapDays) days, so repeat the last session before moving on."
+        }
+
+        // Walk breaks that keep running long: offer the week below the one actually run,
+        // unless pain or a gap already steps back. Declining falls back to the normal plan.
+        if let declined = structuralDeclinedAt { sinceStepBack.removeAll { $0.date <= declined } }
+        let ranWeek = min(stage, sessions.last(where: { $0.stageIndex != nil })?.stageIndex ?? 0)
+        if ranWeek > 0, decision != .stepBack, decision != .stepBackAfterGap,
+           let (hits, window) = StructuralWalking.pattern(sinceStepBack, policy: policy) {
+            let normal = Suggestion(stageIndex: stage, sessionInStage: banked + 1, decision: decision, reason: reason)
+            let runs = hits == window ? "in your last \(hits) runs" : "in \(hits) of your last \(window) runs"
+            var offer = Suggestion(
+                stageIndex: ranWeek - 1, sessionInStage: 1, decision: .stepBackStructural,
+                reason: "Your walk breaks ran long \(runs). A week back lets the running catch up. "
+                    + "Prefer to carry on with week \(stage + 1)? Tap Keep mine.")
+            offer.alternative = ActivePlan(normal)
+            return offer
         }
 
         return Suggestion(stageIndex: stage, sessionInStage: banked + 1, decision: decision, reason: reason)

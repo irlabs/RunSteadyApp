@@ -10,11 +10,12 @@ struct TodayView: View {
     @State private var checkInSession: StoredSession?
 
     private var plan: ActivePlan { plans.first?.plan ?? .initial }
-    private var suggestion: Suggestion { sessions.suggestion() }
+    private var declinedAt: Date? { plans.first?.structuralDeclinedAt }
+    private var suggestion: Suggestion { sessions.suggestion(structuralDeclinedAt: declinedAt) }
 
     /// Where the user stands. A run that still awaits its check-in does not count yet.
     private var position: Suggestion {
-        pending == nil ? suggestion : Array(sessions.dropFirst()).suggestion()
+        pending == nil ? suggestion : Array(sessions.dropFirst()).suggestion(structuralDeclinedAt: declinedAt)
     }
 
     /// The latest run, if it still needs its check-in.

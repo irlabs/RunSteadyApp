@@ -5,9 +5,10 @@ import SwiftUI
 /// The default eight-week progression, with the user's position on it.
 struct PlanView: View {
     @Query(sort: \StoredSession.startedAt, order: .reverse) private var sessions: [StoredSession]
+    @Query private var plans: [StoredPlan]
 
     var body: some View {
-        let suggestion = sessions.suggestion()
+        let suggestion = sessions.suggestion(structuralDeclinedAt: plans.first?.structuralDeclinedAt)
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 4) {

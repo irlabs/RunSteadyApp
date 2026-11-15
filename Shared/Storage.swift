@@ -35,6 +35,8 @@ final class StoredPlan {
     var updatedAt: Date
     /// Key of a suggestion the user chose to ignore, so it is not offered again.
     var dismissedSuggestion: String?
+    /// When the runner last declined a structural step-back ("Settle in"); restarts that rule's window.
+    var structuralDeclinedAt: Date?
 
     init(_ plan: ActivePlan) {
         payload = (try? JSONEncoder().encode(plan)) ?? Data()
@@ -83,8 +85,8 @@ extension Suggestion {
 }
 
 extension Array where Element == StoredSession {
-    func suggestion(now: Date = .now) -> Suggestion {
+    func suggestion(now: Date = .now, structuralDeclinedAt: Date? = nil) -> Suggestion {
         let outcomes = compactMap { stored in stored.record.map { SessionOutcome($0, checkIn: stored.checkIn) } }
-        return ProgressionRules.suggestion(history: outcomes, now: now)
+        return ProgressionRules.suggestion(history: outcomes, now: now, structuralDeclinedAt: structuralDeclinedAt)
     }
 }

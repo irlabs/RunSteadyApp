@@ -39,14 +39,15 @@ public enum RunAnalysis {
         let intervals = record.segments.filter { $0.kind == .run || $0.kind == .walk }
         var result: [Deviation] = []
 
-        for kind in [SegmentKind.run, .walk] {
-            let extended = intervals.filter {
-                $0.kind == kind && $0.round <= planned && isNotable(difference: $0.actual - $0.target, target: $0.target)
-            }
-            if !extended.isEmpty {
-                result.append(Deviation(kind: kind == .run ? .runExtended : .walkExtended,
-                                        rounds: extended.map(\.round), seconds: extended.reduce(0) { $0 + $1.overrun }))
-            }
+        let longRuns = intervals.filter {
+            $0.kind == .run && $0.round <= planned && isNotable(difference: $0.actual - $0.target, target: $0.target)
+        }
+        if !longRuns.isEmpty {
+            result.append(Deviation(kind: .runExtended, rounds: longRuns.map(\.round),
+                                    seconds: longRuns.reduce(0) { $0 + $1.overrun }))
+        }
+        if let walks = walkExtended(intervals.filter { $0.kind == .walk && $0.round <= planned }, schedule: schedule) {
+            result.append(walks)
         }
 
         let extra = intervals.filter { $0.round > planned }
@@ -79,5 +80,23 @@ public enum RunAnalysis {
             }
         }
         return result
+    }
+
+    /// Walk breaks count as extended when they ran long in enough rounds and by enough in total,
+    /// or one walk ran far over, or all walks together ran well over. See TASKS.md decisions.
+    static func walkExtended(_ walks: [SegmentRecord], schedule: Schedule) -> Deviation? {
+        let plannedWalking = schedule.walk * schedule.rounds
+        guard plannedWalking > 0 else { return nil }
+        let longRounds = walks.filter { isNotable(difference: $0.actual - $0.target, target: $0.target) }.map(\.round)
+        let extra = walks.reduce(0) { $0 + $1.overrun }
+
+        let roundsNeeded = min(2, (schedule.rounds + 2) / 3)
+        let enoughRoundsAndTime = longRounds.count >= roundsNeeded
+            && Double(extra) >= max(60, Double(plannedWalking) * 0.10)
+        let oneFarOver = walks.contains { Double($0.overrun) > Double($0.target) * 0.75 }
+        let allWellOver = Double(extra) > Double(plannedWalking) * 0.25
+
+        guard enoughRoundsAndTime || oneFarOver || allWellOver else { return nil }
+        return Deviation(kind: .walkExtended, rounds: longRounds, seconds: extra)
     }
 }

@@ -102,7 +102,7 @@ struct CheckInView: View {
         try? context.save()
 
         // The rule layer decides; the coach explains.
-        let suggestion = sessions.suggestion()
+        let suggestion = sessions.suggestion(structuralDeclinedAt: plans.first?.structuralDeclinedAt)
         let coachContext = CoachContext(record: record, checkIn: checkIn, suggestion: suggestion)
         self.coachContext = coachContext
         step = .wrapUp

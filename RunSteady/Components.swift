@@ -114,7 +114,7 @@ extension Decision {
         switch self {
         case .start, .proceed, .advance, .maintain: .brand
         case .repeatSession, .repeatAfterGap: .warmColor
-        case .stepBack, .stepBackAfterGap: .coolColor
+        case .stepBack, .stepBackAfterGap, .stepBackStructural: .coolColor
         }
     }
 
@@ -125,7 +125,7 @@ extension Decision {
         case .advance: "arrow.up.right"
         case .maintain: "equal"
         case .repeatSession, .repeatAfterGap: "arrow.triangle.2.circlepath"
-        case .stepBack, .stepBackAfterGap: "arrow.down.right"
+        case .stepBack, .stepBackAfterGap, .stepBackStructural: "arrow.down.right"
         }
     }
 }

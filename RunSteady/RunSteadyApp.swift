@@ -49,6 +49,12 @@ final class AppModel: ObservableObject {
     }
 
     func keepCurrent(insteadOf suggestion: Suggestion) {
+        // An offer with a fallback (structural step-back): carry on with the normal plan and restart its window.
+        if let alternative = suggestion.alternative {
+            storedPlan.structuralDeclinedAt = .now
+            apply(alternative)
+            return
+        }
         storedPlan.dismissedSuggestion = suggestion.key
         try? container.mainContext.save()
     }
