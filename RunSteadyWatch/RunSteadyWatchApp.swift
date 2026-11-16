@@ -38,7 +38,7 @@ struct RunSteadyWatchApp: App {
         Connectivity.shared.onPlan = { plan in
             stored.plan = plan
             try? context.save()
-            if manager.screen == .start { manager.plan = plan }
+            manager.receive(plan)
         }
         Connectivity.shared.activate()
     }

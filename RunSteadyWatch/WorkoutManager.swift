@@ -17,6 +17,7 @@ final class WorkoutManager: ObservableObject {
     @Published private(set) var savedToHealth = false
 
     var onFinish: ((SessionRecord) -> Void)?
+    private var queuedPlan: ActivePlan?
 
     /// > 1 fast-forwards workout time (Simulator demos only).
     private let timeScale: Double
@@ -90,6 +91,14 @@ final class WorkoutManager: ObservableObject {
     func dismissSummary() {
         engine = nil
         screen = .start
+        if let queuedPlan { plan = queuedPlan }
+        queuedPlan = nil
+    }
+
+    /// A new plan from the phone. Mid-run (or on the summary) the current plan stays, since the
+    /// session record still needs it; the new one takes over back on the start screen.
+    func receive(_ newPlan: ActivePlan) {
+        if screen == .start { plan = newPlan } else { queuedPlan = newPlan }
     }
 
     private func tick() {

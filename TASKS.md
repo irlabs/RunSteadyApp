@@ -26,7 +26,9 @@ Principle: code computes the facts, taps give the reasons, Haiku asks and talks.
   - **Safety net:** if the run after an early step-up is Tough, uncomfortable or sore, repeat the session and allow no early step-ups for about 2 weeks.
 - **Manual sessions** (an easier run with a friend, for example):
   - Reset the gap clock.
-  - Don't count toward progress or change the week.
+  - Never bank sessions. A checked-in, completed, comfortable, not-Tough, pain-free manual run **above** the plan moves the plan up one week (`.advanceFromManual`, "Catching up"), never past the run's own level. Tough/incomplete ones are ignored.
+  - Level of a manual schedule (`ProgressionPlan.level(of:)`): midpoint of the week matched by total running time and the week matched by run-block length, rounded toward the block-length week.
+  - The card then offers Use this / Keep mine. Treated like `.advance` in the gap handling.
   - Pain reported on them still counts.
   - Afterwards the coach asks "One-off or keep it easier?"; the default is back to the plan.
 - **Coach notes:** shown in the check-in only, not on the Today screen.
@@ -53,3 +55,7 @@ Principle: code computes the facts, taps give the reasons, Haiku asks and talks.
 - [x] 10. Coach prompt: open notes with their age, a short code-written summary of recent runs, today's deviations with reasons, early step-up eligibility. Ask about follow-up notes once; never invent bigger jumps.
 - [x] 11. History: show and delete coach notes.
 - [x] 12. Verify: `swift test` in RunSteadyKit, plus both `xcodebuild test` schemes.
+- [x] 13. Phone re-sends the active plan on launch, activation and watch-state changes; watch queues a plan received mid-run.
+- [x] 14. Plan tab shows the active manual schedule.
+- [x] 15. Manual runs above the plan step it up one week at a time (TDD).
+- [ ] 16. Check on device that a run synced from the watch triggers the check-in notification with the phone app closed.

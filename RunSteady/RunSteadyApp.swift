@@ -33,6 +33,8 @@ final class AppModel: ObservableObject {
 
         Connectivity.shared.onSession = { [weak self] record in self?.receive(record) }
         Connectivity.shared.activate()
+        // Push the current plan on every launch; it goes out once the session is active.
+        if !isDemo { Connectivity.shared.send(storedPlan.plan) }
         if !isDemo {
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, _ in }
         }

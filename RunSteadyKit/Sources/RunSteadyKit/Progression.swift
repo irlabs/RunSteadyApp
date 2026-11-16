@@ -21,6 +21,16 @@ public enum ProgressionPlan {
         stage(8, run: 1800, walk: 0, rounds: 1, "30 minutes non-stop"),
     ]
 
+    /// Which plan week a schedule matches, or nil when it is easier than week 1.
+    /// Judged on total running time and on the length of one run block; the block length weighs
+    /// more, so the result is the midpoint of the two, rounded toward the block-length week.
+    public static func level(of schedule: Schedule) -> Int? {
+        let byTotal = fiveK.lastIndex { $0.schedule.totalRunSeconds <= schedule.totalRunSeconds } ?? -1
+        let byBlock = fiveK.lastIndex { $0.schedule.run <= schedule.run } ?? -1
+        let level = Int((Double(byTotal + byBlock) / 2).rounded(byBlock >= byTotal ? .up : .down))
+        return level >= 0 ? level : nil
+    }
+
     private static func stage(_ week: Int, run: Int, walk: Int, rounds: Int, _ focus: String) -> Stage {
         Stage(week: week,
               schedule: Schedule(name: "Week \(week)", warmUp: 300, run: run, walk: walk, rounds: rounds, coolDown: 300),
@@ -36,20 +46,31 @@ public struct SessionOutcome: Hashable, Sendable {
     public var checkIn: CheckIn?
     /// Notable deviations from the schedule, as found by `RunAnalysis`.
     public var deviations: Set<Deviation.Kind>
+    /// The schedule that was run. Only used for manual sessions, to place them on the plan.
+    public var schedule: Schedule?
 
     public init(date: Date, stageIndex: Int?, completedPlannedRounds: Bool, checkIn: CheckIn?,
-                deviations: Set<Deviation.Kind> = []) {
+                deviations: Set<Deviation.Kind> = [], schedule: Schedule? = nil) {
         self.date = date
         self.stageIndex = stageIndex
         self.completedPlannedRounds = completedPlannedRounds
         self.checkIn = checkIn
         self.deviations = deviations
+        self.schedule = schedule
     }
 
     public init(_ record: SessionRecord, checkIn: CheckIn?) {
         self.init(date: record.startedAt, stageIndex: record.stageIndex,
                   completedPlannedRounds: record.completedPlannedRounds, checkIn: checkIn,
-                  deviations: Set(RunAnalysis.deviations(in: record).map(\.kind)))
+                  deviations: Set(RunAnalysis.deviations(in: record).map(\.kind)), schedule: record.schedule)
+    }
+
+    /// A manual run that went well enough to pull the plan up: checked in, completed, comfortable,
+    /// not tough, nothing sore. Its plan week, if it has one.
+    var manualLevelEarned: Int? {
+        guard stageIndex == nil, completedPlannedRounds, let checkIn, checkIn.feeling != .tough,
+              checkIn.comfortable, checkIn.knee == .none, let schedule else { return nil }
+        return ProgressionPlan.level(of: schedule)
     }
 
     /// The tapped reason for a deviation, or nil when it wasn't answered.
@@ -64,6 +85,8 @@ public enum Decision: String, Codable, Sendable {
     case stepBackStructural
     /// Runs extended because they felt good: step up after two sessions instead of three. Offered only.
     case advanceEarly
+    /// A good manual run above the plan pulls it up one week, never past the manual run's own level.
+    case advanceFromManual
 
     public var title: String {
         switch self {
@@ -77,6 +100,7 @@ public enum Decision: String, Codable, Sendable {
         case .maintain: "Hold steady"
         case .stepBackStructural: "Settle in"
         case .advanceEarly: "Ready early"
+        case .advanceFromManual: "Catching up"
         }
     }
 }
@@ -135,14 +159,16 @@ public enum ProgressionRules {
         let lastStage = plan.count - 1
         let sessions = history.sorted { $0.date < $1.date }
 
-        // Manual sessions never start the plan; the gap clock counts from any session.
-        guard sessions.contains(where: { $0.stageIndex != nil }), let last = sessions.last else {
-            return Suggestion(stageIndex: 0, sessionInStage: 1, decision: .start,
-                              reason: "Start easy: short runs with generous walk breaks.")
-        }
+        let notStarted = Suggestion(stageIndex: 0, sessionInStage: 1, decision: .start,
+                                    reason: "Start easy: short runs with generous walk breaks.")
+        // The gap clock counts from any session.
+        guard let last = sessions.last else { return notStarted }
+        // Only a planned session, or a manual one that steps the plan up, starts the plan.
+        var started = sessions.contains { $0.stageIndex != nil }
 
         // Fold the history into (stage, sessions banked at that stage).
-        // Manual sessions only count for pain; they never bank progress or move the week.
+        // Manual sessions never bank progress. They count for pain, and a good one above the plan
+        // moves it up one week at a time, never past its own level.
         var stage = 0
         var banked = 0
         var decision = Decision.start
@@ -180,7 +206,13 @@ public enum ProgressionRules {
                 decision = .repeatSession
                 reason = "A little soreness: repeat this session until it feels fine before adding more."
             } else if isManual {
-                continue
+                guard let level = outcome.manualLevelEarned, level > stage else { continue }
+                stage += 1
+                banked = 0
+                started = true
+                decision = .advanceFromManual
+                reason = "Your own \(outcome.schedule?.summary ?? "schedule") went well, so the plan moves up "
+                    + "a week. Step by step, until it meets the level you ran."
             } else if check?.feeling == .tough || check?.comfortable == false {
                 decision = .repeatSession
                 reason = "That one felt hard. Repeating it lets your body catch up."
@@ -207,6 +239,8 @@ public enum ProgressionRules {
             }
         }
 
+        guard started else { return notStarted }
+
         // Gap handling, measured from the last session of any kind.
         let gapDays = Int(now.timeIntervalSince(last.date) / 86_400)
         if gapDays >= policy.stepBackTwoAfterDays {
@@ -219,8 +253,8 @@ public enum ProgressionRules {
             banked = 0
             decision = .stepBackAfterGap
             reason = "It's been \(gapDays) days. Stepping back a week keeps your knees happy."
-        } else if gapDays >= policy.repeatAfterDays, decision == .proceed || decision == .advance {
-            if decision == .advance { stage = max(0, stage - 1); banked = ProgressionPlan.sessionsPerStage }
+        } else if gapDays >= policy.repeatAfterDays, [.proceed, .advance, .advanceFromManual].contains(decision) {
+            if decision != .proceed { stage = max(0, stage - 1); banked = ProgressionPlan.sessionsPerStage }
             banked = max(0, banked - 1)
             decision = .repeatAfterGap
             reason = "It's been \(gapDays) days, so repeat the last session before moving on."

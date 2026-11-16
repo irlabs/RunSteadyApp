@@ -20,6 +20,22 @@ struct PlanView: View {
                 }
                 .padding(.top, 8).padding(.bottom, 18)
 
+                if let manual = plans.first?.plan, manual.isManual {
+                    Card(color: Color.coolColor.opacity(0.14)) {
+                        HStack {
+                            Eyebrow(text: "Your own schedule", color: .coolColor)
+                            Spacer()
+                            Chip(text: "Manual", symbol: "hand.raised.fill", color: .coolColor)
+                        }
+                        ScheduleSummary(schedule: manual.schedule)
+                        Text("Your next run uses this instead of the plan. The plan stays at week \(suggestion.stageIndex + 1), "
+                             + "session \(suggestion.sessionInStage) until you switch back.")
+                            .font(.footnote.weight(.medium)).foregroundStyle(.secondary)
+                    }
+                    .accessibilityIdentifier("manualScheduleCard")
+                    .padding(.bottom, 18)
+                }
+
                 ForEach(Array(ProgressionPlan.fiveK.enumerated()), id: \.offset) { index, stage in
                     StageRow(stage: stage, state: state(index, suggestion.stageIndex),
                              session: suggestion.sessionInStage, isLast: index == ProgressionPlan.fiveK.count - 1)
