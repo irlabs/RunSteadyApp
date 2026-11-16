@@ -1,29 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Scheme LastUpgradeVersion="1620" version="1.7">
-   <BuildAction parallelizeBuildables="YES" buildImplicitDependencies="YES">
+<Scheme
+   LastUpgradeVersion = "1620"
+   version = "1.3">
+   <BuildAction
+      parallelizeBuildables = "YES"
+      buildImplicitDependencies = "YES">
       <BuildActionEntries>
-         <BuildActionEntry buildForTesting="YES" buildForRunning="YES" buildForProfiling="YES" buildForArchiving="YES" buildForAnalyzing="YES">
-            <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="F616E859B20A93D5ADA63666" BuildableName="RunSteadyWatch.app" BlueprintName="RunSteadyWatch" ReferencedContainer="container:RunSteady.xcodeproj"/>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "F616E859B20A93D5ADA63666"
+               BuildableName = "RunSteadyWatch.app"
+               BlueprintName = "RunSteadyWatch"
+               ReferencedContainer = "container:RunSteady.xcodeproj">
+            </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
-   <TestAction buildConfiguration="Debug" selectedDebuggerIdentifier="Xcode.DebuggerFoundation.Debugger.LLDB" selectedLauncherIdentifier="Xcode.DebuggerFoundation.Launcher.LLDB" shouldUseLaunchSchemeArgsEnv="YES">
+   <TestAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference skipped="NO">
-            <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="E7725242B31CE8D193332197" BuildableName="RunSteadyWatchUITests.xctest" BlueprintName="RunSteadyWatchUITests" ReferencedContainer="container:RunSteady.xcodeproj"/>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E7725242B31CE8D193332197"
+               BuildableName = "RunSteadyWatchUITests.xctest"
+               BlueprintName = "RunSteadyWatchUITests"
+               ReferencedContainer = "container:RunSteady.xcodeproj">
+            </BuildableReference>
          </TestableReference>
       </Testables>
    </TestAction>
-   <LaunchAction buildConfiguration="Debug" selectedDebuggerIdentifier="Xcode.DebuggerFoundation.Debugger.LLDB" selectedLauncherIdentifier="Xcode.DebuggerFoundation.Launcher.LLDB" launchStyle="0" useCustomWorkingDirectory="NO" ignoresPersistentStateOnLaunch="NO" debugDocumentVersioning="YES" debugServiceExtension="internal" allowLocationSimulation="YES">
-      <BuildableProductRunnable runnableDebuggingMode="0">
-         <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="F616E859B20A93D5ADA63666" BuildableName="RunSteadyWatch.app" BlueprintName="RunSteadyWatch" ReferencedContainer="container:RunSteady.xcodeproj"/>
+   <LaunchAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      launchStyle = "0"
+      useCustomWorkingDirectory = "NO"
+      ignoresPersistentStateOnLaunch = "NO"
+      debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
+      allowLocationSimulation = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "F616E859B20A93D5ADA63666"
+            BuildableName = "RunSteadyWatch.app"
+            BlueprintName = "RunSteadyWatch"
+            ReferencedContainer = "container:RunSteady.xcodeproj">
+         </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
-   <ProfileAction buildConfiguration="Release" shouldUseLaunchSchemeArgsEnv="YES" savedToolIdentifier="" useCustomWorkingDirectory="NO" debugDocumentVersioning="YES">
-      <BuildableProductRunnable runnableDebuggingMode="0">
-         <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="F616E859B20A93D5ADA63666" BuildableName="RunSteadyWatch.app" BlueprintName="RunSteadyWatch" ReferencedContainer="container:RunSteady.xcodeproj"/>
+   <ProfileAction
+      buildConfiguration = "Release"
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      savedToolIdentifier = ""
+      useCustomWorkingDirectory = "NO"
+      debugDocumentVersioning = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "F616E859B20A93D5ADA63666"
+            BuildableName = "RunSteadyWatch.app"
+            BlueprintName = "RunSteadyWatch"
+            ReferencedContainer = "container:RunSteady.xcodeproj">
+         </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
-   <AnalyzeAction buildConfiguration="Debug"/>
-   <ArchiveAction buildConfiguration="Release" revealArchiveInOrganizer="YES"/>
+   <AnalyzeAction
+      buildConfiguration = "Debug">
+   </AnalyzeAction>
+   <ArchiveAction
+      buildConfiguration = "Release"
+      revealArchiveInOrganizer = "YES">
+   </ArchiveAction>
 </Scheme>
