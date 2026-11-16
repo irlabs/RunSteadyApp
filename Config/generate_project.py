@@ -81,6 +81,7 @@ def package_dep(target):
 common = {
     "SWIFT_VERSION": "5.0",
     "CODE_SIGN_STYLE": "Automatic",
+    "DEVELOPMENT_TEAM": "PPCJ48FDZ3",  # dirk@irlabs.nl (Personal Team)
     "CURRENT_PROJECT_VERSION": 1,
     "MARKETING_VERSION": "1.0",
     "GENERATE_INFOPLIST_FILE": "YES",

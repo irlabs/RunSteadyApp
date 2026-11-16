@@ -160,14 +160,16 @@ struct ClaudeCoach: Coach {
         guard !context.notes.isEmpty else { return "- none" }
         return context.notes.map { note in
             let age = note.ageDays == 0 ? "today" : note.ageDays == 1 ? "1 day ago" : "\(note.ageDays) days ago"
-            return "- \(note.kind.title.lowercased()), \(age): \(note.text)\(note.askNow ? " [ask about this once]" : "")"
+            let ask = context.isWrapUp && note.askNow ? " [ask about this once]" : ""
+            return "- \(note.kind.title.lowercased()), \(age): \(note.text)\(ask)"
         }.joined(separator: "\n")
     }
 
     private func followUpRule(_ context: CoachContext) -> String {
         context.isWrapUp && context.notes.contains(where: \.askNow)
             ? "End with one short question about how the notes marked [ask about this once] are going."
-            : "Don't ask about old notes again unless the runner brings them up."
+            : "You already asked about the notes earlier in this conversation. Don't ask about them again, even if "
+                + "the runner didn't answer; just respond to what they said now."
     }
 
     private func request(context: CoachContext, transcript: [ChatMessage]) async throws -> String {
