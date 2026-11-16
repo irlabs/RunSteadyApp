@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Installs the last build on the iPhone (cable or Wi-Fi) and launches it.
+# iOS then hands the embedded watch app to the watch (needs Watch app → General →
+# Automatic App Install, or tap Install under Available Apps in the Watch app).
+set -euo pipefail
+. "$(dirname "$0")/_env.sh"
+
+[ -d "$PHONE_APP" ] || { echo "No build at $PHONE_APP — run scripts/build first." >&2; exit 1; }
+echo "▸ Installing v$(version_of "$PHONE_APP") ($(build_of "$PHONE_APP")) on iPhone $PHONE_ID"
+xcrun devicectl device install app --device "$PHONE_ID" "$PHONE_APP"
+echo "▸ Launching"
+xcrun devicectl device process launch --device "$PHONE_ID" --terminate-existing "$BUNDLE_ID" \
+  || echo "(Launch failed — is the phone unlocked? Open Run Steady by hand.)"
+echo "✓ Done. Today screen shows whether the watch caught up."

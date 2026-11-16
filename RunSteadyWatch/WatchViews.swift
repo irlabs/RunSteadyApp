@@ -40,6 +40,11 @@ struct StartView: View {
                 }
                 .tint(.brand)
                 .padding(.top, 2)
+
+                Text(Connectivity.ownVersion.label)
+                    .font(.system(size: 11)).foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity)
+                    .accessibilityIdentifier("watchVersion")
             }
             .padding(.horizontal, 4)
         }

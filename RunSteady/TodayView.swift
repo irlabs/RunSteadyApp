@@ -49,6 +49,7 @@ struct TodayView: View {
                 if let offer { SuggestionCard(suggestion: offer) }
                 nextSessionCard
                 weekStats
+                if let status = model.watchStatus { WatchStatusLine(status: status) }
             }
             .padding(.horizontal, 16)
             .padding(.bottom, 24)
@@ -59,6 +60,28 @@ struct TodayView: View {
         .sheet(isPresented: $editing) { ScheduleEditorView(plan: plan, suggestion: suggestion) }
         .sheet(item: $checkInSession) { CheckInView(session: $0) }
         .task(id: suggestion.key + "\(pending == nil)") { followPlanSilently() }
+        .alert("Watch app too old", isPresented: tooOldAlert) {
+            Button("Try again") {
+                dismissedTooOld = tooOldWatch
+                model.recheckWatch()
+            }
+            Button("Later", role: .cancel) { dismissedTooOld = tooOldWatch }
+        } message: {
+            Text("Failed to install the latest update \(Connectivity.ownVersion.label) on your watch. "
+                 + "Runs and plans won't sync until it updates. Open Run Steady on the watch, "
+                 + "or reinstall it from the Watch app on this iPhone.")
+        }
+    }
+
+    @State private var dismissedTooOld: AppVersion?
+
+    private var tooOldWatch: AppVersion? {
+        if case .tooOld(let watch) = model.watchStatus { watch } else { nil }
+    }
+
+    /// Shown while the watch is too old, until dismissed for that particular watch build.
+    private var tooOldAlert: Binding<Bool> {
+        Binding(get: { tooOldWatch != nil && tooOldWatch != dismissedTooOld }, set: { _ in })
     }
 
     private func followPlanSilently() {
@@ -132,6 +155,44 @@ struct TodayView: View {
             StatTile(title: "Distance", value: String(format: "%.1f", km), unit: "km", symbol: "point.topleft.down.to.point.bottomright.curvepath.fill", color: .walkColor)
             StatTile(title: "Running", value: "\(minutes)", unit: "min", symbol: "figure.run", color: .runColor)
         }
+    }
+}
+
+/// One quiet line at the bottom of Today: does the watch run this phone app's build?
+struct WatchStatusLine: View {
+    let status: WatchAppStatus
+    private let phone = Connectivity.ownVersion
+
+    var body: some View {
+        Label(text, systemImage: symbol)
+            .font(.footnote)
+            .foregroundStyle(color)
+            .frame(maxWidth: .infinity)
+            .padding(.top, 4)
+            .accessibilityIdentifier("watchStatusLine")
+    }
+
+    private var text: String {
+        switch status {
+        case .upToDate: "Both apps up to date · \(phone.label)"
+        case .outdated(let watch): "Watch app not yet on \(phone.label) · has \(watch.label)"
+        case .tooOld(let watch): "Watch app too old (\(watch.label)) · needs \(phone.label)"
+        case .unknown: "Watch app version unknown · open Run Steady on your watch"
+        case .notInstalled: "Watch app not installed · \(phone.label)"
+        }
+    }
+
+    private var symbol: String {
+        switch status {
+        case .upToDate: "checkmark.circle"
+        case .outdated, .unknown: "arrow.triangle.2.circlepath"
+        case .tooOld: "exclamationmark.triangle.fill"
+        case .notInstalled: "applewatch.slash"
+        }
+    }
+
+    private var color: Color {
+        if case .tooOld = status { .orange } else { .secondary }
     }
 }
 

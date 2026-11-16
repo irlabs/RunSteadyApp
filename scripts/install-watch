@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Fallback: install the watch app directly over the network, with retries.
+# Wireless watch installs are flaky; what helped before: watch unlocked + awake, Developer Mode on,
+# and iPhone Bluetooth OFF in Settings (not Control Center) so the watch stays on Wi-Fi.
+set -uo pipefail
+. "$(dirname "$0")/_env.sh"
+
+ATTEMPTS="${ATTEMPTS:-5}"
+[ -d "$WATCH_APP" ] || { echo "No build at $WATCH_APP — run scripts/build first." >&2; exit 1; }
+echo "▸ Installing watch app v$(version_of "$WATCH_APP") ($(build_of "$WATCH_APP")) on watch $WATCH_ID"
+for i in $(seq 1 "$ATTEMPTS"); do
+  if xcrun devicectl device install app --device "$WATCH_ID" "$WATCH_APP"; then
+    echo "✓ Installed on attempt $i"; exit 0
+  fi
+  echo "✗ Attempt $i/$ATTEMPTS failed; retrying in 10 s…"; sleep 10
+done
+echo "Gave up. Try: wake the watch, turn iPhone Bluetooth off in Settings, or run from Xcode." >&2
+exit 1

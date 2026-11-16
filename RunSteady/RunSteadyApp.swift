@@ -23,6 +23,8 @@ final class AppModel: ObservableObject {
     let container: ModelContainer
     let coach: Coach
     let isDemo: Bool
+    /// Whether the watch runs the same build as this phone app. `nil` in demo mode.
+    @Published private(set) var watchStatus: WatchAppStatus?
 
     init() {
         isDemo = UserDefaults.standard.bool(forKey: "demoSeed")
@@ -32,6 +34,11 @@ final class AppModel: ObservableObject {
         Store.resolveStaleNotes(in: container.mainContext)
 
         Connectivity.shared.onSession = { [weak self] record in self?.receive(record) }
+        if !isDemo {
+            Connectivity.shared.onWatchState = { [weak self] watch, installed in
+                self?.watchStatus = .evaluate(phone: Connectivity.ownVersion, watch: watch, watchAppInstalled: installed)
+            }
+        }
         Connectivity.shared.activate()
         // Push the current plan on every launch; it goes out once the session is active.
         if !isDemo { Connectivity.shared.send(storedPlan.plan) }
@@ -39,6 +46,8 @@ final class AppModel: ObservableObject {
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, _ in }
         }
     }
+
+    func recheckWatch() { Connectivity.shared.refreshWatchState() }
 
     var storedPlan: StoredPlan { Store.storedPlan(in: container.mainContext) }
 

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Build, then install on the iPhone and launch.
+set -euo pipefail
+cd "$(dirname "$0")"
+./build && ./install

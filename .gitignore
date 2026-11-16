@@ -13,3 +13,4 @@ xcuserdata/
 *.xcuserstate
 Secrets.plist
 .build/
+scripts/local.env

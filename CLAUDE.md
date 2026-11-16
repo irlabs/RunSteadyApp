@@ -31,6 +31,8 @@ Run Steady: iPhone + standalone Apple Watch app for run-walk progression. Produc
 - App targets (each scheme also runs its XCUITest demo walkthrough):
   - `xcodebuild test -project RunSteady.xcodeproj -scheme RunSteady -derivedDataPath build/dd -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=18.3.1'`
   - `xcodebuild test -project RunSteady.xcodeproj -scheme RunSteadyWatch -derivedDataPath build/dd -destination 'platform=watchOS Simulator,name=Apple Watch Series 10 (46mm)'`
+- Real devices (from repo root): `scripts/deploy` = `scripts/build` + `scripts/install` (phone via devicectl, then launch; iOS pushes the embedded watch app). `scripts/install-watch` = direct watch install with retries (flaky over Bluetooth). Device ids in `scripts/_env.sh`, override in gitignored `scripts/local.env`.
+- Versioning: marketing version in `VERSION`; `scripts/build` stamps build number `yymmdd.HHMM` on both apps. Watch reports its `AppVersion` to the phone; Today shows the status. Bump `SyncProtocol.current` (RunSteadyKit/AppVersion.swift) on breaking sync changes, and `minimumWatch` when the phone can't work with older watches (triggers "Watch app too old" alert).
 - Project file is generated: `python3 Config/generate_project.py` (only needed when targets/build settings change; source folders are synchronized groups).
 - Launch arguments: phone `-demoSeed YES` (in-memory sample history); watch `-timeScale <n>` (fast-forward), `-demoStage <i> -demoSession <n>`, `-inMemory YES`, `-useHealthKit YES` (Simulator defaults to simulated sensors).
 - LLM coach: copy `RunSteady/Secrets.example.plist` to `Secrets.plist` (gitignored) and add the key; without it a scripted coach is used.
