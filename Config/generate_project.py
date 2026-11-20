@@ -62,6 +62,7 @@ product_refs = {
 config_group = add("group:Config", {"isa": "PBXGroup", "path": "Config", "sourceTree": "<group>", "children": [
     add("file:watchplist", {"isa": "PBXFileReference", "lastKnownFileType": "text.plist.xml", "path": "Watch-Info.plist", "sourceTree": "<group>"}),
     add("file:watchent", {"isa": "PBXFileReference", "lastKnownFileType": "text.plist.entitlements", "path": "RunSteadyWatch.entitlements", "sourceTree": "<group>"}),
+    add("file:phoneent", {"isa": "PBXFileReference", "lastKnownFileType": "text.plist.entitlements", "path": "RunSteady.entitlements", "sourceTree": "<group>"}),
 ]})
 products_group = add("group:Products", {"isa": "PBXGroup", "name": "Products", "sourceTree": "<group>", "children": list(product_refs.values())})
 main_group = add("group:main", {"isa": "PBXGroup", "sourceTree": "<group>",
@@ -100,6 +101,9 @@ settings = {
         "INFOPLIST_KEY_UILaunchScreen_Generation": "YES",
         "INFOPLIST_KEY_UIApplicationSceneManifest_Generation": "YES",
         "INFOPLIST_KEY_UISupportedInterfaceOrientations": "UIInterfaceOrientationPortrait",
+        "CODE_SIGN_ENTITLEMENTS": "Config/RunSteady.entitlements",
+        "INFOPLIST_KEY_NSHealthShareUsageDescription": "Run Steady reads your workouts and date of birth to follow up on runs and set heart rate zones.",
+        "INFOPLIST_KEY_NSHealthUpdateUsageDescription": "Run Steady saves how hard each run felt to Apple Health.",
         "LD_RUNPATH_SEARCH_PATHS": "$(inherited) @executable_path/Frameworks",
         "ENABLE_PREVIEWS": "YES",
     },

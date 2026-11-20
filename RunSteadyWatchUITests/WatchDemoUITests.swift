@@ -59,4 +59,52 @@ final class WatchDemoUITests: XCTestCase {
         XCTAssertTrue(app.buttons["startButton"].waitForExistence(timeout: 5))
         Thread.sleep(forTimeInterval: 1.5)
     }
+
+    /// Scrolls the list until `element` sits fully below the navigation bar (the watch screen shows
+    /// only a few rows). Short drags that hold before release, so the list does not fling past it.
+    private func reveal(_ element: XCUIElement) -> XCUIElement {
+        let list = app.collectionViews.firstMatch
+        let screen = app.windows.firstMatch.frame
+        func visible() -> Bool {
+            element.exists && element.frame.minY >= 62 && element.frame.maxY <= screen.maxY
+        }
+        for _ in 0..<10 where !visible() {
+            let down = element.exists && element.frame.minY < 62
+            let a = list.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: down ? 0.45 : 0.7))
+            let b = list.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: down ? 0.7 : 0.45))
+            a.press(forDuration: 0.05, thenDragTo: b, withVelocity: .slow, thenHoldForDuration: 0.3)
+            Thread.sleep(forTimeInterval: 0.6)
+        }
+        return element
+    }
+
+    /// Hidden diagnostics: long-press the tortoise, check permissions, try a voice, send a fake run.
+    func testDiagnostics() {
+        let tortoise = app.otherElements["tortoise"].exists ? app.otherElements["tortoise"] : app.buttons["tortoise"]
+        XCTAssertTrue(tortoise.waitForExistence(timeout: 15))
+        Thread.sleep(forTimeInterval: 2)
+        tortoise.press(forDuration: 1.2)
+
+        let check = app.buttons["checkPermissions"]
+        XCTAssertTrue(check.waitForExistence(timeout: 10))
+        check.tap()
+        Thread.sleep(forTimeInterval: 1.5)
+
+        reveal(app.buttons["voiceLab"]).tap()
+        XCTAssertTrue(app.buttons["rateToggle"].waitForExistence(timeout: 5))
+        let before = app.buttons["rateToggle"].label
+        app.buttons["rateToggle"].tap()
+        Thread.sleep(forTimeInterval: 0.5)
+        XCTAssertNotEqual(app.buttons["rateToggle"].label, before)
+        Thread.sleep(forTimeInterval: 1.5)
+        app.navigationBars.buttons.firstMatch.tap()
+
+        XCTAssertTrue(app.buttons["voiceLab"].waitForExistence(timeout: 5))
+        reveal(app.buttons["fakeRun"]).tap()
+        Thread.sleep(forTimeInterval: 1)
+        reveal(app.buttons["logLink"]).tap()
+        let logged = NSPredicate(format: "label CONTAINS 'Fake run' OR label CONTAINS 'Test workout'")
+        XCTAssertTrue(app.staticTexts.matching(logged).firstMatch.waitForExistence(timeout: 5))
+        Thread.sleep(forTimeInterval: 2)
+    }
 }

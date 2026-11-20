@@ -164,10 +164,13 @@ public struct SessionRecord: Codable, Hashable, Sendable, Identifiable {
     public var segments: [SegmentRecord]
     public var distanceMeters: Double
     public var averageHeartRate: Double?
+    /// A synthetic record from the watch's diagnostics screen. The phone never stores it.
+    /// Optional so records from older watch builds still decode.
+    public var isTest: Bool?
 
     public init(
         id: UUID = UUID(), startedAt: Date, schedule: Schedule, stageIndex: Int?, sessionInStage: Int?,
-        segments: [SegmentRecord], distanceMeters: Double, averageHeartRate: Double?
+        segments: [SegmentRecord], distanceMeters: Double, averageHeartRate: Double?, isTest: Bool? = nil
     ) {
         self.id = id
         self.startedAt = startedAt
@@ -177,7 +180,10 @@ public struct SessionRecord: Codable, Hashable, Sendable, Identifiable {
         self.segments = segments
         self.distanceMeters = distanceMeters
         self.averageHeartRate = averageHeartRate
+        self.isTest = isTest
     }
+
+    public var isTestRun: Bool { isTest == true }
 
     public var duration: Int { segments.reduce(0) { $0 + $1.actual } }
     public var roundsDone: Int { segments.filter { $0.kind == .run }.count }

@@ -5,6 +5,7 @@ import UserNotifications
 
 @main
 struct RunSteadyApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @StateObject private var model = AppModel()
 
     var body: some Scene {
@@ -32,6 +33,7 @@ final class AppModel: ObservableObject {
         coach = ClaudeCoach.fromBundledSecrets() ?? ScriptedCoach()
         if isDemo { DemoData.seed(into: container.mainContext) }
         Store.resolveStaleNotes(in: container.mainContext)
+        Diag.log("App", "App model ready\(isDemo ? " (demo)" : "")")
 
         Connectivity.shared.onSession = { [weak self] record in self?.receive(record) }
         if !isDemo {
@@ -43,7 +45,9 @@ final class AppModel: ObservableObject {
         // Push the current plan on every launch; it goes out once the session is active.
         if !isDemo { Connectivity.shared.send(storedPlan.plan) }
         if !isDemo {
-            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, _ in }
+            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, _ in
+                Diag.log("Notify", "Authorization granted: \(granted)")
+            }
         }
     }
 
@@ -93,12 +97,15 @@ final class AppModel: ObservableObject {
 
     /// A session arrived from the watch (it is back in range): store it and prompt the check-in.
     private func receive(_ record: SessionRecord) {
+        guard !record.isTestRun else { return } // Diagnostics test runs never land in History.
         Store.upsert(record, in: container.mainContext)
         let content = UNMutableNotificationContent()
         content.title = "Welcome back!"
         content.body = "How was your run? Three quick questions from Steady."
         content.sound = .default
-        UNUserNotificationCenter.current().add(UNNotificationRequest(identifier: record.id.uuidString, content: content, trigger: nil))
+        UNUserNotificationCenter.current().add(UNNotificationRequest(identifier: record.id.uuidString, content: content, trigger: nil)) { error in
+            Diag.log("Notify", "Check-in prompt for \(record.shortID) (app \(Diag.phase)): \(error.map { "failed: \($0.localizedDescription)" } ?? "ok")")
+        }
     }
 }
 

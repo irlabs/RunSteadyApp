@@ -40,6 +40,17 @@ final class Cues: NSObject, AVSpeechSynthesizerDelegate {
         synthesizer.speak(utterance)
     }
 
+    /// Voice lab (diagnostics): speak `text` the way a run cue would, through the same ducking audio session.
+    func preview(_ text: String, voice: AVSpeechSynthesisVoice?, rate: Float, volume: Float) {
+        synthesizer.stopSpeaking(at: .immediate)
+        duck()
+        let utterance = AVSpeechUtterance(string: text)
+        utterance.voice = voice ?? AVSpeechSynthesisVoice(language: "en-GB")
+        utterance.rate = rate
+        utterance.volume = volume
+        synthesizer.speak(utterance)
+    }
+
     nonisolated func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
         Task { @MainActor in self.unduck() }
     }

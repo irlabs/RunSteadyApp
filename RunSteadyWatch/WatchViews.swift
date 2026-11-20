@@ -6,12 +6,18 @@ import SwiftUI
 struct StartView: View {
     @EnvironmentObject private var manager: WorkoutManager
     @AppStorage("announceKm") private var announceKm = true
+    @State private var showDiagnostics = false
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 8) {
                 HStack(spacing: 8) {
                     TortoiseView().frame(width: 46)
+                        .contentShape(Rectangle())
+                        // Hidden diagnostics for device checks.
+                        .onLongPressGesture { showDiagnostics = true }
+                        .accessibilityIdentifier("tortoise")
+                        .accessibilityAddTraits(.isButton)
                     VStack(alignment: .leading, spacing: 0) {
                         Text("Run Steady").font(.headline)
                         Text(manager.plan.title).font(.caption2).foregroundStyle(Color.brandSoft)
@@ -47,6 +53,9 @@ struct StartView: View {
                     .accessibilityIdentifier("watchVersion")
             }
             .padding(.horizontal, 4)
+        }
+        .sheet(isPresented: $showDiagnostics) {
+            NavigationStack { WatchDiagnosticsView() }
         }
     }
 }

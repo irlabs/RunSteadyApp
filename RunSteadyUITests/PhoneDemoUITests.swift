@@ -93,4 +93,19 @@ final class PhoneDemoUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Left knee a bit stiff afterwards."].waitForExistence(timeout: 5))
         pause(2.5)
     }
+
+    /// Hidden diagnostics: long-press the title on Today, then show the log.
+    func testDiagnostics() {
+        let title = app.staticTexts["appTitle"]
+        XCTAssertTrue(title.waitForExistence(timeout: 15))
+        title.press(forDuration: 1.2)
+        XCTAssertTrue(app.buttons["requestHealth"].waitForExistence(timeout: 5))
+        let launch = NSPredicate(format: "label BEGINSWITH 'Now:' OR label BEGINSWITH 'Share '")
+        XCTAssertTrue(app.staticTexts.matching(launch).firstMatch.waitForExistence(timeout: 5))
+        pause(2)
+        app.segmentedControls.buttons.element(boundBy: 1).tap()
+        pause(1.5)
+        app.buttons["Done"].tap()
+        XCTAssertTrue(title.waitForExistence(timeout: 5))
+    }
 }

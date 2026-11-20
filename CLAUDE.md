@@ -30,11 +30,12 @@ Run Steady: iPhone + standalone Apple Watch app for run-walk progression. Produc
 - Shared package: `swift test` from the package directory.
 - App targets (each scheme also runs its XCUITest demo walkthrough):
   - `xcodebuild test -project RunSteady.xcodeproj -scheme RunSteady -derivedDataPath build/dd -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=18.3.1'`
-  - `xcodebuild test -project RunSteady.xcodeproj -scheme RunSteadyWatch -derivedDataPath build/dd -destination 'platform=watchOS Simulator,name=Apple Watch Series 10 (46mm)'`
+  - `xcodebuild test -project RunSteady.xcodeproj -scheme RunSteadyWatch -derivedDataPath build/dd -destination 'platform=watchOS Simulator,id=18F51A38-41C5-454E-9F08-6A9A7326F0B1'` (Series 10 46mm, watchOS 11.2; by name, xcodebuild also matches the 11.1 one paired to an iPhone 16 Plus and gives up)
 - Real devices (from repo root): `scripts/deploy` = `scripts/build` + `scripts/install` (phone via devicectl, then launch; iOS pushes the embedded watch app). `scripts/install-watch` = direct watch install with retries (flaky over Bluetooth). Device ids in `scripts/_env.sh`, override in gitignored `scripts/local.env`.
 - Versioning: marketing version in `VERSION`; `scripts/build` stamps build number `yymmdd.HHMM` on both apps. Watch reports its `AppVersion` to the phone; Today shows the status. Bump `SyncProtocol.current` (RunSteadyKit/AppVersion.swift) on breaking sync changes, and `minimumWatch` when the phone can't work with older watches (triggers "Watch app too old" alert).
 - Project file is generated: `python3 Config/generate_project.py` (only needed when targets/build settings change; source folders are synchronized groups).
-- Launch arguments: phone `-demoSeed YES` (in-memory sample history); watch `-timeScale <n>` (fast-forward), `-demoStage <i> -demoSession <n>`, `-inMemory YES`, `-useHealthKit YES` (Simulator defaults to simulated sensors).
+- Launch arguments: phone `-demoSeed YES` (in-memory sample history); watch `-timeScale <n>` (fast-forward), `-demoStage <i> -demoSession <n>`, `-inMemory YES`, `-useHealthKit YES` (Simulator defaults to simulated sensors), `-fakeRunOnLaunch YES` (diagnostics fake run 5 s after launch).
+- Hidden diagnostics (device checks, log): phone long-press the title on Today; watch long-press the tortoise. Device test steps: `docs/spike-test-instructions.md`.
 - LLM coach: copy `RunSteady/Secrets.example.plist` to `Secrets.plist` (gitignored) and add the key; without it a scripted coach is used.
 
 ## Workflow

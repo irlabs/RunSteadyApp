@@ -54,6 +54,12 @@
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		15DAB397FC9889C53844415A = {
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.entitlements;
+			path = RunSteady.entitlements;
+			sourceTree = "<group>";
+		};
 		97D2CC4EF1011BAFC535EF0A = {
 			isa = PBXFileReference;
 			explicitFileType = wrapper.cfbundle;
@@ -180,6 +186,7 @@
 			children = (
 				F969A12750531D3625430123,
 				B1FA352A4500E6719110CA3C,
+				15DAB397FC9889C53844415A,
 			);
 		};
 		0C25B3D4D6EE44D021CD07B1 = {
@@ -438,6 +445,9 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				CODE_SIGN_ENTITLEMENTS = Config/RunSteady.entitlements;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Run Steady reads your workouts and date of birth to follow up on runs and set heart rate zones.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Run Steady saves how hard each run felt to Apple Health.";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ENABLE_PREVIEWS = YES;
 			};
@@ -557,6 +567,9 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				CODE_SIGN_ENTITLEMENTS = Config/RunSteady.entitlements;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Run Steady reads your workouts and date of birth to follow up on runs and set heart rate zones.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Run Steady saves how hard each run felt to Apple Health.";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ENABLE_PREVIEWS = YES;
 			};

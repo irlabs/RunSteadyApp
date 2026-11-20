@@ -9,6 +9,7 @@ struct TodayView: View {
     @Query(filter: #Predicate<CoachNote> { $0.isOpen }) private var openNotes: [CoachNote]
     @State private var editing = false
     @State private var checkInSession: StoredSession?
+    @State private var showDiagnostics = false
 
     private var plan: ActivePlan { plans.first?.plan ?? .initial }
     private var declinedAt: Date? { plans.first?.structuralDeclinedAt }
@@ -59,6 +60,7 @@ struct TodayView: View {
         .background(Color.pageBackground)
         .sheet(isPresented: $editing) { ScheduleEditorView(plan: plan, suggestion: suggestion) }
         .sheet(item: $checkInSession) { CheckInView(session: $0) }
+        .sheet(isPresented: $showDiagnostics) { PhoneDiagnosticsView() }
         .task(id: suggestion.key + "\(pending == nil)") { followPlanSilently() }
         .alert("Watch app too old", isPresented: tooOldAlert) {
             Button("Try again") {
@@ -94,6 +96,9 @@ struct TodayView: View {
                 Text(Date.now.formatted(.dateTime.weekday(.wide).day().month(.wide)))
                     .font(.subheadline.weight(.semibold)).foregroundStyle(.secondary)
                 Text("Run Steady").font(.largeTitle.weight(.heavy))
+                    // Hidden diagnostics for device checks.
+                    .onLongPressGesture { showDiagnostics = true }
+                    .accessibilityIdentifier("appTitle")
             }
             Spacer()
             TortoiseView().frame(width: 76)

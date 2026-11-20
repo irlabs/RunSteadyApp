@@ -4,6 +4,7 @@ import SwiftUI
 
 @main
 struct RunSteadyWatchApp: App {
+    @WKApplicationDelegateAdaptor(WatchAppDelegate.self) private var appDelegate
     @StateObject private var manager = WorkoutManager()
     private let container = Store.container(inMemory: UserDefaults.standard.bool(forKey: "inMemory"))
 
@@ -32,6 +33,7 @@ struct RunSteadyWatchApp: App {
         manager.plan = stored.plan
 
         manager.onFinish = { record in
+            Diag.log("Run", "Finished \(record.shortID): \(record.duration / 60) min, \(record.roundsDone) rounds")
             Store.upsert(record, in: context)
             Connectivity.shared.send(record)
         }
