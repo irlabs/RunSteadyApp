@@ -58,4 +58,38 @@ Principle: code computes the facts, taps give the reasons, Haiku asks and talks.
 - [x] 13. Phone re-sends the active plan on launch, activation and watch-state changes; watch queues a plan received mid-run.
 - [x] 14. Plan tab shows the active manual schedule.
 - [x] 15. Manual runs above the plan step it up one week at a time (TDD).
-- [ ] 16. Check on device that a run synced from the watch triggers the check-in notification with the phone app closed.
+- [ ] 16. (See F10.) Check on device that a run synced from the watch triggers the check-in notification with the phone app closed.
+
+## Design ideas v1
+
+From [docs/design-ideas-v1.md](docs/design-ideas-v1.md).
+
+- [ ] D1. Add darker text colours (`brandText`, `runText`, `walkText`, `warmText`, `coolText`, `heartText`) to `Shared/Theme.swift`; use them for chip and label text on light backgrounds.
+- [ ] D2. Watch buttons: ink label on warm-up yellow (and consider it on walk blue).
+- [ ] D3. Add an emotion setting to `TortoiseView` (happy, proud, focused, thinking, encouraging, concerned, resting) plus mono-white and mono-ink versions; connect each to its moment.
+- [ ] D4. Fixed schedule strip sizes (18 / 14 / 8 pt) and a live strip state (done solid, current outlined, upcoming 30%).
+- [ ] D5. PAUSED pill on the watch, replacing the phase pill while paused.
+- [ ] D6. Empty state for History (resting Steady, one line, primary button).
+- [ ] D7. Run-in-progress card on Today while the watch is running.
+- [ ] D8. Inline notice card for watch-version and sync alerts instead of a pop-up.
+- [ ] D9. Dark mode check of brand tints on #1C1C1E.
+
+## First-run feedback (2026-11-20)
+
+From the first real run. Decisions settled in an interview.
+
+- [ ] F1. **Permissions up front.** Watch: a one-time welcome screen on first launch ("Steady tracks your runs with Health + GPS" → Continue) that triggers the HealthKit and location prompts (now in `HealthKitSensor.start()`, `RunSteadyWatch/Sensors.swift`). Phone: ask for Health in its own first launch (needed for F11). Spike: check on device whether the phone's HealthKit permission also covers the independent watch app. Location is per device, so the watch always has to ask for it itself.
+- [ ] F2. **Big time counts down** to `0:00` for the segment target, then counts up from `+0:01` in the segment colour until next is tapped.
+- [ ] F3. **Arc progress** instead of the flat bar: a 270° arc along the screen edge, filling clockwise from 7:30 to 4:30 (25% open at the bottom); time and phase pill inside. Overtime: the full arc pulses or changes tint.
+- [ ] F4. **Repeating cue:** chime + haptic every 8 s after the target is reached, until next is tapped (`Cues.targetReached`). Keep other audio ducked while it repeats.
+- [ ] F5. **Softer voice:** a female British (en-GB) voice chosen by identifier, slightly slower and quieter, with a fallback to the default en-GB voice. Check which voices exist on watchOS (Series 5).
+- [ ] F6. **Km announcement = split pace** of the last km (store clock and distance at each km boundary; now `clock / distance` since start, which includes the warm-up). Speech: "8 minutes" instead of "8 minutes 0". Possible "0 minutes" bug: no bug found in code yet; unit-test the formatting for edge cases (pace < 60 s, whole minutes, first km right after GPS lock). Listen carefully on the next run.
+- [ ] F7. **Watch start summary on one line** (drop "with warm-up and cool-down") so the start button fits without scrolling.
+- [ ] F8. **Small values while running:** 1st = total exercise time; 2nd = heart rate (F9); 3rd = pace (min/km) during run and warm-up, total km during walk and cool-down.
+- [ ] F9. **Heart rate zone colour:** 5 zones as % of max HR (220 − age, age from the HealthKit birth date; needs read permission for date of birth). Shown as a small coloured dot or ring next to the bpm value. Zone maths in RunSteadyKit (TDD).
+- [ ] F10. **Push notification after a run** (supersedes step 16). Do both: (a) the watch sends the finished session with `sendMessage` when the phone is reachable (wakes the iOS app), with `transferUserInfo` as backup; (b) the phone registers HealthKit background delivery for workouts, and on wake posts the check-in notification (or waits for the session). Run was received fine (orange card showed on opening); only the notification was missing. Verify on device with the phone app in the background and with it force-quit.
+- [ ] F11. **Effort slider** as the first check-in question, 1–10, starting at 5. Mapping to `Feeling`: 1–4 Great, 5–7 Okay, 8–10 Tough (TDD in RunSteadyKit). Store the score on `CheckIn` (optional field). Phone writes it to Apple Health as the workout's effort score (`workoutEffortScore`, related to the watch workout found by date); if the workout hasn't synced to the phone's Health yet, retry later.
+- [ ] F12. **Free text on the other check-in questions**, next to the suggested-answer buttons. Typed text counts as no tap for the rules (it never changes the schedule); it goes to the coach and the note extractor, so an injury note can still make the plan more careful.
+- [ ] F13. **"Keep mine" looks disabled:** give the secondary button a clearly enabled style (`SuggestionCard`, `RunSteady/TodayView.swift`).
+- [ ] F14. **Suggestion with a manual schedule:** on Today, show the suggestion card *below* the manual next session, collapsed: "Steady suggests" line + chip, title, schedule bar, buttons "Ignore" / "Use this". The reason line is hidden and shown on tap. After Ignore, the card stays hidden until a new suggestion appears; editing the manual schedule must not bring it back (now `apply()` clears `dismissedSuggestion`). Elsewhere the buttons stay "Keep mine" / "Use this".
+- [ ] F15. **Gap rules on the watch:** when the watch app opens, apply the existing gap rules (6 days → repeat, 12 → back 1 week, 24 → back 2 weeks) using the days since the last session of any kind, with the shared RunSteadyKit rule code, so the plan is right without the phone. Start screen shows "Welcome back, it's been N weeks → Week X". The phone and the watch must reach the same result (deterministic, same inputs); the phone's plan wins once it syncs. TDD for the shared part.

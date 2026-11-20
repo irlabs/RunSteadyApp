@@ -1,16 +1,24 @@
+# iOS Project
+# Build output and secrets
+build/
+xcuserdata/
+*.xcuserstate
+.build/
+
+# Secrets
+Secrets.plist
+scripts/local.env
+
 # OS generated files #
 ######################
 .DS_Store
 .DS_Store?
 
-# ===========================================================================
+# ====================
 # Promptcellar.io
-# ===========================================================================
+# ====================
 .prompts
-# Build output and secrets
-build/
-xcuserdata/
-*.xcuserstate
-Secrets.plist
-.build/
-scripts/local.env
+
+# ========================
+# Design Inspiration files
+DesignInpirations/
