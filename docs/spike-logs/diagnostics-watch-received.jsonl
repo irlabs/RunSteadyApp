@@ -1,0 +1,535 @@
+{"c":"App","t":"2026-11-20T22:23:56.413Z","m":"Launch v1.0 (1) on watchOS 10.6.2: state=inactive","d":"watch"}
+{"t":"2026-11-20T22:23:56.421Z","d":"watch","c":"WC","m":"Activating"}
+{"c":"WC","t":"2026-11-20T22:23:56.745Z","m":"Activated: state=2 reachable=false companionInstalled=true outstandingUserInfo=0","d":"watch"}
+{"t":"2026-11-20T22:23:56.851Z","d":"watch","c":"WC","m":"Plan via context (on activation): My schedule"}
+{"c":"WC","t":"2026-11-20T22:23:56.861Z","m":"Plan via context: My schedule","d":"watch"}
+{"t":"2026-11-20T22:23:56.924Z","d":"watch","c":"App","m":"→ foreground"}
+{"c":"WC","t":"2026-11-20T22:23:57.234Z","m":"Reachable: true","d":"watch"}
+{"t":"2026-11-20T22:24:21.734Z","d":"watch","c":"App","m":"→ inactive"}
+{"c":"WC","t":"2026-11-20T22:24:21.832Z","m":"Reachable: false","d":"watch"}
+{"t":"2026-11-20T22:24:24.891Z","d":"watch","c":"App","m":"→ foreground"}
+{"c":"WC","t":"2026-11-20T22:24:24.967Z","m":"Reachable: true","d":"watch"}
+{"t":"2026-11-20T22:24:54.707Z","d":"watch","c":"App","m":"→ inactive"}
+{"c":"WC","t":"2026-11-20T22:24:54.948Z","m":"Reachable: false","d":"watch"}
+{"t":"2026-11-20T22:24:57.332Z","d":"watch","c":"App","m":"→ foreground"}
+{"c":"WC","t":"2026-11-20T22:24:57.409Z","m":"Reachable: true","d":"watch"}
+{"t":"2026-11-20T22:25:18.510Z","d":"watch","c":"WC","m":"Now: state=2 reachable=true companionInstalled=true outstandingUserInfo=0"}
+{"c":"App","t":"2026-11-20T22:25:25.542Z","m":"→ inactive","d":"watch"}
+{"t":"2026-11-20T22:25:25.912Z","d":"watch","c":"WC","m":"Reachable: false"}
+{"c":"App","t":"2026-11-20T22:25:25.996Z","m":"→ background","d":"watch"}
+{"t":"2026-11-20T22:26:31.362Z","d":"watch","c":"App","m":"Background task: WKSnapshotRefreshBackgroundTask"}
+{"c":"WC","t":"2026-11-20T22:26:31.447Z","m":"Reachable: true","d":"watch"}
+{"t":"2026-11-20T22:26:31.485Z","d":"watch","c":"WC","m":"Reachable: false"}
+{"c":"App","t":"2026-11-20T22:27:12.630Z","m":"→ foreground","d":"watch"}
+{"t":"2026-11-20T22:27:12.639Z","d":"watch","c":"WC","m":"Reachable: true"}
+{"c":"HealthKit","t":"2026-11-20T22:27:23.024Z","m":"Effort score type needs watchOS 11 (this watch: 10.6.2); checking date of birth only","d":"watch"}
+{"t":"2026-11-20T22:27:23.065Z","d":"watch","c":"HealthKit","m":"Request status (watch) for birth date: should request"}
+{"c":"HealthKit","t":"2026-11-20T22:27:23.074Z","m":"Share HKWorkoutTypeIdentifier: authorized","d":"watch"}
+{"t":"2026-11-20T22:27:23.075Z","d":"watch","c":"HealthKit","m":"Share HKWorkoutRouteTypeIdentifier: authorized"}
+{"c":"Location","t":"2026-11-20T22:27:23.086Z","m":"Authorization: when in use","d":"watch"}
+{"t":"2026-11-20T22:28:27.438Z","d":"watch","c":"HealthKit","m":"Effort score type needs watchOS 11 (this watch: 10.6.2); checking date of birth only"}
+{"c":"HealthKit","t":"2026-11-20T22:28:27.460Z","m":"Request status (watch) for birth date: should request","d":"watch"}
+{"t":"2026-11-20T22:28:27.464Z","d":"watch","c":"HealthKit","m":"Share HKWorkoutTypeIdentifier: authorized"}
+{"c":"HealthKit","t":"2026-11-20T22:28:27.468Z","m":"Share HKWorkoutRouteTypeIdentifier: authorized","d":"watch"}
+{"t":"2026-11-20T22:28:27.489Z","d":"watch","c":"Location","m":"Authorization: when in use"}
+{"c":"App","t":"2026-11-20T22:29:57.382Z","m":"→ inactive","d":"watch"}
+{"t":"2026-11-20T22:29:57.638Z","d":"watch","c":"WC","m":"Reachable: false"}
+{"c":"App","t":"2026-11-20T22:29:57.859Z","m":"→ background","d":"watch"}
+{"t":"2026-11-20T22:31:09.975Z","d":"watch","c":"App","m":"Background task: WKSnapshotRefreshBackgroundTask"}
+{"c":"App","t":"2026-11-20T22:31:19.538Z","m":"→ foreground","d":"watch"}
+{"t":"2026-11-20T22:31:19.572Z","d":"watch","c":"WC","m":"Reachable: true"}
+{"c":"WC","t":"2026-11-20T22:31:29.636Z","m":"Now: state=2 reachable=true companionInstalled=true outstandingUserInfo=0","d":"watch"}
+{"t":"2026-11-20T22:31:42.070Z","d":"watch","c":"HealthKit","m":"Effort score type needs watchOS 11 (this watch: 10.6.2); checking date of birth only"}
+{"c":"HealthKit","t":"2026-11-20T22:31:42.080Z","m":"Request status (watch) for birth date: should request","d":"watch"}
+{"t":"2026-11-20T22:31:42.091Z","d":"watch","c":"HealthKit","m":"Share HKWorkoutTypeIdentifier: authorized"}
+{"c":"HealthKit","t":"2026-11-20T22:31:42.095Z","m":"Share HKWorkoutRouteTypeIdentifier: authorized","d":"watch"}
+{"t":"2026-11-20T22:31:42.106Z","d":"watch","c":"Location","m":"Authorization: when in use"}
+{"c":"WC","t":"2026-11-20T22:32:09.259Z","m":"Now: state=2 reachable=true companionInstalled=true outstandingUserInfo=0","d":"watch"}
+{"t":"2026-11-20T22:32:12.840Z","d":"watch","c":"HealthKit","m":"Effort score type needs watchOS 11 (this watch: 10.6.2); checking date of birth only"}
+{"c":"HealthKit","t":"2026-11-20T22:32:12.847Z","m":"Request status (watch) for birth date: should request","d":"watch"}
+{"t":"2026-11-20T22:32:12.850Z","d":"watch","c":"HealthKit","m":"Share HKWorkoutTypeIdentifier: authorized"}
+{"c":"HealthKit","t":"2026-11-20T22:32:12.855Z","m":"Share HKWorkoutRouteTypeIdentifier: authorized","d":"watch"}
+{"t":"2026-11-20T22:32:12.862Z","d":"watch","c":"Location","m":"Authorization: when in use"}
+{"c":"WC","t":"2026-11-20T22:32:24.736Z","m":"Now: state=2 reachable=true companionInstalled=true outstandingUserInfo=0","d":"watch"}
+{"t":"2026-11-20T22:32:39.770Z","d":"watch","c":"WC","m":"Now: state=2 reachable=true companionInstalled=true outstandingUserInfo=0"}
+{"c":"App","t":"2026-11-20T22:33:49.955Z","m":"→ inactive","d":"watch"}
+{"t":"2026-11-20T22:34:08.716Z","d":"watch","c":"App","m":"→ foreground"}
+{"c":"WC","t":"2026-11-20T22:34:08.947Z","m":"Reachable: false","d":"watch"}
+{"t":"2026-11-20T22:34:09.033Z","d":"watch","c":"WC","m":"Reachable: true"}
+{"c":"HealthKit","t":"2026-11-20T22:34:11.934Z","m":"Effort score type needs watchOS 11 (this watch: 10.6.2); checking date of birth only","d":"watch"}
+{"t":"2026-11-20T22:34:11.949Z","d":"watch","c":"HealthKit","m":"Request status (watch) for birth date: should request"}
+{"c":"HealthKit","t":"2026-11-20T22:34:11.958Z","m":"Share HKWorkoutTypeIdentifier: authorized","d":"watch"}
+{"t":"2026-11-20T22:34:11.964Z","d":"watch","c":"HealthKit","m":"Share HKWorkoutRouteTypeIdentifier: authorized"}
+{"c":"Location","t":"2026-11-20T22:34:11.976Z","m":"Authorization: when in use","d":"watch"}
+{"t":"2026-11-20T22:34:14.138Z","d":"watch","c":"HealthKit","m":"Effort score type needs watchOS 11 (this watch: 10.6.2); checking date of birth only"}
+{"c":"HealthKit","t":"2026-11-20T22:34:14.149Z","m":"Request status (watch) for birth date: should request","d":"watch"}
+{"t":"2026-11-20T22:34:14.151Z","d":"watch","c":"HealthKit","m":"Share HKWorkoutTypeIdentifier: authorized"}
+{"c":"HealthKit","t":"2026-11-20T22:34:14.156Z","m":"Share HKWorkoutRouteTypeIdentifier: authorized","d":"watch"}
+{"t":"2026-11-20T22:34:14.161Z","d":"watch","c":"Location","m":"Authorization: when in use"}
+{"c":"App","t":"2026-11-20T22:35:17.849Z","m":"→ inactive","d":"watch"}
+{"t":"2026-11-20T22:35:18.102Z","d":"watch","c":"WC","m":"Reachable: false"}
+{"c":"App","t":"2026-11-20T22:35:18.318Z","m":"→ background","d":"watch"}
+{"t":"2026-11-20T22:36:02.296Z","d":"watch","c":"App","m":"→ foreground"}
+{"c":"WC","t":"2026-11-20T22:36:02.328Z","m":"Reachable: true","d":"watch"}
+{"t":"2026-11-20T22:36:03.064Z","d":"watch","c":"WC","m":"Now: state=2 reachable=true companionInstalled=true outstandingUserInfo=0"}
+{"c":"HealthKit","t":"2026-11-20T22:36:08.357Z","m":"Date of birth (watch) failed: Authorization is not determined","d":"watch"}
+{"t":"2026-11-20T22:36:45.404Z","d":"watch","c":"WC","m":"Now: state=2 reachable=true companionInstalled=true outstandingUserInfo=0"}
+{"c":"App","t":"2026-11-20T22:36:50.783Z","m":"→ inactive","d":"watch"}
+{"t":"2026-11-20T22:36:50.956Z","d":"watch","c":"WC","m":"Reachable: false"}
+{"c":"HealthKit","t":"2026-11-20T22:37:11.045Z","m":"Request finished (watch)","d":"watch"}
+{"t":"2026-11-20T22:37:11.045Z","d":"watch","c":"HealthKit","m":"Effort score type needs watchOS 11 (this watch: 10.6.2); checking date of birth only"}
+{"c":"HealthKit","t":"2026-11-20T22:37:11.058Z","m":"Request status (watch) for birth date: unnecessary","d":"watch"}
+{"t":"2026-11-20T22:37:11.060Z","d":"watch","c":"HealthKit","m":"Share HKWorkoutTypeIdentifier: authorized"}
+{"c":"HealthKit","t":"2026-11-20T22:37:11.061Z","m":"Share HKWorkoutRouteTypeIdentifier: authorized","d":"watch"}
+{"t":"2026-11-20T22:37:11.076Z","d":"watch","c":"Location","m":"Authorization: when in use"}
+{"c":"App","t":"2026-11-20T22:37:11.431Z","m":"→ foreground","d":"watch"}
+{"t":"2026-11-20T22:37:11.465Z","d":"watch","c":"WC","m":"Reachable: true"}
+{"c":"HealthKit","t":"2026-11-20T22:37:17.310Z","m":"Date of birth (watch): present","d":"watch"}
+{"t":"2026-11-20T22:37:27.519Z","d":"watch","c":"WC","m":"Now: state=2 reachable=true companionInstalled=true outstandingUserInfo=0"}
+{"c":"App","t":"2026-11-20T22:37:28.951Z","m":"→ inactive","d":"watch"}
+{"t":"2026-11-20T22:37:29.142Z","d":"watch","c":"WC","m":"Reachable: false"}
+{"c":"App","t":"2026-11-20T22:37:29.425Z","m":"→ background","d":"watch"}
+{"t":"2026-11-20T22:39:30.522Z","d":"watch","c":"App","m":"Background task: WKSnapshotRefreshBackgroundTask"}
+{"c":"WC","t":"2026-11-20T22:39:30.884Z","m":"Reachable: true","d":"watch"}
+{"t":"2026-11-20T22:39:30.892Z","d":"watch","c":"WC","m":"Reachable: false"}
+{"c":"App","t":"2026-11-20T22:51:24.078Z","m":"→ foreground","d":"watch"}
+{"t":"2026-11-20T22:51:24.570Z","d":"watch","c":"WC","m":"Reachable: true"}
+{"c":"Voice","t":"2026-11-20T22:51:38.806Z","m":"41 English voices (of 143)","d":"watch"}
+{"t":"2026-11-20T22:51:38.806Z","d":"watch","c":"Voice","m":"en-AU Karen · female · default · com.apple.voice.compact.en-AU.Karen"}
+{"c":"Voice","t":"2026-11-20T22:51:38.806Z","m":"en-GB Daniel · male · default · com.apple.voice.compact.en-GB.Daniel","d":"watch"}
+{"t":"2026-11-20T22:51:38.806Z","d":"watch","c":"Voice","m":"en-GB Eddy · unspecified · default · com.apple.eloquence.en-GB.Eddy"}
+{"c":"Voice","t":"2026-11-20T22:51:38.806Z","m":"en-GB Flo · unspecified · default · com.apple.eloquence.en-GB.Flo","d":"watch"}
+{"t":"2026-11-20T22:51:38.806Z","d":"watch","c":"Voice","m":"en-GB Grandma · unspecified · default · com.apple.eloquence.en-GB.Grandma"}
+{"c":"Voice","t":"2026-11-20T22:51:38.806Z","m":"en-GB Grandpa · unspecified · default · com.apple.eloquence.en-GB.Grandpa","d":"watch"}
+{"t":"2026-11-20T22:51:38.806Z","d":"watch","c":"Voice","m":"en-GB Reed · unspecified · default · com.apple.eloquence.en-GB.Reed"}
+{"c":"Voice","t":"2026-11-20T22:51:38.806Z","m":"en-GB Rocko · unspecified · default · com.apple.eloquence.en-GB.Rocko","d":"watch"}
+{"t":"2026-11-20T22:51:38.806Z","d":"watch","c":"Voice","m":"en-GB Sandy · unspecified · default · com.apple.eloquence.en-GB.Sandy"}
+{"c":"Voice","t":"2026-11-20T22:51:38.807Z","m":"en-GB Shelley · unspecified · default · com.apple.eloquence.en-GB.Shelley","d":"watch"}
+{"t":"2026-11-20T22:51:38.807Z","d":"watch","c":"Voice","m":"en-IE Moira · female · default · com.apple.voice.compact.en-IE.Moira"}
+{"c":"Voice","t":"2026-11-20T22:51:38.807Z","m":"en-IN Rishi · male · default · com.apple.voice.compact.en-IN.Rishi","d":"watch"}
+{"t":"2026-11-20T22:51:38.807Z","d":"watch","c":"Voice","m":"en-US Albert · unspecified · default · com.apple.speech.synthesis.voice.Albert"}
+{"c":"Voice","t":"2026-11-20T22:51:38.807Z","m":"en-US Bad News · unspecified · default · com.apple.speech.synthesis.voice.BadNews","d":"watch"}
+{"t":"2026-11-20T22:51:38.807Z","d":"watch","c":"Voice","m":"en-US Bahh · unspecified · default · com.apple.speech.synthesis.voice.Bahh"}
+{"c":"Voice","t":"2026-11-20T22:51:38.807Z","m":"en-US Bells · unspecified · default · com.apple.speech.synthesis.voice.Bells","d":"watch"}
+{"t":"2026-11-20T22:51:38.807Z","d":"watch","c":"Voice","m":"en-US Boing · unspecified · default · com.apple.speech.synthesis.voice.Boing"}
+{"c":"Voice","t":"2026-11-20T22:51:38.807Z","m":"en-US Bubbles · unspecified · default · com.apple.speech.synthesis.voice.Bubbles","d":"watch"}
+{"t":"2026-11-20T22:51:38.807Z","d":"watch","c":"Voice","m":"en-US Cellos · unspecified · default · com.apple.speech.synthesis.voice.Cellos"}
+{"c":"Voice","t":"2026-11-20T22:51:38.807Z","m":"en-US Eddy · unspecified · default · com.apple.eloquence.en-US.Eddy","d":"watch"}
+{"t":"2026-11-20T22:51:38.807Z","d":"watch","c":"Voice","m":"en-US Flo · unspecified · default · com.apple.eloquence.en-US.Flo"}
+{"c":"Voice","t":"2026-11-20T22:51:38.807Z","m":"en-US Fred · male · default · com.apple.speech.synthesis.voice.Fred","d":"watch"}
+{"t":"2026-11-20T22:51:38.807Z","d":"watch","c":"Voice","m":"en-US Good News · unspecified · default · com.apple.speech.synthesis.voice.GoodNews"}
+{"c":"Voice","t":"2026-11-20T22:51:38.807Z","m":"en-US Grandma · unspecified · default · com.apple.eloquence.en-US.Grandma","d":"watch"}
+{"t":"2026-11-20T22:51:38.808Z","d":"watch","c":"Voice","m":"en-US Grandpa · unspecified · default · com.apple.eloquence.en-US.Grandpa"}
+{"c":"Voice","t":"2026-11-20T22:51:38.808Z","m":"en-US Jester · unspecified · default · com.apple.speech.synthesis.voice.Hysterical","d":"watch"}
+{"t":"2026-11-20T22:51:38.808Z","d":"watch","c":"Voice","m":"en-US Junior · unspecified · default · com.apple.speech.synthesis.voice.Junior"}
+{"c":"Voice","t":"2026-11-20T22:51:38.808Z","m":"en-US Kathy · unspecified · default · com.apple.speech.synthesis.voice.Kathy","d":"watch"}
+{"t":"2026-11-20T22:51:38.808Z","d":"watch","c":"Voice","m":"en-US Organ · unspecified · default · com.apple.speech.synthesis.voice.Organ"}
+{"c":"Voice","t":"2026-11-20T22:51:38.808Z","m":"en-US Ralph · unspecified · default · com.apple.speech.synthesis.voice.Ralph","d":"watch"}
+{"t":"2026-11-20T22:51:38.808Z","d":"watch","c":"Voice","m":"en-US Reed · unspecified · default · com.apple.eloquence.en-US.Reed"}
+{"c":"Voice","t":"2026-11-20T22:51:38.808Z","m":"en-US Rocko · unspecified · default · com.apple.eloquence.en-US.Rocko","d":"watch"}
+{"t":"2026-11-20T22:51:38.808Z","d":"watch","c":"Voice","m":"en-US Samantha · female · default · com.apple.voice.compact.en-US.Samantha"}
+{"c":"Voice","t":"2026-11-20T22:51:38.808Z","m":"en-US Sandy · unspecified · default · com.apple.eloquence.en-US.Sandy","d":"watch"}
+{"t":"2026-11-20T22:51:38.808Z","d":"watch","c":"Voice","m":"en-US Shelley · unspecified · default · com.apple.eloquence.en-US.Shelley"}
+{"c":"Voice","t":"2026-11-20T22:51:38.808Z","m":"en-US Superstar · unspecified · default · com.apple.speech.synthesis.voice.Princess","d":"watch"}
+{"t":"2026-11-20T22:51:38.808Z","d":"watch","c":"Voice","m":"en-US Trinoids · unspecified · default · com.apple.speech.synthesis.voice.Trinoids"}
+{"c":"Voice","t":"2026-11-20T22:51:38.808Z","m":"en-US Whisper · unspecified · default · com.apple.speech.synthesis.voice.Whisper","d":"watch"}
+{"t":"2026-11-20T22:51:38.808Z","d":"watch","c":"Voice","m":"en-US Wobble · unspecified · default · com.apple.speech.synthesis.voice.Deranged"}
+{"c":"Voice","t":"2026-11-20T22:51:38.809Z","m":"en-US Zarvox · unspecified · default · com.apple.speech.synthesis.voice.Zarvox","d":"watch"}
+{"t":"2026-11-20T22:51:38.809Z","d":"watch","c":"Voice","m":"en-ZA Tessa · female · default · com.apple.voice.compact.en-ZA.Tessa"}
+{"c":"Voice","t":"2026-11-20T22:52:00.116Z","m":"Speak com.apple.voice.compact.en-AU.Karen rate 0.5 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:52:06.794Z","d":"watch","c":"Voice","m":"Speak com.apple.voice.compact.en-GB.Daniel rate 0.5 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:52:12.636Z","m":"Speak com.apple.eloquence.en-GB.Eddy rate 0.5 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:52:18.952Z","d":"watch","c":"Voice","m":"Speak com.apple.voice.compact.en-GB.Daniel rate 0.5 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:52:25.361Z","m":"Speak com.apple.eloquence.en-GB.Flo rate 0.5 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:52:31.068Z","d":"watch","c":"Voice","m":"Speak com.apple.eloquence.en-GB.Grandpa rate 0.5 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:52:37.972Z","m":"Speak com.apple.eloquence.en-GB.Reed rate 0.5 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:52:42.883Z","d":"watch","c":"Voice","m":"Speak com.apple.eloquence.en-GB.Rocko rate 0.5 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:52:49.122Z","m":"Speak com.apple.eloquence.en-GB.Sandy rate 0.5 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:52:54.011Z","d":"watch","c":"Voice","m":"Speak com.apple.eloquence.en-GB.Shelley rate 0.5 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:53:00.268Z","m":"Speak com.apple.voice.compact.en-IE.Moira rate 0.5 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:53:05.484Z","d":"watch","c":"Voice","m":"Speak com.apple.voice.compact.en-IN.Rishi rate 0.5 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:53:10.167Z","m":"Speak com.apple.speech.synthesis.voice.Albert rate 0.5 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:53:18.519Z","d":"watch","c":"Voice","m":"Speak com.apple.speech.synthesis.voice.BadNews rate 0.5 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:53:21.908Z","m":"Speak com.apple.speech.synthesis.voice.Bahh rate 0.5 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:53:24.784Z","d":"watch","c":"Voice","m":"Speak com.apple.speech.synthesis.voice.Bells rate 0.5 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:53:27.342Z","m":"Speak com.apple.speech.synthesis.voice.Boing rate 0.5 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:53:30.352Z","d":"watch","c":"Voice","m":"Speak com.apple.speech.synthesis.voice.Bubbles rate 0.5 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:53:32.288Z","m":"Speak com.apple.speech.synthesis.voice.Cellos rate 0.5 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:53:35.243Z","d":"watch","c":"Voice","m":"Speak com.apple.eloquence.en-US.Eddy rate 0.5 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:53:41.063Z","m":"Speak com.apple.eloquence.en-US.Flo rate 0.5 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:53:46.605Z","d":"watch","c":"Voice","m":"Speak com.apple.speech.synthesis.voice.Fred rate 0.5 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:53:50.758Z","m":"Speak com.apple.speech.synthesis.voice.GoodNews rate 0.5 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:53:53.046Z","d":"watch","c":"Voice","m":"Speak com.apple.eloquence.en-US.Grandma rate 0.5 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:53:55.488Z","m":"Speak com.apple.eloquence.en-US.Grandpa rate 0.5 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:53:58.027Z","d":"watch","c":"Voice","m":"Speak com.apple.speech.synthesis.voice.Hysterical rate 0.5 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:54:01.244Z","m":"Speak com.apple.speech.synthesis.voice.Junior rate 0.5 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:54:06.121Z","d":"watch","c":"Voice","m":"Speak com.apple.speech.synthesis.voice.Kathy rate 0.5 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:54:11.024Z","m":"Speak com.apple.speech.synthesis.voice.Organ rate 0.5 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:54:13.146Z","d":"watch","c":"Voice","m":"Speak com.apple.speech.synthesis.voice.Ralph rate 0.5 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:54:16.310Z","m":"Speak com.apple.eloquence.en-US.Reed rate 0.5 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:54:20.111Z","d":"watch","c":"Voice","m":"Speak com.apple.eloquence.en-US.Rocko rate 0.5 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:54:22.902Z","m":"Speak com.apple.voice.compact.en-US.Samantha rate 0.5 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:54:30.437Z","d":"watch","c":"Voice","m":"Speak com.apple.voice.compact.en-US.Samantha rate 0.5 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:54:33.854Z","m":"Speak com.apple.eloquence.en-US.Sandy rate 0.5 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:54:38.934Z","d":"watch","c":"Voice","m":"Speak com.apple.eloquence.en-US.Shelley rate 0.5 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:54:42.758Z","m":"Speak com.apple.speech.synthesis.voice.Princess rate 0.5 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:54:45.719Z","d":"watch","c":"Voice","m":"Speak com.apple.speech.synthesis.voice.Trinoids rate 0.5 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:54:47.828Z","m":"Speak com.apple.speech.synthesis.voice.Whisper rate 0.5 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:54:50.593Z","d":"watch","c":"Voice","m":"Speak com.apple.speech.synthesis.voice.Deranged rate 0.5 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:54:53.265Z","m":"Speak com.apple.speech.synthesis.voice.Zarvox rate 0.5 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:54:56.498Z","d":"watch","c":"Voice","m":"Speak com.apple.voice.compact.en-ZA.Tessa rate 0.5 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:55:11.639Z","m":"Speak com.apple.voice.compact.en-GB.Daniel rate 0.5 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:55:13.777Z","d":"watch","c":"Voice","m":"Speak com.apple.voice.compact.en-GB.Daniel rate 0.5 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:55:18.790Z","m":"Speak com.apple.eloquence.en-GB.Flo rate 0.5 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:55:22.920Z","d":"watch","c":"Voice","m":"Speak com.apple.eloquence.en-GB.Eddy rate 0.5 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:55:28.361Z","m":"Speak com.apple.voice.compact.en-GB.Daniel rate 0.5 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:55:41.182Z","d":"watch","c":"Voice","m":"Speak com.apple.voice.compact.en-GB.Daniel rate 0.45 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:55:45.404Z","m":"Speak default en-GB rate 0.45 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:55:46.820Z","d":"watch","c":"Voice","m":"Speak default en-GB rate 0.45 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:56:00.329Z","m":"Speak com.apple.eloquence.en-US.Eddy rate 0.45 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:56:02.535Z","d":"watch","c":"Voice","m":"Speak com.apple.eloquence.en-US.Flo rate 0.45 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:56:07.176Z","m":"Speak com.apple.speech.synthesis.voice.Kathy rate 0.45 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:56:10.660Z","d":"watch","c":"Voice","m":"Speak com.apple.voice.compact.en-US.Samantha rate 0.45 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:56:13.511Z","m":"Speak com.apple.voice.compact.en-US.Samantha rate 0.45 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:56:17.344Z","d":"watch","c":"Voice","m":"Speak com.apple.eloquence.en-US.Sandy rate 0.45 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:56:20.495Z","m":"Speak com.apple.voice.compact.en-US.Samantha rate 0.45 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:56:28.716Z","d":"watch","c":"Voice","m":"Speak com.apple.voice.compact.en-GB.Daniel rate 0.45 volume 1.0"}
+{"c":"WC","t":"2026-11-20T22:56:36.690Z","m":"Now: state=2 reachable=true companionInstalled=true outstandingUserInfo=0","d":"watch"}
+{"t":"2026-11-20T22:57:56.939Z","d":"watch","c":"WC","m":"Now: state=2 reachable=true companionInstalled=true outstandingUserInfo=0"}
+{"c":"Voice","t":"2026-11-20T22:58:00.931Z","m":"41 English voices (of 143)","d":"watch"}
+{"t":"2026-11-20T22:58:00.931Z","d":"watch","c":"Voice","m":"en-AU Karen · female · default · com.apple.voice.compact.en-AU.Karen"}
+{"c":"Voice","t":"2026-11-20T22:58:00.931Z","m":"en-GB Daniel · male · default · com.apple.voice.compact.en-GB.Daniel","d":"watch"}
+{"t":"2026-11-20T22:58:00.931Z","d":"watch","c":"Voice","m":"en-GB Eddy · unspecified · default · com.apple.eloquence.en-GB.Eddy"}
+{"c":"Voice","t":"2026-11-20T22:58:00.931Z","m":"en-GB Flo · unspecified · default · com.apple.eloquence.en-GB.Flo","d":"watch"}
+{"t":"2026-11-20T22:58:00.931Z","d":"watch","c":"Voice","m":"en-GB Grandma · unspecified · default · com.apple.eloquence.en-GB.Grandma"}
+{"c":"Voice","t":"2026-11-20T22:58:00.931Z","m":"en-GB Grandpa · unspecified · default · com.apple.eloquence.en-GB.Grandpa","d":"watch"}
+{"t":"2026-11-20T22:58:00.932Z","d":"watch","c":"Voice","m":"en-GB Reed · unspecified · default · com.apple.eloquence.en-GB.Reed"}
+{"c":"Voice","t":"2026-11-20T22:58:00.932Z","m":"en-GB Rocko · unspecified · default · com.apple.eloquence.en-GB.Rocko","d":"watch"}
+{"t":"2026-11-20T22:58:00.932Z","d":"watch","c":"Voice","m":"en-GB Sandy · unspecified · default · com.apple.eloquence.en-GB.Sandy"}
+{"c":"Voice","t":"2026-11-20T22:58:00.932Z","m":"en-GB Shelley · unspecified · default · com.apple.eloquence.en-GB.Shelley","d":"watch"}
+{"t":"2026-11-20T22:58:00.932Z","d":"watch","c":"Voice","m":"en-IE Moira · female · default · com.apple.voice.compact.en-IE.Moira"}
+{"c":"Voice","t":"2026-11-20T22:58:00.932Z","m":"en-IN Rishi · male · default · com.apple.voice.compact.en-IN.Rishi","d":"watch"}
+{"t":"2026-11-20T22:58:00.932Z","d":"watch","c":"Voice","m":"en-US Albert · unspecified · default · com.apple.speech.synthesis.voice.Albert"}
+{"c":"Voice","t":"2026-11-20T22:58:00.932Z","m":"en-US Bad News · unspecified · default · com.apple.speech.synthesis.voice.BadNews","d":"watch"}
+{"t":"2026-11-20T22:58:00.932Z","d":"watch","c":"Voice","m":"en-US Bahh · unspecified · default · com.apple.speech.synthesis.voice.Bahh"}
+{"c":"Voice","t":"2026-11-20T22:58:00.932Z","m":"en-US Bells · unspecified · default · com.apple.speech.synthesis.voice.Bells","d":"watch"}
+{"t":"2026-11-20T22:58:00.932Z","d":"watch","c":"Voice","m":"en-US Boing · unspecified · default · com.apple.speech.synthesis.voice.Boing"}
+{"c":"Voice","t":"2026-11-20T22:58:00.932Z","m":"en-US Bubbles · unspecified · default · com.apple.speech.synthesis.voice.Bubbles","d":"watch"}
+{"t":"2026-11-20T22:58:00.932Z","d":"watch","c":"Voice","m":"en-US Cellos · unspecified · default · com.apple.speech.synthesis.voice.Cellos"}
+{"c":"Voice","t":"2026-11-20T22:58:00.932Z","m":"en-US Eddy · unspecified · default · com.apple.eloquence.en-US.Eddy","d":"watch"}
+{"t":"2026-11-20T22:58:00.933Z","d":"watch","c":"Voice","m":"en-US Flo · unspecified · default · com.apple.eloquence.en-US.Flo"}
+{"c":"Voice","t":"2026-11-20T22:58:00.933Z","m":"en-US Fred · male · default · com.apple.speech.synthesis.voice.Fred","d":"watch"}
+{"t":"2026-11-20T22:58:00.933Z","d":"watch","c":"Voice","m":"en-US Good News · unspecified · default · com.apple.speech.synthesis.voice.GoodNews"}
+{"c":"Voice","t":"2026-11-20T22:58:00.933Z","m":"en-US Grandma · unspecified · default · com.apple.eloquence.en-US.Grandma","d":"watch"}
+{"t":"2026-11-20T22:58:00.933Z","d":"watch","c":"Voice","m":"en-US Grandpa · unspecified · default · com.apple.eloquence.en-US.Grandpa"}
+{"c":"Voice","t":"2026-11-20T22:58:00.933Z","m":"en-US Jester · unspecified · default · com.apple.speech.synthesis.voice.Hysterical","d":"watch"}
+{"t":"2026-11-20T22:58:00.933Z","d":"watch","c":"Voice","m":"en-US Junior · unspecified · default · com.apple.speech.synthesis.voice.Junior"}
+{"c":"Voice","t":"2026-11-20T22:58:00.933Z","m":"en-US Kathy · unspecified · default · com.apple.speech.synthesis.voice.Kathy","d":"watch"}
+{"t":"2026-11-20T22:58:00.933Z","d":"watch","c":"Voice","m":"en-US Organ · unspecified · default · com.apple.speech.synthesis.voice.Organ"}
+{"c":"Voice","t":"2026-11-20T22:58:00.933Z","m":"en-US Ralph · unspecified · default · com.apple.speech.synthesis.voice.Ralph","d":"watch"}
+{"t":"2026-11-20T22:58:00.933Z","d":"watch","c":"Voice","m":"en-US Reed · unspecified · default · com.apple.eloquence.en-US.Reed"}
+{"c":"Voice","t":"2026-11-20T22:58:00.933Z","m":"en-US Rocko · unspecified · default · com.apple.eloquence.en-US.Rocko","d":"watch"}
+{"t":"2026-11-20T22:58:00.933Z","d":"watch","c":"Voice","m":"en-US Samantha · female · default · com.apple.voice.compact.en-US.Samantha"}
+{"c":"Voice","t":"2026-11-20T22:58:00.933Z","m":"en-US Sandy · unspecified · default · com.apple.eloquence.en-US.Sandy","d":"watch"}
+{"t":"2026-11-20T22:58:00.934Z","d":"watch","c":"Voice","m":"en-US Shelley · unspecified · default · com.apple.eloquence.en-US.Shelley"}
+{"c":"Voice","t":"2026-11-20T22:58:00.934Z","m":"en-US Superstar · unspecified · default · com.apple.speech.synthesis.voice.Princess","d":"watch"}
+{"t":"2026-11-20T22:58:00.934Z","d":"watch","c":"Voice","m":"en-US Trinoids · unspecified · default · com.apple.speech.synthesis.voice.Trinoids"}
+{"c":"Voice","t":"2026-11-20T22:58:00.934Z","m":"en-US Whisper · unspecified · default · com.apple.speech.synthesis.voice.Whisper","d":"watch"}
+{"t":"2026-11-20T22:58:00.934Z","d":"watch","c":"Voice","m":"en-US Wobble · unspecified · default · com.apple.speech.synthesis.voice.Deranged"}
+{"c":"Voice","t":"2026-11-20T22:58:00.934Z","m":"en-US Zarvox · unspecified · default · com.apple.speech.synthesis.voice.Zarvox","d":"watch"}
+{"t":"2026-11-20T22:58:00.934Z","d":"watch","c":"Voice","m":"en-ZA Tessa · female · default · com.apple.voice.compact.en-ZA.Tessa"}
+{"c":"Voice","t":"2026-11-20T22:58:04.466Z","m":"Speak default en-GB rate 0.5 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:58:09.967Z","d":"watch","c":"Voice","m":"Speak default en-GB rate 0.45 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:58:20.251Z","m":"Speak com.apple.eloquence.en-GB.Eddy rate 0.45 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:58:29.383Z","d":"watch","c":"Voice","m":"Speak com.apple.voice.compact.en-IE.Moira rate 0.45 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:58:40.800Z","m":"Speak com.apple.speech.synthesis.voice.Fred rate 0.45 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:58:48.531Z","d":"watch","c":"Voice","m":"Speak com.apple.voice.compact.en-US.Samantha rate 0.45 volume 1.0"}
+{"c":"Voice","t":"2026-11-20T22:58:55.409Z","m":"Speak com.apple.voice.compact.en-ZA.Tessa rate 0.45 volume 1.0","d":"watch"}
+{"t":"2026-11-20T22:59:26.997Z","d":"watch","c":"Voice","m":"Speak com.apple.voice.compact.en-GB.Daniel rate 0.45 volume 1.0"}
+{"c":"WC","t":"2026-11-20T22:59:30.933Z","m":"Now: state=2 reachable=true companionInstalled=true outstandingUserInfo=0","d":"watch"}
+{"t":"2026-11-20T22:59:50.594Z","d":"watch","c":"App","m":"→ inactive"}
+{"c":"WC","t":"2026-11-20T22:59:50.740Z","m":"Reachable: false","d":"watch"}
+{"t":"2026-11-20T23:00:59.173Z","d":"watch","c":"App","m":"→ foreground"}
+{"c":"WC","t":"2026-11-20T23:00:59.543Z","m":"Reachable: true","d":"watch"}
+{"t":"2026-11-20T23:01:01.603Z","d":"watch","c":"WC","m":"Now: state=2 reachable=true companionInstalled=true outstandingUserInfo=0"}
+{"c":"Voice","t":"2026-11-20T23:01:08.309Z","m":"41 English voices (of 143)","d":"watch"}
+{"t":"2026-11-20T23:01:08.309Z","d":"watch","c":"Voice","m":"en-AU Karen · female · default · com.apple.voice.compact.en-AU.Karen"}
+{"c":"Voice","t":"2026-11-20T23:01:08.309Z","m":"en-GB Daniel · male · default · com.apple.voice.compact.en-GB.Daniel","d":"watch"}
+{"t":"2026-11-20T23:01:08.309Z","d":"watch","c":"Voice","m":"en-GB Eddy · unspecified · default · com.apple.eloquence.en-GB.Eddy"}
+{"c":"Voice","t":"2026-11-20T23:01:08.309Z","m":"en-GB Flo · unspecified · default · com.apple.eloquence.en-GB.Flo","d":"watch"}
+{"t":"2026-11-20T23:01:08.309Z","d":"watch","c":"Voice","m":"en-GB Grandma · unspecified · default · com.apple.eloquence.en-GB.Grandma"}
+{"c":"Voice","t":"2026-11-20T23:01:08.310Z","m":"en-GB Grandpa · unspecified · default · com.apple.eloquence.en-GB.Grandpa","d":"watch"}
+{"t":"2026-11-20T23:01:08.310Z","d":"watch","c":"Voice","m":"en-GB Reed · unspecified · default · com.apple.eloquence.en-GB.Reed"}
+{"c":"Voice","t":"2026-11-20T23:01:08.310Z","m":"en-GB Rocko · unspecified · default · com.apple.eloquence.en-GB.Rocko","d":"watch"}
+{"t":"2026-11-20T23:01:08.310Z","d":"watch","c":"Voice","m":"en-GB Sandy · unspecified · default · com.apple.eloquence.en-GB.Sandy"}
+{"c":"Voice","t":"2026-11-20T23:01:08.310Z","m":"en-GB Shelley · unspecified · default · com.apple.eloquence.en-GB.Shelley","d":"watch"}
+{"t":"2026-11-20T23:01:08.310Z","d":"watch","c":"Voice","m":"en-IE Moira · female · default · com.apple.voice.compact.en-IE.Moira"}
+{"c":"Voice","t":"2026-11-20T23:01:08.310Z","m":"en-IN Rishi · male · default · com.apple.voice.compact.en-IN.Rishi","d":"watch"}
+{"t":"2026-11-20T23:01:08.310Z","d":"watch","c":"Voice","m":"en-US Albert · unspecified · default · com.apple.speech.synthesis.voice.Albert"}
+{"c":"Voice","t":"2026-11-20T23:01:08.310Z","m":"en-US Bad News · unspecified · default · com.apple.speech.synthesis.voice.BadNews","d":"watch"}
+{"t":"2026-11-20T23:01:08.310Z","d":"watch","c":"Voice","m":"en-US Bahh · unspecified · default · com.apple.speech.synthesis.voice.Bahh"}
+{"c":"Voice","t":"2026-11-20T23:01:08.310Z","m":"en-US Bells · unspecified · default · com.apple.speech.synthesis.voice.Bells","d":"watch"}
+{"t":"2026-11-20T23:01:08.310Z","d":"watch","c":"Voice","m":"en-US Boing · unspecified · default · com.apple.speech.synthesis.voice.Boing"}
+{"c":"Voice","t":"2026-11-20T23:01:08.310Z","m":"en-US Bubbles · unspecified · default · com.apple.speech.synthesis.voice.Bubbles","d":"watch"}
+{"t":"2026-11-20T23:01:08.310Z","d":"watch","c":"Voice","m":"en-US Cellos · unspecified · default · com.apple.speech.synthesis.voice.Cellos"}
+{"c":"Voice","t":"2026-11-20T23:01:08.310Z","m":"en-US Eddy · unspecified · default · com.apple.eloquence.en-US.Eddy","d":"watch"}
+{"t":"2026-11-20T23:01:08.311Z","d":"watch","c":"Voice","m":"en-US Flo · unspecified · default · com.apple.eloquence.en-US.Flo"}
+{"c":"Voice","t":"2026-11-20T23:01:08.311Z","m":"en-US Fred · male · default · com.apple.speech.synthesis.voice.Fred","d":"watch"}
+{"t":"2026-11-20T23:01:08.311Z","d":"watch","c":"Voice","m":"en-US Good News · unspecified · default · com.apple.speech.synthesis.voice.GoodNews"}
+{"c":"Voice","t":"2026-11-20T23:01:08.311Z","m":"en-US Grandma · unspecified · default · com.apple.eloquence.en-US.Grandma","d":"watch"}
+{"t":"2026-11-20T23:01:08.311Z","d":"watch","c":"Voice","m":"en-US Grandpa · unspecified · default · com.apple.eloquence.en-US.Grandpa"}
+{"c":"Voice","t":"2026-11-20T23:01:08.311Z","m":"en-US Jester · unspecified · default · com.apple.speech.synthesis.voice.Hysterical","d":"watch"}
+{"t":"2026-11-20T23:01:08.311Z","d":"watch","c":"Voice","m":"en-US Junior · unspecified · default · com.apple.speech.synthesis.voice.Junior"}
+{"c":"Voice","t":"2026-11-20T23:01:08.311Z","m":"en-US Kathy · unspecified · default · com.apple.speech.synthesis.voice.Kathy","d":"watch"}
+{"t":"2026-11-20T23:01:08.311Z","d":"watch","c":"Voice","m":"en-US Organ · unspecified · default · com.apple.speech.synthesis.voice.Organ"}
+{"c":"Voice","t":"2026-11-20T23:01:08.311Z","m":"en-US Ralph · unspecified · default · com.apple.speech.synthesis.voice.Ralph","d":"watch"}
+{"t":"2026-11-20T23:01:08.311Z","d":"watch","c":"Voice","m":"en-US Reed · unspecified · default · com.apple.eloquence.en-US.Reed"}
+{"c":"Voice","t":"2026-11-20T23:01:08.311Z","m":"en-US Rocko · unspecified · default · com.apple.eloquence.en-US.Rocko","d":"watch"}
+{"t":"2026-11-20T23:01:08.311Z","d":"watch","c":"Voice","m":"en-US Samantha · female · default · com.apple.voice.compact.en-US.Samantha"}
+{"c":"Voice","t":"2026-11-20T23:01:08.311Z","m":"en-US Sandy · unspecified · default · com.apple.eloquence.en-US.Sandy","d":"watch"}
+{"t":"2026-11-20T23:01:08.312Z","d":"watch","c":"Voice","m":"en-US Shelley · unspecified · default · com.apple.eloquence.en-US.Shelley"}
+{"c":"Voice","t":"2026-11-20T23:01:08.312Z","m":"en-US Superstar · unspecified · default · com.apple.speech.synthesis.voice.Princess","d":"watch"}
+{"t":"2026-11-20T23:01:08.312Z","d":"watch","c":"Voice","m":"en-US Trinoids · unspecified · default · com.apple.speech.synthesis.voice.Trinoids"}
+{"c":"Voice","t":"2026-11-20T23:01:08.312Z","m":"en-US Whisper · unspecified · default · com.apple.speech.synthesis.voice.Whisper","d":"watch"}
+{"t":"2026-11-20T23:01:08.312Z","d":"watch","c":"Voice","m":"en-US Wobble · unspecified · default · com.apple.speech.synthesis.voice.Deranged"}
+{"c":"Voice","t":"2026-11-20T23:01:08.312Z","m":"en-US Zarvox · unspecified · default · com.apple.speech.synthesis.voice.Zarvox","d":"watch"}
+{"t":"2026-11-20T23:01:08.312Z","d":"watch","c":"Voice","m":"en-ZA Tessa · female · default · com.apple.voice.compact.en-ZA.Tessa"}
+{"c":"Voice","t":"2026-11-20T23:01:14.539Z","m":"Speak com.apple.voice.compact.en-GB.Daniel rate 0.5 volume 0.7","d":"watch"}
+{"t":"2026-11-20T23:01:23.705Z","d":"watch","c":"WC","m":"Now: state=2 reachable=true companionInstalled=true outstandingUserInfo=0"}
+{"c":"App","t":"2026-11-20T23:01:24.813Z","m":"→ inactive","d":"watch"}
+{"t":"2026-11-20T23:01:24.985Z","d":"watch","c":"WC","m":"Reachable: false"}
+{"c":"App","t":"2026-11-20T23:01:25.291Z","m":"→ background","d":"watch"}
+{"t":"2026-11-20T23:04:07.481Z","d":"watch","c":"App","m":"Background task: WKSnapshotRefreshBackgroundTask"}
+{"c":"WC","t":"2026-11-20T23:12:28.031Z","m":"Reachable: true","d":"watch"}
+{"t":"2026-11-20T23:12:28.126Z","d":"watch","c":"WC","m":"Reachable: false"}
+{"c":"App","t":"2026-11-20T23:12:28.286Z","m":"→ foreground","d":"watch"}
+{"t":"2026-11-20T23:12:29.301Z","d":"watch","c":"Voice","m":"41 English voices (of 143)"}
+{"c":"Voice","t":"2026-11-20T23:12:29.301Z","m":"en-AU Karen · female · default · com.apple.voice.compact.en-AU.Karen","d":"watch"}
+{"t":"2026-11-20T23:12:29.301Z","d":"watch","c":"Voice","m":"en-GB Daniel · male · default · com.apple.voice.compact.en-GB.Daniel"}
+{"c":"Voice","t":"2026-11-20T23:12:29.302Z","m":"en-GB Eddy · unspecified · default · com.apple.eloquence.en-GB.Eddy","d":"watch"}
+{"t":"2026-11-20T23:12:29.302Z","d":"watch","c":"Voice","m":"en-GB Flo · unspecified · default · com.apple.eloquence.en-GB.Flo"}
+{"c":"Voice","t":"2026-11-20T23:12:29.302Z","m":"en-GB Grandma · unspecified · default · com.apple.eloquence.en-GB.Grandma","d":"watch"}
+{"t":"2026-11-20T23:12:29.302Z","d":"watch","c":"Voice","m":"en-GB Grandpa · unspecified · default · com.apple.eloquence.en-GB.Grandpa"}
+{"c":"Voice","t":"2026-11-20T23:12:29.302Z","m":"en-GB Reed · unspecified · default · com.apple.eloquence.en-GB.Reed","d":"watch"}
+{"t":"2026-11-20T23:12:29.302Z","d":"watch","c":"Voice","m":"en-GB Rocko · unspecified · default · com.apple.eloquence.en-GB.Rocko"}
+{"c":"Voice","t":"2026-11-20T23:12:29.302Z","m":"en-GB Sandy · unspecified · default · com.apple.eloquence.en-GB.Sandy","d":"watch"}
+{"t":"2026-11-20T23:12:29.302Z","d":"watch","c":"Voice","m":"en-GB Shelley · unspecified · default · com.apple.eloquence.en-GB.Shelley"}
+{"c":"Voice","t":"2026-11-20T23:12:29.302Z","m":"en-IE Moira · female · default · com.apple.voice.compact.en-IE.Moira","d":"watch"}
+{"t":"2026-11-20T23:12:29.302Z","d":"watch","c":"Voice","m":"en-IN Rishi · male · default · com.apple.voice.compact.en-IN.Rishi"}
+{"c":"Voice","t":"2026-11-20T23:12:29.302Z","m":"en-US Albert · unspecified · default · com.apple.speech.synthesis.voice.Albert","d":"watch"}
+{"t":"2026-11-20T23:12:29.302Z","d":"watch","c":"Voice","m":"en-US Bad News · unspecified · default · com.apple.speech.synthesis.voice.BadNews"}
+{"c":"Voice","t":"2026-11-20T23:12:29.302Z","m":"en-US Bahh · unspecified · default · com.apple.speech.synthesis.voice.Bahh","d":"watch"}
+{"t":"2026-11-20T23:12:29.302Z","d":"watch","c":"Voice","m":"en-US Bells · unspecified · default · com.apple.speech.synthesis.voice.Bells"}
+{"c":"Voice","t":"2026-11-20T23:12:29.302Z","m":"en-US Boing · unspecified · default · com.apple.speech.synthesis.voice.Boing","d":"watch"}
+{"t":"2026-11-20T23:12:29.303Z","d":"watch","c":"Voice","m":"en-US Bubbles · unspecified · default · com.apple.speech.synthesis.voice.Bubbles"}
+{"c":"Voice","t":"2026-11-20T23:12:29.303Z","m":"en-US Cellos · unspecified · default · com.apple.speech.synthesis.voice.Cellos","d":"watch"}
+{"t":"2026-11-20T23:12:29.303Z","d":"watch","c":"Voice","m":"en-US Eddy · unspecified · default · com.apple.eloquence.en-US.Eddy"}
+{"c":"Voice","t":"2026-11-20T23:12:29.303Z","m":"en-US Flo · unspecified · default · com.apple.eloquence.en-US.Flo","d":"watch"}
+{"t":"2026-11-20T23:12:29.303Z","d":"watch","c":"Voice","m":"en-US Fred · male · default · com.apple.speech.synthesis.voice.Fred"}
+{"c":"Voice","t":"2026-11-20T23:12:29.303Z","m":"en-US Good News · unspecified · default · com.apple.speech.synthesis.voice.GoodNews","d":"watch"}
+{"t":"2026-11-20T23:12:29.303Z","d":"watch","c":"Voice","m":"en-US Grandma · unspecified · default · com.apple.eloquence.en-US.Grandma"}
+{"c":"Voice","t":"2026-11-20T23:12:29.303Z","m":"en-US Grandpa · unspecified · default · com.apple.eloquence.en-US.Grandpa","d":"watch"}
+{"t":"2026-11-20T23:12:29.303Z","d":"watch","c":"Voice","m":"en-US Jester · unspecified · default · com.apple.speech.synthesis.voice.Hysterical"}
+{"c":"Voice","t":"2026-11-20T23:12:29.303Z","m":"en-US Junior · unspecified · default · com.apple.speech.synthesis.voice.Junior","d":"watch"}
+{"t":"2026-11-20T23:12:29.303Z","d":"watch","c":"Voice","m":"en-US Kathy · unspecified · default · com.apple.speech.synthesis.voice.Kathy"}
+{"c":"Voice","t":"2026-11-20T23:12:29.303Z","m":"en-US Organ · unspecified · default · com.apple.speech.synthesis.voice.Organ","d":"watch"}
+{"t":"2026-11-20T23:12:29.303Z","d":"watch","c":"Voice","m":"en-US Ralph · unspecified · default · com.apple.speech.synthesis.voice.Ralph"}
+{"c":"Voice","t":"2026-11-20T23:12:29.303Z","m":"en-US Reed · unspecified · default · com.apple.eloquence.en-US.Reed","d":"watch"}
+{"t":"2026-11-20T23:12:29.304Z","d":"watch","c":"Voice","m":"en-US Rocko · unspecified · default · com.apple.eloquence.en-US.Rocko"}
+{"c":"Voice","t":"2026-11-20T23:12:29.304Z","m":"en-US Samantha · female · default · com.apple.voice.compact.en-US.Samantha","d":"watch"}
+{"t":"2026-11-20T23:12:29.304Z","d":"watch","c":"Voice","m":"en-US Sandy · unspecified · default · com.apple.eloquence.en-US.Sandy"}
+{"c":"Voice","t":"2026-11-20T23:12:29.304Z","m":"en-US Shelley · unspecified · default · com.apple.eloquence.en-US.Shelley","d":"watch"}
+{"t":"2026-11-20T23:12:29.304Z","d":"watch","c":"Voice","m":"en-US Superstar · unspecified · default · com.apple.speech.synthesis.voice.Princess"}
+{"c":"Voice","t":"2026-11-20T23:12:29.304Z","m":"en-US Trinoids · unspecified · default · com.apple.speech.synthesis.voice.Trinoids","d":"watch"}
+{"t":"2026-11-20T23:12:29.304Z","d":"watch","c":"Voice","m":"en-US Whisper · unspecified · default · com.apple.speech.synthesis.voice.Whisper"}
+{"c":"Voice","t":"2026-11-20T23:12:29.304Z","m":"en-US Wobble · unspecified · default · com.apple.speech.synthesis.voice.Deranged","d":"watch"}
+{"t":"2026-11-20T23:12:29.304Z","d":"watch","c":"Voice","m":"en-US Zarvox · unspecified · default · com.apple.speech.synthesis.voice.Zarvox"}
+{"c":"Voice","t":"2026-11-20T23:12:29.304Z","m":"en-ZA Tessa · female · default · com.apple.voice.compact.en-ZA.Tessa","d":"watch"}
+{"t":"2026-11-20T23:12:33.649Z","d":"watch","c":"Voice","m":"Speak com.apple.voice.compact.en-GB.Daniel rate 0.5 volume 1.0"}
+{"c":"WC","t":"2026-11-20T23:12:41.287Z","m":"Now: state=2 reachable=false companionInstalled=true outstandingUserInfo=0","d":"watch"}
+{"t":"2026-11-20T23:12:44.476Z","d":"watch","c":"Voice","m":"41 English voices (of 143)"}
+{"c":"Voice","t":"2026-11-20T23:12:44.476Z","m":"en-AU Karen · female · default · com.apple.voice.compact.en-AU.Karen","d":"watch"}
+{"t":"2026-11-20T23:12:44.476Z","d":"watch","c":"Voice","m":"en-GB Daniel · male · default · com.apple.voice.compact.en-GB.Daniel"}
+{"c":"Voice","t":"2026-11-20T23:12:44.476Z","m":"en-GB Eddy · unspecified · default · com.apple.eloquence.en-GB.Eddy","d":"watch"}
+{"t":"2026-11-20T23:12:44.476Z","d":"watch","c":"Voice","m":"en-GB Flo · unspecified · default · com.apple.eloquence.en-GB.Flo"}
+{"c":"Voice","t":"2026-11-20T23:12:44.477Z","m":"en-GB Grandma · unspecified · default · com.apple.eloquence.en-GB.Grandma","d":"watch"}
+{"t":"2026-11-20T23:12:44.477Z","d":"watch","c":"Voice","m":"en-GB Grandpa · unspecified · default · com.apple.eloquence.en-GB.Grandpa"}
+{"c":"Voice","t":"2026-11-20T23:12:44.477Z","m":"en-GB Reed · unspecified · default · com.apple.eloquence.en-GB.Reed","d":"watch"}
+{"t":"2026-11-20T23:12:44.477Z","d":"watch","c":"Voice","m":"en-GB Rocko · unspecified · default · com.apple.eloquence.en-GB.Rocko"}
+{"c":"Voice","t":"2026-11-20T23:12:44.477Z","m":"en-GB Sandy · unspecified · default · com.apple.eloquence.en-GB.Sandy","d":"watch"}
+{"t":"2026-11-20T23:12:44.477Z","d":"watch","c":"Voice","m":"en-GB Shelley · unspecified · default · com.apple.eloquence.en-GB.Shelley"}
+{"c":"Voice","t":"2026-11-20T23:12:44.477Z","m":"en-IE Moira · female · default · com.apple.voice.compact.en-IE.Moira","d":"watch"}
+{"t":"2026-11-20T23:12:44.477Z","d":"watch","c":"Voice","m":"en-IN Rishi · male · default · com.apple.voice.compact.en-IN.Rishi"}
+{"c":"Voice","t":"2026-11-20T23:12:44.477Z","m":"en-US Albert · unspecified · default · com.apple.speech.synthesis.voice.Albert","d":"watch"}
+{"t":"2026-11-20T23:12:44.477Z","d":"watch","c":"Voice","m":"en-US Bad News · unspecified · default · com.apple.speech.synthesis.voice.BadNews"}
+{"c":"Voice","t":"2026-11-20T23:12:44.477Z","m":"en-US Bahh · unspecified · default · com.apple.speech.synthesis.voice.Bahh","d":"watch"}
+{"t":"2026-11-20T23:12:44.477Z","d":"watch","c":"Voice","m":"en-US Bells · unspecified · default · com.apple.speech.synthesis.voice.Bells"}
+{"c":"Voice","t":"2026-11-20T23:12:44.477Z","m":"en-US Boing · unspecified · default · com.apple.speech.synthesis.voice.Boing","d":"watch"}
+{"t":"2026-11-20T23:12:44.477Z","d":"watch","c":"Voice","m":"en-US Bubbles · unspecified · default · com.apple.speech.synthesis.voice.Bubbles"}
+{"c":"Voice","t":"2026-11-20T23:12:44.477Z","m":"en-US Cellos · unspecified · default · com.apple.speech.synthesis.voice.Cellos","d":"watch"}
+{"t":"2026-11-20T23:12:44.478Z","d":"watch","c":"Voice","m":"en-US Eddy · unspecified · default · com.apple.eloquence.en-US.Eddy"}
+{"c":"Voice","t":"2026-11-20T23:12:44.478Z","m":"en-US Flo · unspecified · default · com.apple.eloquence.en-US.Flo","d":"watch"}
+{"t":"2026-11-20T23:12:44.478Z","d":"watch","c":"Voice","m":"en-US Fred · male · default · com.apple.speech.synthesis.voice.Fred"}
+{"c":"Voice","t":"2026-11-20T23:12:44.478Z","m":"en-US Good News · unspecified · default · com.apple.speech.synthesis.voice.GoodNews","d":"watch"}
+{"t":"2026-11-20T23:12:44.478Z","d":"watch","c":"Voice","m":"en-US Grandma · unspecified · default · com.apple.eloquence.en-US.Grandma"}
+{"c":"Voice","t":"2026-11-20T23:12:44.478Z","m":"en-US Grandpa · unspecified · default · com.apple.eloquence.en-US.Grandpa","d":"watch"}
+{"t":"2026-11-20T23:12:44.478Z","d":"watch","c":"Voice","m":"en-US Jester · unspecified · default · com.apple.speech.synthesis.voice.Hysterical"}
+{"c":"Voice","t":"2026-11-20T23:12:44.478Z","m":"en-US Junior · unspecified · default · com.apple.speech.synthesis.voice.Junior","d":"watch"}
+{"t":"2026-11-20T23:12:44.478Z","d":"watch","c":"Voice","m":"en-US Kathy · unspecified · default · com.apple.speech.synthesis.voice.Kathy"}
+{"c":"Voice","t":"2026-11-20T23:12:44.478Z","m":"en-US Organ · unspecified · default · com.apple.speech.synthesis.voice.Organ","d":"watch"}
+{"t":"2026-11-20T23:12:44.478Z","d":"watch","c":"Voice","m":"en-US Ralph · unspecified · default · com.apple.speech.synthesis.voice.Ralph"}
+{"c":"Voice","t":"2026-11-20T23:12:44.478Z","m":"en-US Reed · unspecified · default · com.apple.eloquence.en-US.Reed","d":"watch"}
+{"t":"2026-11-20T23:12:44.478Z","d":"watch","c":"Voice","m":"en-US Rocko · unspecified · default · com.apple.eloquence.en-US.Rocko"}
+{"c":"Voice","t":"2026-11-20T23:12:44.478Z","m":"en-US Samantha · female · default · com.apple.voice.compact.en-US.Samantha","d":"watch"}
+{"t":"2026-11-20T23:12:44.479Z","d":"watch","c":"Voice","m":"en-US Sandy · unspecified · default · com.apple.eloquence.en-US.Sandy"}
+{"c":"Voice","t":"2026-11-20T23:12:44.479Z","m":"en-US Shelley · unspecified · default · com.apple.eloquence.en-US.Shelley","d":"watch"}
+{"t":"2026-11-20T23:12:44.479Z","d":"watch","c":"Voice","m":"en-US Superstar · unspecified · default · com.apple.speech.synthesis.voice.Princess"}
+{"c":"Voice","t":"2026-11-20T23:12:44.479Z","m":"en-US Trinoids · unspecified · default · com.apple.speech.synthesis.voice.Trinoids","d":"watch"}
+{"t":"2026-11-20T23:12:44.479Z","d":"watch","c":"Voice","m":"en-US Whisper · unspecified · default · com.apple.speech.synthesis.voice.Whisper"}
+{"c":"Voice","t":"2026-11-20T23:12:44.479Z","m":"en-US Wobble · unspecified · default · com.apple.speech.synthesis.voice.Deranged","d":"watch"}
+{"t":"2026-11-20T23:12:44.479Z","d":"watch","c":"Voice","m":"en-US Zarvox · unspecified · default · com.apple.speech.synthesis.voice.Zarvox"}
+{"c":"Voice","t":"2026-11-20T23:12:44.479Z","m":"en-ZA Tessa · female · default · com.apple.voice.compact.en-ZA.Tessa","d":"watch"}
+{"t":"2026-11-20T23:12:52.230Z","d":"watch","c":"Voice","m":"Speak com.apple.voice.compact.en-GB.Daniel rate 0.5 volume 0.7"}
+{"c":"Voice","t":"2026-11-20T23:13:01.880Z","m":"Speak com.apple.voice.compact.en-GB.Daniel rate 0.5 volume 1.0","d":"watch"}
+{"t":"2026-11-20T23:13:07.163Z","d":"watch","c":"WC","m":"Now: state=2 reachable=false companionInstalled=true outstandingUserInfo=0"}
+{"c":"App","t":"2026-11-20T23:13:08.706Z","m":"→ inactive","d":"watch"}
+{"t":"2026-11-20T23:13:09.212Z","d":"watch","c":"App","m":"→ background"}
+{"c":"App","t":"2026-11-20T23:15:12.588Z","m":"Launch v1.0 (1) on watchOS 10.6.2: state=inactive","d":"watch"}
+{"t":"2026-11-20T23:15:12.597Z","d":"watch","c":"WC","m":"Activating"}
+{"c":"App","t":"2026-11-20T23:15:13.291Z","m":"→ foreground","d":"watch"}
+{"t":"2026-11-20T23:15:13.421Z","d":"watch","c":"WC","m":"Activated: state=2 reachable=false companionInstalled=true outstandingUserInfo=0"}
+{"c":"WC","t":"2026-11-20T23:15:13.582Z","m":"Plan via context (on activation): My schedule","d":"watch"}
+{"t":"2026-11-20T23:15:13.976Z","d":"watch","c":"WC","m":"Reachable: true"}
+{"c":"App","t":"2026-11-20T23:15:19.992Z","m":"→ inactive","d":"watch"}
+{"t":"2026-11-20T23:15:20.012Z","d":"watch","c":"App","m":"→ foreground"}
+{"c":"App","t":"2026-11-20T23:15:20.602Z","m":"→ inactive","d":"watch"}
+{"t":"2026-11-20T23:15:20.689Z","d":"watch","c":"App","m":"→ foreground"}
+{"c":"WC","t":"2026-11-20T23:15:20.721Z","m":"Reachable: false","d":"watch"}
+{"t":"2026-11-20T23:15:20.727Z","d":"watch","c":"WC","m":"Reachable: true"}
+{"c":"App","t":"2026-11-20T23:15:20.905Z","m":"→ inactive","d":"watch"}
+{"t":"2026-11-20T23:15:20.958Z","d":"watch","c":"WC","m":"Reachable: false"}
+{"c":"App","t":"2026-11-20T23:15:28.822Z","m":"→ foreground","d":"watch"}
+{"t":"2026-11-20T23:15:29.063Z","d":"watch","c":"WC","m":"Reachable: true"}
+{"c":"WC","t":"2026-11-20T23:15:33.718Z","m":"Now: state=2 reachable=true companionInstalled=true outstandingUserInfo=0","d":"watch"}
+{"t":"2026-11-20T23:16:01.685Z","d":"watch","c":"Spike","m":"Fake run fea559a8: sending"}
+{"c":"WC","t":"2026-11-20T23:16:01.689Z","m":"Session fea559a8 sent as message","d":"watch"}
+{"t":"2026-11-20T23:16:01.767Z","d":"watch","c":"WC","m":"Session fea559a8 queued as userInfo (1 outstanding)"}
+{"c":"Spike","t":"2026-11-20T23:16:02.145Z","m":"Test workout 0c8b5e1e saved for run fea559a8","d":"watch"}
+{"t":"2026-11-20T23:16:02.836Z","d":"watch","c":"WC","m":"userInfo [sentAt,session] delivered"}
+{"c":"WC","t":"2026-11-20T23:16:03.003Z","m":"Session fea559a8: message reply [\"received\"]","d":"watch"}
+{"t":"2026-11-20T23:16:03.004Z","d":"watch","c":"Spike","m":"Phone confirmed receiving the run fea559a8 via message"}
+{"c":"Spike","t":"2026-11-20T23:16:03.178Z","m":"Ack received for fea559a8 again via userInfo","d":"watch"}
+{"t":"2026-11-20T23:16:15.438Z","d":"watch","c":"Spike","m":"Phone confirmed seeing the test workout fea559a8 via message"}
+{"c":"Spike","t":"2026-11-20T23:16:15.493Z","m":"Delete test workout 0c8b5e1e (phone saw it): 1 deleted","d":"watch"}
+{"t":"2026-11-20T23:16:15.771Z","d":"watch","c":"Spike","m":"Ack healthKit for fea559a8 again via userInfo"}
+{"c":"App","t":"2026-11-20T23:16:21.831Z","m":"→ inactive","d":"watch"}
+{"t":"2026-11-20T23:16:21.964Z","d":"watch","c":"WC","m":"Reachable: false"}
+{"c":"App","t":"2026-11-20T23:17:11.310Z","m":"→ foreground","d":"watch"}
+{"t":"2026-11-20T23:17:11.698Z","d":"watch","c":"WC","m":"Reachable: true"}
+{"c":"App","t":"2026-11-20T23:17:12.434Z","m":"→ inactive","d":"watch"}
+{"t":"2026-11-20T23:17:12.534Z","d":"watch","c":"WC","m":"Reachable: false"}
+{"c":"App","t":"2026-11-20T23:19:13.337Z","m":"→ background","d":"watch"}
+{"t":"2026-11-20T23:20:19.225Z","d":"watch","c":"App","m":"Background task: WKSnapshotRefreshBackgroundTask"}
+{"c":"WC","t":"2026-11-20T23:26:17.195Z","m":"Reachable: true","d":"watch"}
+{"t":"2026-11-20T23:26:17.211Z","d":"watch","c":"WC","m":"Reachable: false"}
+{"c":"App","t":"2026-11-20T23:26:17.467Z","m":"→ foreground","d":"watch"}
+{"t":"2026-11-20T23:26:17.525Z","d":"watch","c":"WC","m":"Reachable: true"}
+{"c":"App","t":"2026-11-20T23:26:26.529Z","m":"→ inactive","d":"watch"}
+{"t":"2026-11-20T23:26:26.626Z","d":"watch","c":"WC","m":"Reachable: false"}
+{"c":"App","t":"2026-11-20T23:26:58.840Z","m":"→ foreground","d":"watch"}
+{"t":"2026-11-20T23:26:59.001Z","d":"watch","c":"WC","m":"Reachable: true"}
+{"c":"App","t":"2026-11-20T23:27:04.655Z","m":"→ inactive","d":"watch"}
+{"t":"2026-11-20T23:27:04.691Z","d":"watch","c":"WC","m":"Reachable: false"}
+{"c":"App","t":"2026-11-20T23:27:05.367Z","m":"→ foreground","d":"watch"}
+{"t":"2026-11-20T23:27:05.401Z","d":"watch","c":"WC","m":"Reachable: true"}
+{"c":"Spike","t":"2026-11-20T23:27:07.367Z","m":"Fake run ed7e5a05: sending","d":"watch"}
+{"t":"2026-11-20T23:27:07.370Z","d":"watch","c":"WC","m":"Session ed7e5a05 sent as message"}
+{"c":"WC","t":"2026-11-20T23:27:07.402Z","m":"Session ed7e5a05 queued as userInfo (1 outstanding)","d":"watch"}
+{"t":"2026-11-20T23:27:07.571Z","d":"watch","c":"Spike","m":"Test workout 43ab5b9e saved for run ed7e5a05"}
+{"c":"WC","t":"2026-11-20T23:27:08.257Z","m":"Session ed7e5a05: message reply [\"received\"]","d":"watch"}
+{"t":"2026-11-20T23:27:08.258Z","d":"watch","c":"Spike","m":"Phone confirmed receiving the run ed7e5a05 via message"}
+{"c":"WC","t":"2026-11-20T23:27:08.375Z","m":"userInfo [sentAt,session] delivered","d":"watch"}
+{"t":"2026-11-20T23:27:08.416Z","d":"watch","c":"Spike","m":"Ack received for ed7e5a05 again via userInfo"}
+{"c":"Spike","t":"2026-11-20T23:27:08.416Z","m":"Phone confirmed seeing the test workout ed7e5a05 via userInfo","d":"watch"}
+{"t":"2026-11-20T23:27:08.419Z","d":"watch","c":"Spike","m":"Ack healthKit for ed7e5a05 again via message"}
+{"c":"Spike","t":"2026-11-20T23:27:08.449Z","m":"Delete test workout 43ab5b9e (phone saw it): 1 deleted","d":"watch"}
+{"t":"2026-11-20T23:27:43.068Z","d":"watch","c":"App","m":"→ inactive"}
+{"c":"WC","t":"2026-11-20T23:27:43.175Z","m":"Reachable: false","d":"watch"}
+{"t":"2026-11-20T23:28:30.792Z","d":"watch","c":"App","m":"→ foreground"}
+{"c":"WC","t":"2026-11-20T23:28:31.119Z","m":"Reachable: true","d":"watch"}
+{"t":"2026-11-20T23:28:34.813Z","d":"watch","c":"Spike","m":"Fake run 6202600f: sending"}
+{"c":"WC","t":"2026-11-20T23:28:34.816Z","m":"Session 6202600f sent as message","d":"watch"}
+{"t":"2026-11-20T23:28:34.855Z","d":"watch","c":"WC","m":"Session 6202600f queued as userInfo (1 outstanding)"}
+{"c":"Spike","t":"2026-11-20T23:28:35.102Z","m":"Test workout 45818b8c saved for run 6202600f","d":"watch"}
+{"t":"2026-11-20T23:28:35.504Z","d":"watch","c":"WC","m":"Session 6202600f: message reply [\"received\"]"}
+{"c":"Spike","t":"2026-11-20T23:28:35.505Z","m":"Phone confirmed receiving the run 6202600f via message","d":"watch"}
+{"t":"2026-11-20T23:28:35.886Z","d":"watch","c":"Spike","m":"Ack received for 6202600f again via userInfo"}
+{"c":"WC","t":"2026-11-20T23:28:35.950Z","m":"userInfo [sentAt,session] delivered","d":"watch"}
+{"t":"2026-11-20T23:28:36.279Z","d":"watch","c":"Spike","m":"Phone confirmed seeing the test workout 6202600f via message"}
+{"c":"Spike","t":"2026-11-20T23:28:36.294Z","m":"Delete test workout 45818b8c (phone saw it): 1 deleted","d":"watch"}
+{"t":"2026-11-20T23:28:36.466Z","d":"watch","c":"Spike","m":"Ack healthKit for 6202600f again via userInfo"}
+{"c":"Spike","t":"2026-11-20T23:29:25.517Z","m":"Fake run 85f602e6: sending","d":"watch"}
+{"t":"2026-11-20T23:29:25.519Z","d":"watch","c":"WC","m":"Session 85f602e6 sent as message"}
+{"c":"WC","t":"2026-11-20T23:29:25.572Z","m":"Session 85f602e6 queued as userInfo (1 outstanding)","d":"watch"}
+{"t":"2026-11-20T23:29:25.882Z","d":"watch","c":"Spike","m":"Test workout 59b49de9 saved for run 85f602e6"}
+{"c":"WC","t":"2026-11-20T23:29:40.606Z","m":"Session 85f602e6: message failed: Transfer timed out.","d":"watch"}
+{"t":"2026-11-20T23:29:44.297Z","d":"watch","c":"App","m":"→ inactive"}
+{"c":"App","t":"2026-11-20T23:29:47.315Z","m":"Background task: WKWatchConnectivityRefreshBackgroundTask","d":"watch"}
+{"t":"2026-11-20T23:29:47.372Z","d":"watch","c":"WC","m":"Reachable: false"}
+{"c":"WC","t":"2026-11-20T23:29:52.116Z","m":"Plan via context: My schedule","d":"watch"}
+{"t":"2026-11-20T23:29:52.142Z","d":"watch","c":"WC","m":"userInfo [sentAt,session] delivered"}
+{"c":"App","t":"2026-11-20T23:29:52.526Z","m":"Background task: WKWatchConnectivityRefreshBackgroundTask","d":"watch"}
+{"t":"2026-11-20T23:29:52.534Z","d":"watch","c":"Spike","m":"Phone confirmed receiving the run 85f602e6 via userInfo"}
+{"c":"Spike","t":"2026-11-20T23:29:52.534Z","m":"Phone confirmed seeing the test workout 85f602e6 via userInfo","d":"watch"}
+{"t":"2026-11-20T23:29:52.609Z","d":"watch","c":"Spike","m":"Delete test workout 59b49de9 (phone saw it): 1 deleted"}
+{"c":"App","t":"2026-11-20T23:29:54.108Z","m":"→ foreground","d":"watch"}
+{"t":"2026-11-20T23:29:54.141Z","d":"watch","c":"WC","m":"Plan via context: My schedule"}
+{"c":"WC","t":"2026-11-20T23:29:54.573Z","m":"Reachable: true","d":"watch"}
+{"t":"2026-11-20T23:29:58.318Z","d":"watch","c":"App","m":"→ inactive"}
+{"c":"App","t":"2026-11-20T23:31:29.060Z","m":"→ foreground","d":"watch"}
+{"t":"2026-11-20T23:31:29.194Z","d":"watch","c":"WC","m":"Reachable: false"}
+{"c":"WC","t":"2026-11-20T23:31:29.251Z","m":"Reachable: true","d":"watch"}
+{"t":"2026-11-20T23:31:32.117Z","d":"watch","c":"Spike","m":"Fake run cb64a675: sending"}
+{"c":"WC","t":"2026-11-20T23:31:32.119Z","m":"Session cb64a675 sent as message","d":"watch"}
+{"t":"2026-11-20T23:31:32.164Z","d":"watch","c":"WC","m":"Session cb64a675 queued as userInfo (1 outstanding)"}
+{"c":"Spike","t":"2026-11-20T23:31:32.459Z","m":"Test workout d09ff25f saved for run cb64a675","d":"watch"}
+{"t":"2026-11-20T23:31:32.758Z","d":"watch","c":"Spike","m":"Phone confirmed receiving the run cb64a675 via message"}
+{"c":"WC","t":"2026-11-20T23:31:33.128Z","m":"userInfo [sentAt,session] delivered","d":"watch"}
+{"t":"2026-11-20T23:31:33.154Z","d":"watch","c":"WC","m":"Session cb64a675: message reply [\"received\"]"}
+{"c":"Spike","t":"2026-11-20T23:31:33.212Z","m":"Ack received for cb64a675 again via userInfo","d":"watch"}
+{"t":"2026-11-20T23:31:36.129Z","d":"watch","c":"Spike","m":"Phone confirmed seeing the test workout cb64a675 via message"}
+{"c":"Spike","t":"2026-11-20T23:31:36.216Z","m":"Delete test workout d09ff25f (phone saw it): 1 deleted","d":"watch"}
+{"t":"2026-11-20T23:31:36.435Z","d":"watch","c":"Spike","m":"Ack healthKit for cb64a675 again via userInfo"}
+{"c":"Spike","t":"2026-11-20T23:31:36.435Z","m":"Ack healthKit for cb64a675 again via userInfo","d":"watch"}
+{"t":"2026-11-20T23:31:36.435Z","d":"watch","c":"Spike","m":"Ack healthKit for cb64a675 again via message"}
+{"c":"App","t":"2026-11-20T23:31:42.986Z","m":"→ inactive","d":"watch"}
+{"t":"2026-11-20T23:31:45.099Z","d":"watch","c":"App","m":"→ foreground"}
+{"c":"WC","t":"2026-11-20T23:31:45.240Z","m":"Reachable: false","d":"watch"}
+{"t":"2026-11-20T23:31:45.277Z","d":"watch","c":"WC","m":"Reachable: true"}
+{"c":"App","t":"2026-11-20T23:31:45.619Z","m":"→ inactive","d":"watch"}
+{"t":"2026-11-20T23:31:45.642Z","d":"watch","c":"WC","m":"Reachable: false"}
+{"c":"App","t":"2026-11-20T23:33:34.010Z","m":"→ foreground","d":"watch"}
+{"t":"2026-11-20T23:33:34.438Z","d":"watch","c":"WC","m":"Reachable: true"}
+{"c":"Spike","t":"2026-11-20T23:33:36.448Z","m":"Fake run 3b554805: sending","d":"watch"}
+{"t":"2026-11-20T23:33:36.450Z","d":"watch","c":"WC","m":"Session 3b554805 sent as message"}
+{"c":"WC","t":"2026-11-20T23:33:36.817Z","m":"Session 3b554805 queued as userInfo (1 outstanding)","d":"watch"}
+{"t":"2026-11-20T23:33:36.927Z","d":"watch","c":"WC","m":"Reachable: false"}
+{"c":"Spike","t":"2026-11-20T23:33:37.187Z","m":"Test workout 6a80966b saved for run 3b554805","d":"watch"}
+{"t":"2026-11-20T23:33:37.655Z","d":"watch","c":"WC","m":"Session 3b554805: message failed: WatchConnectivity session on paired device is not reachable."}
+{"c":"App","t":"2026-11-20T23:33:41.800Z","m":"→ inactive","d":"watch"}
+{"t":"2026-11-20T23:33:42.331Z","d":"watch","c":"App","m":"→ background"}
+{"c":"App","t":"2026-11-20T23:35:05.800Z","m":"Background task: WKSnapshotRefreshBackgroundTask","d":"watch"}
+{"t":"2026-11-20T23:42:51.898Z","d":"watch","c":"App","m":"Launch v1.0 (1) on watchOS 10.6.2: state=inactive"}
+{"c":"WC","t":"2026-11-20T23:42:51.910Z","m":"Activating","d":"watch"}
+{"t":"2026-11-20T23:42:52.120Z","d":"watch","c":"App","m":"Background task: WKWatchConnectivityRefreshBackgroundTask"}
+{"c":"WC","t":"2026-11-20T23:42:52.205Z","m":"Activated: state=2 reachable=false companionInstalled=true outstandingUserInfo=1","d":"watch"}
+{"t":"2026-11-20T23:42:52.216Z","d":"watch","c":"WC","m":"Plan via context (on activation): My schedule"}
+{"c":"WC","t":"2026-11-20T23:54:58.029Z","m":"userInfo [sentAt,session] delivered","d":"watch"}
+{"t":"2026-11-20T23:54:58.266Z","d":"watch","c":"WC","m":"Reachable: true"}
+{"c":"WC","t":"2026-11-20T23:54:58.286Z","m":"Reachable: false","d":"watch"}
+{"t":"2026-11-20T23:54:58.392Z","d":"watch","c":"App","m":"→ foreground"}
+{"c":"Spike","t":"2026-11-20T23:54:58.416Z","m":"Phone confirmed receiving the run 3b554805 via userInfo","d":"watch"}
+{"t":"2026-11-20T23:54:58.417Z","d":"watch","c":"Spike","m":"Phone confirmed seeing the test workout 3b554805 via userInfo"}
+{"c":"Spike","t":"2026-11-20T23:54:58.448Z","m":"Delete test workout 6a80966b (overdue): 1 deleted","d":"watch"}
+{"t":"2026-11-20T23:54:58.450Z","d":"watch","c":"WC","m":"Reachable: true"}
+{"c":"WC","t":"2026-11-20T23:55:00.730Z","m":"Now: state=2 reachable=true companionInstalled=true outstandingUserInfo=0","d":"watch"}

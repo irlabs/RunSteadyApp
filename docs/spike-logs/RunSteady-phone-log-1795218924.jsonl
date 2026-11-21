@@ -1,0 +1,307 @@
+{"t":"2026-11-20T22:02:11.448Z","d":"phone","c":"App","m":"Launch v1.0 (1): state=background options=none"}
+{"t":"2026-11-20T22:02:11.450Z","d":"phone","c":"WC","m":"Activating"}
+{"d":"phone","c":"HealthKit","m":"Background delivery: on","t":"2026-11-20T22:02:11.539Z"}
+{"t":"2026-11-20T22:02:11.539Z","d":"phone","c":"WC","m":"Activated: state=2 reachable=false paired=true watchAppInstalled=true outstandingUserInfo=0"}
+{"d":"phone","c":"HealthKit","m":"Observer woke, app background","t":"2026-11-20T22:02:11.552Z"}
+{"t":"2026-11-20T22:02:11.564Z","d":"phone","c":"WC","m":"Watch version via context (on activation): v1.0 (261116.1751)"}
+{"d":"phone","c":"App","m":"App model ready","t":"2026-11-20T22:02:11.571Z"}
+{"t":"2026-11-20T22:02:11.578Z","d":"phone","c":"Notify","m":"Authorization granted: true"}
+{"d":"phone","c":"HealthKit","m":"Workout 021737c7 from Run Steady, 38 min, ended 54670.0 s ago (real run, ignored for now)","t":"2026-11-20T22:02:11.858Z"}
+{"t":"2026-11-20T22:02:12.079Z","d":"phone","c":"App","m":"→ foreground"}
+{"d":"phone","c":"WC","m":"Reachable: true","t":"2026-11-20T22:02:12.457Z"}
+{"t":"2026-11-20T22:02:12.469Z","d":"phone","c":"WC","m":"Reachable: false"}
+{"d":"phone","c":"WC","m":"Version request failed: WatchConnectivity session on paired device is not reachable.","t":"2026-11-20T22:02:12.472Z"}
+{"t":"2026-11-20T22:02:49.956Z","d":"phone","c":"App","m":"→ inactive"}
+{"d":"phone","c":"App","m":"→ background","t":"2026-11-20T22:02:50.559Z"}
+{"t":"2026-11-20T22:02:54.541Z","d":"phone","c":"App","m":"Launch v1.0 (1): state=background options=none"}
+{"d":"phone","c":"WC","m":"Activating","t":"2026-11-20T22:02:54.542Z"}
+{"t":"2026-11-20T22:02:54.545Z","d":"phone","c":"HealthKit","m":"Background delivery: on"}
+{"d":"phone","c":"WC","m":"Activated: state=2 reachable=false paired=true watchAppInstalled=true outstandingUserInfo=0","t":"2026-11-20T22:02:54.547Z"}
+{"t":"2026-11-20T22:02:54.548Z","d":"phone","c":"WC","m":"Watch version via context (on activation): v1.0 (261116.1751)"}
+{"d":"phone","c":"HealthKit","m":"Observer woke, app background","t":"2026-11-20T22:02:54.549Z"}
+{"t":"2026-11-20T22:02:54.552Z","d":"phone","c":"App","m":"App model ready"}
+{"d":"phone","c":"Notify","m":"Authorization granted: true","t":"2026-11-20T22:02:54.556Z"}
+{"t":"2026-11-20T22:02:54.816Z","d":"phone","c":"App","m":"→ foreground"}
+{"d":"phone","c":"App","m":"Launch v1.0 (1): state=background options=none","t":"2026-11-20T22:03:04.629Z"}
+{"t":"2026-11-20T22:03:04.630Z","d":"phone","c":"WC","m":"Activating"}
+{"d":"phone","c":"HealthKit","m":"Background delivery: on","t":"2026-11-20T22:03:04.671Z"}
+{"t":"2026-11-20T22:03:04.672Z","d":"phone","c":"WC","m":"Activated: state=2 reachable=false paired=true watchAppInstalled=true outstandingUserInfo=0"}
+{"d":"phone","c":"HealthKit","m":"Observer woke, app background","t":"2026-11-20T22:03:04.674Z"}
+{"t":"2026-11-20T22:03:04.686Z","d":"phone","c":"WC","m":"Watch version via context (on activation): v1.0 (261116.1751)"}
+{"d":"phone","c":"App","m":"App model ready","t":"2026-11-20T22:03:04.701Z"}
+{"t":"2026-11-20T22:03:04.707Z","d":"phone","c":"Notify","m":"Authorization granted: true"}
+{"d":"phone","c":"App","m":"→ foreground","t":"2026-11-20T22:03:04.936Z"}
+{"t":"2026-11-20T22:14:07.738Z","d":"phone","c":"App","m":"Launch v1.0 (1): state=background options=none"}
+{"d":"phone","c":"WC","m":"Activating","t":"2026-11-20T22:14:08.027Z"}
+{"t":"2026-11-20T22:14:08.502Z","d":"phone","c":"HealthKit","m":"Background delivery: on"}
+{"d":"phone","c":"HealthKit","m":"Observer woke, app background","t":"2026-11-20T22:14:08.512Z"}
+{"t":"2026-11-20T22:14:08.551Z","d":"phone","c":"WC","m":"Activated: state=2 reachable=false paired=true watchAppInstalled=true outstandingUserInfo=0"}
+{"d":"phone","c":"WC","m":"Watch version via context (on activation): v1.0 (261116.1751)","t":"2026-11-20T22:14:08.600Z"}
+{"t":"2026-11-20T22:14:08.772Z","d":"phone","c":"App","m":"App model ready"}
+{"d":"phone","c":"Notify","m":"Authorization granted: true","t":"2026-11-20T22:14:08.780Z"}
+{"t":"2026-11-20T22:18:43.465Z","d":"phone","c":"HealthKit","m":"Observer woke, app background"}
+{"d":"phone","c":"App","m":"→ unlocked","t":"2026-11-20T22:18:43.620Z"}
+{"t":"2026-11-20T22:18:44.109Z","d":"phone","c":"App","m":"→ foreground"}
+{"d":"phone","c":"HealthKit","m":"Request status (phone): should request","t":"2026-11-20T22:18:51.164Z"}
+{"t":"2026-11-20T22:18:51.165Z","d":"phone","c":"HealthKit","m":"Share HKWorkoutTypeIdentifier: authorized"}
+{"d":"phone","c":"HealthKit","m":"Share HKQuantityTypeIdentifierWorkoutEffortScore: not determined","t":"2026-11-20T22:18:51.165Z"}
+{"t":"2026-11-20T22:18:51.165Z","d":"phone","c":"WC","m":"Now: state=2 reachable=false paired=true watchAppInstalled=true outstandingUserInfo=0"}
+{"d":"phone","c":"Notify","m":"Settings: authorization=2 alert=2 lockScreen=2 (2 = granted\/enabled)","t":"2026-11-20T22:18:51.166Z"}
+{"t":"2026-11-20T22:19:12.767Z","d":"phone","c":"HealthKit","m":"Request status (phone): should request"}
+{"d":"phone","c":"HealthKit","m":"Share HKQuantityTypeIdentifierWorkoutEffortScore: not determined","t":"2026-11-20T22:19:12.767Z"}
+{"t":"2026-11-20T22:19:12.767Z","d":"phone","c":"HealthKit","m":"Share HKWorkoutTypeIdentifier: authorized"}
+{"d":"phone","c":"WC","m":"Now: state=2 reachable=false paired=true watchAppInstalled=true outstandingUserInfo=0","t":"2026-11-20T22:19:12.768Z"}
+{"t":"2026-11-20T22:19:12.769Z","d":"phone","c":"Notify","m":"Settings: authorization=2 alert=2 lockScreen=2 (2 = granted\/enabled)"}
+{"d":"phone","c":"App","m":"→ inactive","t":"2026-11-20T22:20:19.716Z"}
+{"t":"2026-11-20T22:21:22.041Z","d":"phone","c":"App","m":"→ background"}
+{"d":"phone","c":"App","m":"→ unlocked","t":"2026-11-20T22:24:04.733Z"}
+{"t":"2026-11-20T22:24:04.734Z","d":"phone","c":"HealthKit","m":"Observer woke, app background"}
+{"d":"phone","c":"WC","m":"Reachable: true","t":"2026-11-20T22:24:04.787Z"}
+{"t":"2026-11-20T22:24:04.792Z","d":"phone","c":"WC","m":"Watch version via context: v1.0 (1)"}
+{"d":"phone","c":"WC","m":"Watch version via context: v1.0 (1)","t":"2026-11-20T22:24:04.894Z"}
+{"t":"2026-11-20T22:24:05.188Z","d":"phone","c":"WC","m":"Watch version via version reply: v1.0 (1)"}
+{"d":"phone","c":"App","m":"→ foreground","t":"2026-11-20T22:24:05.268Z"}
+{"t":"2026-11-20T22:24:21.832Z","d":"phone","c":"WC","m":"Reachable: false"}
+{"d":"phone","c":"WC","m":"Reachable: true","t":"2026-11-20T22:24:24.969Z"}
+{"t":"2026-11-20T22:24:25.016Z","d":"phone","c":"WC","m":"Watch version via version reply: v1.0 (1)"}
+{"d":"phone","c":"WC","m":"Reachable: false","t":"2026-11-20T22:24:54.949Z"}
+{"t":"2026-11-20T22:24:57.401Z","d":"phone","c":"WC","m":"Reachable: true"}
+{"d":"phone","c":"WC","m":"Watch version via version reply: v1.0 (1)","t":"2026-11-20T22:24:57.433Z"}
+{"t":"2026-11-20T22:25:25.942Z","d":"phone","c":"WC","m":"Reachable: false"}
+{"d":"phone","c":"App","m":"→ locked","t":"2026-11-20T22:26:05.386Z"}
+{"t":"2026-11-20T22:26:05.393Z","d":"phone","c":"App","m":"→ inactive"}
+{"d":"phone","c":"App","m":"→ foreground","t":"2026-11-20T22:26:06.759Z"}
+{"t":"2026-11-20T22:26:06.774Z","d":"phone","c":"App","m":"→ inactive"}
+{"d":"phone","c":"App","m":"→ background","t":"2026-11-20T22:26:06.776Z"}
+{"t":"2026-11-20T22:26:51.238Z","d":"phone","c":"App","m":"→ unlocked"}
+{"d":"phone","c":"HealthKit","m":"Observer woke, app background","t":"2026-11-20T22:26:51.250Z"}
+{"t":"2026-11-20T22:26:51.834Z","d":"phone","c":"App","m":"→ foreground"}
+{"d":"phone","c":"App","m":"→ inactive","t":"2026-11-20T22:26:52.537Z"}
+{"t":"2026-11-20T22:26:57.966Z","d":"phone","c":"App","m":"→ background"}
+{"d":"phone","c":"HealthKit","m":"Observer woke, app background","t":"2026-11-20T22:27:31.076Z"}
+{"t":"2026-11-20T22:27:31.093Z","d":"phone","c":"WC","m":"Reachable: true"}
+{"d":"phone","c":"App","m":"→ foreground","t":"2026-11-20T22:27:31.366Z"}
+{"t":"2026-11-20T22:27:31.369Z","d":"phone","c":"WC","m":"Watch version via version reply: v1.0 (1)"}
+{"d":"phone","c":"HealthKit","m":"Request status (phone): should request","t":"2026-11-20T22:27:34.079Z"}
+{"t":"2026-11-20T22:27:34.079Z","d":"phone","c":"HealthKit","m":"Share HKWorkoutTypeIdentifier: authorized"}
+{"d":"phone","c":"HealthKit","m":"Share HKQuantityTypeIdentifierWorkoutEffortScore: not determined","t":"2026-11-20T22:27:34.080Z"}
+{"t":"2026-11-20T22:27:34.080Z","d":"phone","c":"WC","m":"Now: state=2 reachable=true paired=true watchAppInstalled=true outstandingUserInfo=0"}
+{"d":"phone","c":"Notify","m":"Settings: authorization=2 alert=2 lockScreen=2 (2 = granted\/enabled)","t":"2026-11-20T22:27:34.081Z"}
+{"t":"2026-11-20T22:29:34.467Z","d":"phone","c":"App","m":"→ locked"}
+{"d":"phone","c":"App","m":"→ inactive","t":"2026-11-20T22:29:34.469Z"}
+{"t":"2026-11-20T22:29:35.795Z","d":"phone","c":"App","m":"→ foreground"}
+{"d":"phone","c":"App","m":"→ inactive","t":"2026-11-20T22:29:35.859Z"}
+{"t":"2026-11-20T22:29:35.860Z","d":"phone","c":"App","m":"→ background"}
+{"d":"phone","c":"HealthKit","m":"Observer woke, app background","t":"2026-11-20T22:29:52.768Z"}
+{"t":"2026-11-20T22:29:52.796Z","d":"phone","c":"App","m":"→ unlocked"}
+{"d":"phone","c":"App","m":"→ foreground","t":"2026-11-20T22:29:53.320Z"}
+{"t":"2026-11-20T22:29:57.633Z","d":"phone","c":"WC","m":"Reachable: false"}
+{"d":"phone","c":"HealthKit","m":"Request finished (phone)","t":"2026-11-20T22:31:05.462Z"}
+{"t":"2026-11-20T22:31:05.468Z","d":"phone","c":"HealthKit","m":"Request status (phone): unnecessary"}
+{"d":"phone","c":"HealthKit","m":"Share HKQuantityTypeIdentifierWorkoutEffortScore: authorized","t":"2026-11-20T22:31:05.468Z"}
+{"t":"2026-11-20T22:31:05.469Z","d":"phone","c":"HealthKit","m":"Share HKWorkoutTypeIdentifier: authorized"}
+{"d":"phone","c":"HealthKit","m":"Date of birth (phone): present","t":"2026-11-20T22:31:05.472Z"}
+{"t":"2026-11-20T22:31:19.587Z","d":"phone","c":"WC","m":"Reachable: true"}
+{"d":"phone","c":"WC","m":"Watch version via version reply: v1.0 (1)","t":"2026-11-20T22:31:19.707Z"}
+{"t":"2026-11-20T22:33:36.389Z","d":"phone","c":"HealthKit","m":"Request status (phone): unnecessary"}
+{"d":"phone","c":"HealthKit","m":"Share HKWorkoutTypeIdentifier: authorized","t":"2026-11-20T22:33:36.389Z"}
+{"t":"2026-11-20T22:33:36.390Z","d":"phone","c":"HealthKit","m":"Share HKQuantityTypeIdentifierWorkoutEffortScore: authorized"}
+{"d":"phone","c":"WC","m":"Now: state=2 reachable=true paired=true watchAppInstalled=true outstandingUserInfo=0","t":"2026-11-20T22:33:36.390Z"}
+{"t":"2026-11-20T22:33:36.392Z","d":"phone","c":"Notify","m":"Settings: authorization=2 alert=2 lockScreen=2 (2 = granted\/enabled)"}
+{"d":"phone","c":"WC","m":"Reachable: false","t":"2026-11-20T22:33:50.075Z"}
+{"t":"2026-11-20T22:34:08.943Z","d":"phone","c":"WC","m":"Reachable: true"}
+{"d":"phone","c":"WC","m":"Watch version via version reply: v1.0 (1)","t":"2026-11-20T22:34:09.506Z"}
+{"t":"2026-11-20T22:35:18.097Z","d":"phone","c":"WC","m":"Reachable: false"}
+{"d":"phone","c":"App","m":"→ inactive","t":"2026-11-20T22:35:21.883Z"}
+{"t":"2026-11-20T22:35:22.751Z","d":"phone","c":"App","m":"→ background"}
+{"d":"phone","c":"WC","m":"Reachable: true","t":"2026-11-20T23:16:01.898Z"}
+{"t":"2026-11-20T23:16:01.904Z","d":"phone","c":"WC","m":"Session fea559a8 (test) via message, 0.2 s after send, app background"}
+{"d":"phone","c":"Spike","m":"Test run fea559a8 FIRST via message after 0.3 s, app background","t":"2026-11-20T23:16:01.951Z"}
+{"t":"2026-11-20T23:16:01.955Z","d":"phone","c":"WC","m":"Ack received for fea559a8 sent (reachable: true)"}
+{"d":"phone","c":"WC","m":"Session fea559a8 (test) via userInfo, 0.3 s after send, app background","t":"2026-11-20T23:16:01.963Z"}
+{"t":"2026-11-20T23:16:01.963Z","d":"phone","c":"Notify","m":"Post \"Test run received via message\" (app background): ok"}
+{"d":"phone","c":"WC","m":"Watch version via version reply: v1.0 (1)","t":"2026-11-20T23:16:02.006Z"}
+{"t":"2026-11-20T23:16:02.035Z","d":"phone","c":"Spike","m":"Test run fea559a8 again via userInfo after 0.3 s (first via message)"}
+{"d":"phone","c":"WC","m":"userInfo [ackKind,testAck] delivered","t":"2026-11-20T23:16:02.638Z"}
+{"t":"2026-11-20T23:16:15.212Z","d":"phone","c":"App","m":"→ unlocked"}
+{"d":"phone","c":"HealthKit","m":"Observer woke, app background","t":"2026-11-20T23:16:15.229Z"}
+{"t":"2026-11-20T23:16:15.245Z","d":"phone","c":"HealthKit","m":"TEST workout 0c8b5e1e from Run Steady, 13.6 s after it ended, app background"}
+{"d":"phone","c":"WC","m":"Ack healthKit for fea559a8 sent (reachable: true)","t":"2026-11-20T23:16:15.246Z"}
+{"t":"2026-11-20T23:16:15.257Z","d":"phone","c":"Notify","m":"Post \"Test workout seen via HealthKit\" (app background): ok"}
+{"d":"phone","c":"WC","m":"userInfo [ackKind,testAck] delivered","t":"2026-11-20T23:16:15.746Z"}
+{"t":"2026-11-20T23:16:21.929Z","d":"phone","c":"WC","m":"Reachable: false"}
+{"d":"phone","c":"App","m":"→ unlocked","t":"2026-11-20T23:26:59.234Z"}
+{"t":"2026-11-20T23:26:59.280Z","d":"phone","c":"HealthKit","m":"Observer woke, app background"}
+{"d":"phone","c":"WC","m":"Reachable: true","t":"2026-11-20T23:26:59.287Z"}
+{"t":"2026-11-20T23:26:59.342Z","d":"phone","c":"HealthKit","m":"1 workout(s) deleted: 0c8b5e1e"}
+{"d":"phone","c":"WC","m":"Watch version via version reply: v1.0 (1)","t":"2026-11-20T23:26:59.407Z"}
+{"t":"2026-11-20T23:26:59.542Z","d":"phone","c":"App","m":"→ foreground"}
+{"d":"phone","c":"WC","m":"Reachable: false","t":"2026-11-20T23:27:04.661Z"}
+{"t":"2026-11-20T23:27:05.351Z","d":"phone","c":"WC","m":"Reachable: true"}
+{"d":"phone","c":"WC","m":"Watch version via version reply: v1.0 (1)","t":"2026-11-20T23:27:05.436Z"}
+{"t":"2026-11-20T23:27:07.389Z","d":"phone","c":"WC","m":"Session ed7e5a05 (test) via message, 0.0 s after send, app foreground"}
+{"d":"phone","c":"Spike","m":"Test run ed7e5a05 FIRST via message after 0.0 s, app foreground","t":"2026-11-20T23:27:07.391Z"}
+{"t":"2026-11-20T23:27:07.391Z","d":"phone","c":"WC","m":"Ack received for ed7e5a05 sent (reachable: true)"}
+{"d":"phone","c":"Notify","m":"Shown in foreground: Test run received via message","t":"2026-11-20T23:27:07.426Z"}
+{"t":"2026-11-20T23:27:07.431Z","d":"phone","c":"Notify","m":"Post \"Test run received via message\" (app foreground): ok"}
+{"d":"phone","c":"WC","m":"Session ed7e5a05 (test) via userInfo, 0.5 s after send, app foreground","t":"2026-11-20T23:27:07.851Z"}
+{"t":"2026-11-20T23:27:07.851Z","d":"phone","c":"Spike","m":"Test run ed7e5a05 again via userInfo after 0.5 s (first via message)"}
+{"d":"phone","c":"HealthKit","m":"Observer woke, app foreground","t":"2026-11-20T23:27:08.066Z"}
+{"t":"2026-11-20T23:27:08.076Z","d":"phone","c":"HealthKit","m":"TEST workout 43ab5b9e from Run Steady, 0.7 s after it ended, app foreground"}
+{"d":"phone","c":"WC","m":"Ack healthKit for ed7e5a05 sent (reachable: true)","t":"2026-11-20T23:27:08.077Z"}
+{"t":"2026-11-20T23:27:08.086Z","d":"phone","c":"Notify","m":"Shown in foreground: Test workout seen via HealthKit"}
+{"d":"phone","c":"Notify","m":"Post \"Test workout seen via HealthKit\" (app foreground): ok","t":"2026-11-20T23:27:08.089Z"}
+{"t":"2026-11-20T23:27:08.163Z","d":"phone","c":"WC","m":"userInfo [ackKind,testAck] delivered"}
+{"d":"phone","c":"WC","m":"userInfo [ackKind,testAck] delivered","t":"2026-11-20T23:27:08.195Z"}
+{"t":"2026-11-20T23:27:25.389Z","d":"phone","c":"Notify","m":"Tapped: Test run received via message"}
+{"d":"phone","c":"Notify","m":"Tapped: Test workout seen via HealthKit","t":"2026-11-20T23:27:39.138Z"}
+{"t":"2026-11-20T23:27:43.138Z","d":"phone","c":"WC","m":"Reachable: false"}
+{"d":"phone","c":"App","m":"→ inactive","t":"2026-11-20T23:28:05.689Z"}
+{"t":"2026-11-20T23:28:07.691Z","d":"phone","c":"App","m":"→ background"}
+{"d":"phone","c":"WC","m":"Reachable: true","t":"2026-11-20T23:28:30.989Z"}
+{"t":"2026-11-20T23:28:31.316Z","d":"phone","c":"WC","m":"Watch version via version reply: v1.0 (1)"}
+{"d":"phone","c":"WC","m":"Session 6202600f (test) via message, 0.0 s after send, app background","t":"2026-11-20T23:28:34.823Z"}
+{"t":"2026-11-20T23:28:34.824Z","d":"phone","c":"Spike","m":"Test run 6202600f FIRST via message after 0.0 s, app background"}
+{"d":"phone","c":"WC","m":"Ack received for 6202600f sent (reachable: true)","t":"2026-11-20T23:28:34.827Z"}
+{"t":"2026-11-20T23:28:34.844Z","d":"phone","c":"Notify","m":"Post \"Test run received via message\" (app background): ok"}
+{"d":"phone","c":"WC","m":"userInfo [ackKind,testAck] delivered","t":"2026-11-20T23:28:35.400Z"}
+{"t":"2026-11-20T23:28:35.410Z","d":"phone","c":"WC","m":"Session 6202600f (test) via userInfo, 0.6 s after send, app background"}
+{"d":"phone","c":"Spike","m":"Test run 6202600f again via userInfo after 0.6 s (first via message)","t":"2026-11-20T23:28:35.410Z"}
+{"t":"2026-11-20T23:28:36.039Z","d":"phone","c":"HealthKit","m":"Observer woke, app background"}
+{"d":"phone","c":"HealthKit","m":"TEST workout 45818b8c from Run Steady, 1.2 s after it ended, app background","t":"2026-11-20T23:28:36.055Z"}
+{"t":"2026-11-20T23:28:36.056Z","d":"phone","c":"WC","m":"Ack healthKit for 6202600f sent (reachable: true)"}
+{"d":"phone","c":"HealthKit","m":"1 workout(s) deleted: 43ab5b9e","t":"2026-11-20T23:28:36.056Z"}
+{"t":"2026-11-20T23:28:36.072Z","d":"phone","c":"Notify","m":"Post \"Test workout seen via HealthKit\" (app background): ok"}
+{"d":"phone","c":"HealthKit","m":"Observer woke, app background","t":"2026-11-20T23:28:36.079Z"}
+{"t":"2026-11-20T23:28:36.222Z","d":"phone","c":"WC","m":"userInfo [ackKind,testAck] delivered"}
+{"d":"phone","c":"Notify","m":"Tapped: Test workout seen via HealthKit","t":"2026-11-20T23:29:08.339Z"}
+{"t":"2026-11-20T23:29:08.355Z","d":"phone","c":"HealthKit","m":"Observer woke, app background"}
+{"d":"phone","c":"App","m":"→ foreground","t":"2026-11-20T23:29:08.641Z"}
+{"t":"2026-11-20T23:29:11.801Z","d":"phone","c":"HealthKit","m":"Observer woke, app foreground"}
+{"d":"phone","c":"HealthKit","m":"1 workout(s) deleted: 45818b8c","t":"2026-11-20T23:29:11.809Z"}
+{"t":"2026-11-20T23:29:12.424Z","d":"phone","c":"App","m":"→ inactive"}
+{"d":"phone","c":"App","m":"→ background","t":"2026-11-20T23:29:13.291Z"}
+{"t":"2026-11-20T23:29:25.718Z","d":"phone","c":"App","m":"Launch v1.0 (1): state=background options=none"}
+{"d":"phone","c":"WC","m":"Activating","t":"2026-11-20T23:29:25.720Z"}
+{"t":"2026-11-20T23:29:25.728Z","d":"phone","c":"HealthKit","m":"Background delivery: on"}
+{"d":"phone","c":"WC","m":"Activated: state=2 reachable=true paired=true watchAppInstalled=true outstandingUserInfo=0","t":"2026-11-20T23:29:25.729Z"}
+{"t":"2026-11-20T23:29:25.729Z","d":"phone","c":"WC","m":"Watch version via context (on activation): v1.0 (1)"}
+{"d":"phone","c":"WC","m":"Session 85f602e6 (test) via message, 0.2 s after send, app background","t":"2026-11-20T23:29:25.730Z"}
+{"t":"2026-11-20T23:29:25.731Z","d":"phone","c":"HealthKit","m":"Observer woke, app background"}
+{"d":"phone","c":"App","m":"App model ready","t":"2026-11-20T23:29:25.747Z"}
+{"t":"2026-11-20T23:29:25.753Z","d":"phone","c":"Notify","m":"Authorization granted: true"}
+{"d":"phone","c":"Spike","m":"Test run 85f602e6 FIRST via message after 0.3 s, app background","t":"2026-11-20T23:29:25.802Z"}
+{"t":"2026-11-20T23:29:25.802Z","d":"phone","c":"WC","m":"Ack received for 85f602e6 sent (reachable: true)"}
+{"d":"phone","c":"Notify","m":"Post \"Test run received via message\" (app background): ok","t":"2026-11-20T23:29:25.808Z"}
+{"t":"2026-11-20T23:29:26.162Z","d":"phone","c":"WC","m":"Session 85f602e6 (test) via userInfo, 0.6 s after send, app background"}
+{"d":"phone","c":"Spike","m":"Test run 85f602e6 again via userInfo after 0.6 s (first via message)","t":"2026-11-20T23:29:26.162Z"}
+{"t":"2026-11-20T23:29:50.885Z","d":"phone","c":"HealthKit","m":"Observer woke, app background"}
+{"d":"phone","c":"WC","m":"Reachable: false","t":"2026-11-20T23:29:50.902Z"}
+{"t":"2026-11-20T23:29:50.910Z","d":"phone","c":"HealthKit","m":"TEST workout 59b49de9 from Run Steady, 25.4 s after it ended, app background"}
+{"d":"phone","c":"WC","m":"Ack healthKit for 85f602e6 sent (reachable: false)","t":"2026-11-20T23:29:50.910Z"}
+{"t":"2026-11-20T23:29:50.922Z","d":"phone","c":"Notify","m":"Post \"Test workout seen via HealthKit\" (app background): ok"}
+{"d":"phone","c":"WC","m":"userInfo [ackKind,testAck] delivered","t":"2026-11-20T23:29:50.932Z"}
+{"t":"2026-11-20T23:29:50.952Z","d":"phone","c":"WC","m":"Version request failed: WatchConnectivity session on paired device is not reachable."}
+{"d":"phone","c":"WC","m":"Ack received message failed: WatchConnectivity session on paired device is not reachable.","t":"2026-11-20T23:29:50.952Z"}
+{"t":"2026-11-20T23:29:51.491Z","d":"phone","c":"WC","m":"userInfo [ackKind,testAck] delivered"}
+{"d":"phone","c":"WC","m":"Reachable: true","t":"2026-11-20T23:29:54.102Z"}
+{"t":"2026-11-20T23:29:54.634Z","d":"phone","c":"WC","m":"Watch version via version reply: v1.0 (1)"}
+{"d":"phone","c":"WC","m":"Reachable: false","t":"2026-11-20T23:29:58.383Z"}
+{"t":"2026-11-20T23:31:18.229Z","d":"phone","c":"HealthKit","m":"Observer woke, app background"}
+{"d":"phone","c":"App","m":"→ foreground","t":"2026-11-20T23:31:18.514Z"}
+{"t":"2026-11-20T23:31:20.090Z","d":"phone","c":"App","m":"→ inactive"}
+{"d":"phone","c":"HealthKit","m":"Observer woke, app inactive","t":"2026-11-20T23:31:20.223Z"}
+{"t":"2026-11-20T23:31:20.231Z","d":"phone","c":"HealthKit","m":"1 workout(s) deleted: 59b49de9"}
+{"d":"phone","c":"App","m":"→ background","t":"2026-11-20T23:31:20.978Z"}
+{"t":"2026-11-20T23:31:32.186Z","d":"phone","c":"App","m":"→ locked"}
+{"d":"phone","c":"WC","m":"Reachable: true","t":"2026-11-20T23:31:32.189Z"}
+{"t":"2026-11-20T23:31:32.191Z","d":"phone","c":"WC","m":"Session cb64a675 (test) via message, 0.1 s after send, app background"}
+{"d":"phone","c":"Spike","m":"Test run cb64a675 FIRST via message after 0.1 s, app background","t":"2026-11-20T23:31:32.206Z"}
+{"t":"2026-11-20T23:31:32.206Z","d":"phone","c":"WC","m":"Ack received for cb64a675 sent (reachable: true)"}
+{"d":"phone","c":"Notify","m":"Post \"Test run received via message\" (app background): ok","t":"2026-11-20T23:31:32.213Z"}
+{"t":"2026-11-20T23:31:32.277Z","d":"phone","c":"WC","m":"Session cb64a675 (test) via userInfo, 0.2 s after send, app background"}
+{"d":"phone","c":"Spike","m":"Test run cb64a675 again via userInfo after 0.2 s (first via message)","t":"2026-11-20T23:31:32.277Z"}
+{"t":"2026-11-20T23:31:32.803Z","d":"phone","c":"WC","m":"userInfo [ackKind,testAck] delivered"}
+{"d":"phone","c":"WC","m":"Watch version via version reply: v1.0 (1)","t":"2026-11-20T23:31:33.483Z"}
+{"t":"2026-11-20T23:31:35.960Z","d":"phone","c":"HealthKit","m":"Observer woke, app background"}
+{"d":"phone","c":"HealthKit","m":"Observer woke, app background","t":"2026-11-20T23:31:35.960Z"}
+{"t":"2026-11-20T23:31:35.963Z","d":"phone","c":"App","m":"→ unlocked"}
+{"d":"phone","c":"HealthKit","m":"TEST workout d09ff25f from Run Steady, 3.9 s after it ended, app background","t":"2026-11-20T23:31:35.990Z"}
+{"t":"2026-11-20T23:31:35.990Z","d":"phone","c":"WC","m":"Ack healthKit for cb64a675 sent (reachable: true)"}
+{"d":"phone","c":"HealthKit","m":"TEST workout d09ff25f from Run Steady, 3.9 s after it ended, app background","t":"2026-11-20T23:31:35.991Z"}
+{"t":"2026-11-20T23:31:35.991Z","d":"phone","c":"WC","m":"Ack healthKit for cb64a675 sent (reachable: true)"}
+{"d":"phone","c":"Notify","m":"Post \"Test workout seen via HealthKit\" (app background): ok","t":"2026-11-20T23:31:36.008Z"}
+{"t":"2026-11-20T23:31:36.011Z","d":"phone","c":"Notify","m":"Post \"Test workout seen via HealthKit\" (app background): ok"}
+{"d":"phone","c":"WC","m":"userInfo [ackKind,testAck] delivered","t":"2026-11-20T23:31:36.325Z"}
+{"t":"2026-11-20T23:31:36.338Z","d":"phone","c":"WC","m":"userInfo [ackKind,testAck] delivered"}
+{"d":"phone","c":"HealthKit","m":"Observer woke, app background","t":"2026-11-20T23:31:38.455Z"}
+{"t":"2026-11-20T23:31:38.466Z","d":"phone","c":"HealthKit","m":"1 workout(s) deleted: d09ff25f"}
+{"d":"phone","c":"WC","m":"Reachable: false","t":"2026-11-20T23:31:43.005Z"}
+{"t":"2026-11-20T23:31:45.270Z","d":"phone","c":"WC","m":"Reachable: true"}
+{"d":"phone","c":"WC","m":"Watch version via version reply: v1.0 (1)","t":"2026-11-20T23:31:45.496Z"}
+{"t":"2026-11-20T23:31:45.633Z","d":"phone","c":"WC","m":"Reachable: false"}
+{"d":"phone","c":"App","m":"→ locked","t":"2026-11-20T23:31:51.753Z"}
+{"t":"2026-11-20T23:31:55.806Z","d":"phone","c":"App","m":"→ unlocked"}
+{"d":"phone","c":"Notify","m":"Tapped: Test workout seen via HealthKit","t":"2026-11-20T23:32:39.759Z"}
+{"t":"2026-11-20T23:32:39.796Z","d":"phone","c":"HealthKit","m":"Observer woke, app background"}
+{"d":"phone","c":"App","m":"→ foreground","t":"2026-11-20T23:32:40.327Z"}
+{"t":"2026-11-20T23:32:42.097Z","d":"phone","c":"App","m":"→ inactive"}
+{"d":"phone","c":"App","m":"→ foreground","t":"2026-11-20T23:32:42.688Z"}
+{"t":"2026-11-20T23:32:42.697Z","d":"phone","c":"App","m":"→ inactive"}
+{"d":"phone","c":"Notify","m":"Tapped: Test run received via message","t":"2026-11-20T23:32:43.549Z"}
+{"t":"2026-11-20T23:32:44.114Z","d":"phone","c":"App","m":"→ foreground"}
+{"d":"phone","c":"App","m":"→ inactive","t":"2026-11-20T23:32:44.503Z"}
+{"t":"2026-11-20T23:32:45.109Z","d":"phone","c":"App","m":"→ foreground"}
+{"d":"phone","c":"App","m":"→ inactive","t":"2026-11-20T23:32:45.121Z"}
+{"t":"2026-11-20T23:32:46.588Z","d":"phone","c":"Notify","m":"Tapped: Test workout seen via HealthKit"}
+{"d":"phone","c":"App","m":"→ foreground","t":"2026-11-20T23:32:47.155Z"}
+{"t":"2026-11-20T23:32:47.343Z","d":"phone","c":"App","m":"→ inactive"}
+{"d":"phone","c":"App","m":"→ foreground","t":"2026-11-20T23:32:47.901Z"}
+{"t":"2026-11-20T23:32:47.903Z","d":"phone","c":"App","m":"→ inactive"}
+{"d":"phone","c":"Notify","m":"Tapped: Test run received via message","t":"2026-11-20T23:32:48.146Z"}
+{"t":"2026-11-20T23:32:48.717Z","d":"phone","c":"App","m":"→ foreground"}
+{"d":"phone","c":"App","m":"→ inactive","t":"2026-11-20T23:32:48.798Z"}
+{"t":"2026-11-20T23:32:49.349Z","d":"phone","c":"App","m":"→ foreground"}
+{"d":"phone","c":"App","m":"→ inactive","t":"2026-11-20T23:32:49.350Z"}
+{"t":"2026-11-20T23:32:49.597Z","d":"phone","c":"Notify","m":"Tapped: Test run received via message"}
+{"d":"phone","c":"App","m":"→ foreground","t":"2026-11-20T23:32:50.181Z"}
+{"t":"2026-11-20T23:32:50.281Z","d":"phone","c":"App","m":"→ inactive"}
+{"d":"phone","c":"App","m":"→ foreground","t":"2026-11-20T23:32:50.840Z"}
+{"t":"2026-11-20T23:32:50.848Z","d":"phone","c":"App","m":"→ inactive"}
+{"d":"phone","c":"Notify","m":"Tapped: Test workout seen via HealthKit","t":"2026-11-20T23:32:51.049Z"}
+{"t":"2026-11-20T23:32:51.639Z","d":"phone","c":"App","m":"→ foreground"}
+{"d":"phone","c":"App","m":"→ inactive","t":"2026-11-20T23:32:51.702Z"}
+{"t":"2026-11-20T23:32:52.283Z","d":"phone","c":"App","m":"→ foreground"}
+{"d":"phone","c":"App","m":"→ inactive","t":"2026-11-20T23:32:52.296Z"}
+{"t":"2026-11-20T23:32:52.629Z","d":"phone","c":"Notify","m":"Tapped: Test run received via message"}
+{"d":"phone","c":"App","m":"→ foreground","t":"2026-11-20T23:32:53.212Z"}
+{"t":"2026-11-20T23:32:53.244Z","d":"phone","c":"App","m":"→ inactive"}
+{"d":"phone","c":"App","m":"→ foreground","t":"2026-11-20T23:32:53.806Z"}
+{"t":"2026-11-20T23:32:53.807Z","d":"phone","c":"App","m":"→ inactive"}
+{"d":"phone","c":"App","m":"→ foreground","t":"2026-11-20T23:32:55.081Z"}
+{"t":"2026-11-20T23:32:55.722Z","d":"phone","c":"App","m":"→ inactive"}
+{"d":"phone","c":"App","m":"→ background","t":"2026-11-20T23:32:56.311Z"}
+{"t":"2026-11-20T23:36:23.632Z","d":"phone","c":"HealthKit","m":"Observer woke, app background"}
+{"d":"phone","c":"WC","m":"Session 3b554805 (test) via userInfo, 167.2 s after send, app background","t":"2026-11-20T23:36:23.637Z"}
+{"t":"2026-11-20T23:36:23.639Z","d":"phone","c":"Spike","m":"Test run 3b554805 FIRST via userInfo after 167.2 s, app background"}
+{"d":"phone","c":"WC","m":"Ack received for 3b554805 sent (reachable: false)","t":"2026-11-20T23:36:23.639Z"}
+{"t":"2026-11-20T23:36:23.643Z","d":"phone","c":"HealthKit","m":"TEST workout 6a80966b from Run Steady, 167.2 s after it ended, app background"}
+{"d":"phone","c":"WC","m":"Ack healthKit for 3b554805 sent (reachable: false)","t":"2026-11-20T23:36:23.644Z"}
+{"t":"2026-11-20T23:36:23.644Z","d":"phone","c":"Notify","m":"Post \"Test run received via userInfo\" (app background): ok"}
+{"d":"phone","c":"Notify","m":"Post \"Test workout seen via HealthKit\" (app background): ok","t":"2026-11-20T23:36:23.648Z"}
+{"t":"2026-11-20T23:36:26.881Z","d":"phone","c":"WC","m":"userInfo [ackKind,testAck] delivered"}
+{"d":"phone","c":"WC","m":"userInfo [ackKind,testAck] delivered","t":"2026-11-20T23:36:28.651Z"}
+{"t":"2026-11-20T23:55:12.543Z","d":"phone","c":"HealthKit","m":"Observer woke, app background"}
+{"d":"phone","c":"WC","m":"Reachable: true","t":"2026-11-20T23:55:12.557Z"}
+{"t":"2026-11-20T23:55:12.567Z","d":"phone","c":"App","m":"→ unlocked"}
+{"d":"phone","c":"WC","m":"Watch log received: 535 entries","t":"2026-11-20T23:55:12.720Z"}
+{"t":"2026-11-20T23:55:12.762Z","d":"phone","c":"WC","m":"Watch version via version reply: v1.0 (1)"}
+{"d":"phone","c":"App","m":"→ foreground","t":"2026-11-20T23:55:12.825Z"}
+{"t":"2026-11-20T23:55:15.054Z","d":"phone","c":"HealthKit","m":"Observer woke, app foreground"}
+{"d":"phone","c":"HealthKit","m":"1 workout(s) deleted: 6a80966b","t":"2026-11-20T23:55:15.062Z"}
+{"t":"2026-11-20T23:55:15.704Z","d":"phone","c":"HealthKit","m":"Request status (phone): unnecessary"}
+{"d":"phone","c":"HealthKit","m":"Share HKWorkoutTypeIdentifier: authorized","t":"2026-11-20T23:55:15.704Z"}
+{"t":"2026-11-20T23:55:15.704Z","d":"phone","c":"HealthKit","m":"Share HKQuantityTypeIdentifierWorkoutEffortScore: authorized"}
+{"d":"phone","c":"WC","m":"Now: state=2 reachable=true paired=true watchAppInstalled=true outstandingUserInfo=0","t":"2026-11-20T23:55:15.705Z"}
+{"t":"2026-11-20T23:55:15.706Z","d":"phone","c":"Notify","m":"Settings: authorization=2 alert=2 lockScreen=2 (2 = granted\/enabled)"}
+{"d":"phone","c":"WC","m":"Reachable: false","t":"2026-11-20T23:55:22.234Z"}

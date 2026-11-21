@@ -16,7 +16,8 @@ Time needed: about 45 minutes after the install.
 
 1. Plug in the iPhone (or use Wi-Fi), unlocked.
 2. Xcode → scheme **RunSteady** → target your iPhone → Run (⌘R).
-3. Allow notifications when asked.
+3. Notifications: iOS asks only on a fresh install. Installing over an earlier build keeps your old answer, so you won't see a prompt. Check: phone diagnostics log shows `Settings: authorization=2` (2 = allowed), or Settings → Run Steady → Notifications.
+4. No Health prompt at launch, on purpose: the phone asks only when you tap Request Health in step 3.2 below, so the F1 test can check the watch first.
 
 ### Watch (the method that works)
 
