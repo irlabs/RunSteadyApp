@@ -115,4 +115,44 @@ private let schedule = Schedule(name: "Test", warmUp: 300, run: 60, walk: 120, r
         #expect(Format.minutes(90) == "1:30 min")
         #expect(Format.minutes(120) == "2 min")
     }
+
+    // MARK: F4 repeating cue
+
+    @Test func remindsEveryIntervalAfterTargetUntilNext() {
+        var engine = WorkoutEngine(schedule: schedule, reminderEvery: 6)
+        engine.next() // -> run 1 (target 60)
+        #expect(engine.tick(60) == [.targetReached(.run)])
+        #expect(engine.tick(5) == [])
+        #expect(engine.tick(1) == [.reminder(.run)])   // 66
+        #expect(engine.tick(5.5) == [])
+        #expect(engine.tick(0.5) == [.reminder(.run)]) // 72
+        engine.next() // -> walk: reminders stop
+        #expect(engine.tick(100) == [])
+    }
+
+    @Test func oneReminderPerTickEvenAfterALongGap() {
+        var engine = WorkoutEngine(schedule: schedule, reminderEvery: 6)
+        engine.next()
+        _ = engine.tick(60)
+        #expect(engine.tick(20) == [.reminder(.run)]) // 80: skipped ones are not replayed
+        #expect(engine.tick(3) == [])                  // next one due at 86
+        #expect(engine.tick(3) == [.reminder(.run)])
+    }
+
+    @Test func noRemindersWhilePaused() {
+        var engine = WorkoutEngine(schedule: schedule, reminderEvery: 6)
+        engine.next()
+        _ = engine.tick(60)
+        engine.pause()
+        #expect(engine.tick(30) == [])
+        engine.resume()
+        #expect(engine.tick(6) == [.reminder(.run)])
+    }
+
+    @Test func noRemindersByDefault() {
+        var engine = WorkoutEngine(schedule: schedule)
+        engine.next()
+        _ = engine.tick(60)
+        #expect(engine.tick(30) == [])
+    }
 }

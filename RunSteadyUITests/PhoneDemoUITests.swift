@@ -26,11 +26,22 @@ final class PhoneDemoUITests: XCTestCase {
         // Check-in chat
         app.buttons["checkInButton"].tap()
         pause(2)
-        app.buttons["feeling-great"].tap()
+        // Effort slider (F11): slide down to an easy 3, which counts as "Great".
+        let slider = app.sliders["effortSlider"]
+        XCTAssertTrue(slider.waitForExistence(timeout: 5))
+        slider.adjust(toNormalizedSliderPosition: 0.22)
+        pause(1.2)
+        app.buttons["effortDone"].tap()
+        XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH '3 · '")).firstMatch.waitForExistence(timeout: 3))
         pause(1.5)
         app.buttons["comfort-yes"].tap()
         pause(1.5)
-        app.buttons["knee-none"].tap()
+        // A typed answer instead of a button (F12): counts as no tap, goes to the coach.
+        let typed = app.textFields["typedAnswerField"]
+        XCTAssertTrue(typed.waitForExistence(timeout: 5))
+        typed.tap()
+        typed.typeText("All good, calves a little tight")
+        app.buttons["typedAnswerSend"].tap()
         // Up to two "what happened?" questions about how the run differed from the plan.
         for _ in 0..<2 {
             pause(1.5)
@@ -40,8 +51,10 @@ final class PhoneDemoUITests: XCTestCase {
             (feltGood.exists ? feltGood : skip).tap()
         }
         // The same offer also appears on Today underneath the sheet; tap the one in the chat.
+        // With a coach key, typed answers add a note-extraction call before the wrap-up, so wait for both.
         let offers = app.buttons.matching(identifier: "useSuggestionButton")
-        XCTAssertTrue(offers.firstMatch.waitForExistence(timeout: 30))
+        let both = expectation(for: NSPredicate(format: "count >= 2"), evaluatedWith: offers)
+        wait(for: [both], timeout: 45)
         pause(3)
         offers.element(boundBy: offers.count - 1).tap()
         pause(1)
@@ -65,10 +78,28 @@ final class PhoneDemoUITests: XCTestCase {
         app.buttons["roundsMinus"].tap(); pause(1.2)
         app.buttons["saveScheduleButton"].tap()
         XCTAssertTrue(app.staticTexts["Manual"].waitForExistence(timeout: 5))
-        pause(2.5)
-        // The plan's suggestion is offered again; ignore it.
-        app.buttons["keepMineButton"].tap()
         pause(2)
+        // The plan's suggestion sits collapsed under the manual schedule (F14): reason on tap, then ignore.
+        app.swipeUp()
+        let why = app.staticTexts["Why?"]
+        XCTAssertTrue(why.waitForExistence(timeout: 5))
+        XCTAssertFalse(app.staticTexts["suggestionReason"].exists)
+        why.tap()
+        XCTAssertTrue(app.staticTexts["suggestionReason"].waitForExistence(timeout: 3))
+        pause(2)
+        XCTAssertEqual(app.buttons["keepMineButton"].label, "Ignore")
+        app.buttons["keepMineButton"].tap()
+        pause(1)
+        XCTAssertFalse(app.buttons["keepMineButton"].exists)
+        // Editing the manual schedule again doesn't bring it back.
+        app.swipeDown()
+        app.buttons["editScheduleButton"].tap()
+        pause(1)
+        app.buttons["runPlus"].tap()
+        app.buttons["saveScheduleButton"].tap()
+        pause(1.5)
+        XCTAssertFalse(app.buttons["keepMineButton"].exists)
+        pause(1)
 
         // Plan
         app.tabBars.buttons["Plan"].tap()

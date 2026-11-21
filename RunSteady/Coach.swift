@@ -111,7 +111,7 @@ struct ClaudeCoach: Coach {
         Distance \(Format.km(meters: record.distanceMeters)) km, time \(Format.clock(record.duration)), \
         average pace \(Format.pace(secondsPerKm: record.paceSecondsPerKm)) min/km, total overrun past segment targets \
         \(Format.clock(record.totalOverrun)).
-        Check-in answers: overall "\(check.feeling.title)", comfortable pace: \(check.comfortable ? "yes" : "no"), \
+        Check-in answers: overall "\(check.feeling.title)"\(check.effort.map { " (effort \($0) of 10)" } ?? ""), comfortable pace: \(check.comfortable ? "yes" : "no"), \
         knees/muscles: "\(check.knee.title)".
         Decision by the rules: \(suggestion.decision.title). Reason: \(suggestion.reason)
         Next session: week \(suggestion.stageIndex + 1) of 8, session \(suggestion.sessionInStage) of 3: \

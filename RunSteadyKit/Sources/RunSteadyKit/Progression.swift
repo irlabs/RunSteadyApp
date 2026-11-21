@@ -241,23 +241,10 @@ public enum ProgressionRules {
 
         guard started else { return notStarted }
 
-        // Gap handling, measured from the last session of any kind.
-        let gapDays = Int(now.timeIntervalSince(last.date) / 86_400)
-        if gapDays >= policy.stepBackTwoAfterDays {
-            stage = max(0, stage - 2)
-            banked = 0
-            decision = .stepBackAfterGap
-            reason = "It's been \(gapDays) days. Stepping back two weeks rebuilds safely."
-        } else if gapDays >= policy.stepBackAfterDays {
-            stage = max(0, stage - 1)
-            banked = 0
-            decision = .stepBackAfterGap
-            reason = "It's been \(gapDays) days. Stepping back a week keeps your knees happy."
-        } else if gapDays >= policy.repeatAfterDays, [.proceed, .advance, .advanceFromManual].contains(decision) {
-            if decision != .proceed { stage = max(0, stage - 1); banked = ProgressionPlan.sessionsPerStage }
-            banked = max(0, banked - 1)
-            decision = .repeatAfterGap
-            reason = "It's been \(gapDays) days, so repeat the last session before moving on."
+        // Gap handling, measured from the last session of any kind (shared with the watch).
+        let gapDays = GapRule.days(since: last.date, now: now)
+        if let gap = GapRule.apply(stage: stage, banked: banked, decision: decision, gapDays: gapDays, policy: policy) {
+            (stage, banked, decision, reason) = gap
         }
 
         // Walk breaks that keep running long: offer the week below the one actually run,

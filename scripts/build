@@ -1,17 +1,14 @@
 #!/usr/bin/env bash
 # Builds the phone app (with the watch app embedded) for real devices.
-# Version comes from ./VERSION; the build number is a timestamp (yymmdd.HHMM), so every
-# build is distinguishable and the phone can tell whether the watch runs the same one.
+# Version and build number are stamped by the "Stamp Version" build phase (scripts/stamp-version),
+# the same way as a build from Xcode: VERSION file + a per-build timestamp shared by both apps.
 set -euo pipefail
 . "$(dirname "$0")/_env.sh"
 
-VERSION="$(tr -d '[:space:]' < "$ROOT/VERSION")"
-BUILD="$(date +%y%m%d.%H%M)"
-echo "▸ Building Run Steady v$VERSION ($BUILD)"
+echo "▸ Building Run Steady v$(tr -d '[:space:]' < "$ROOT/VERSION")"
 
 xcodebuild build -quiet \
   -project "$ROOT/RunSteady.xcodeproj" -scheme RunSteady -configuration Debug \
-  -destination 'generic/platform=iOS' -derivedDataPath "$DERIVED" -allowProvisioningUpdates \
-  MARKETING_VERSION="$VERSION" CURRENT_PROJECT_VERSION="$BUILD"
+  -destination 'generic/platform=iOS' -derivedDataPath "$DERIVED" -allowProvisioningUpdates
 
 echo "✓ Phone app $(version_of "$PHONE_APP") ($(build_of "$PHONE_APP")) · watch app $(version_of "$WATCH_APP") ($(build_of "$WATCH_APP"))"

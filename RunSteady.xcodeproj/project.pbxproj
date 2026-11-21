@@ -220,6 +220,7 @@
 				2D3321804222F9B8CC7CD244,
 				A3F537897EB52380DC3D4E5D,
 				ECBFB3498CE100477E8DDB7E,
+				F982B08E053E8253FEE014DE,
 			);
 			buildRules = (
 			);
@@ -268,6 +269,7 @@
 				F006694E9266BC59ED091CED,
 				66A0976B37DAB079C63EE821,
 				4CDBAB436A5A006B4F2F9AD7,
+				B1894019B5EBFDC3312FC815,
 			);
 			buildRules = (
 			);
@@ -351,6 +353,48 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B1894019B5EBFDC3312FC815 = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Stamp Version";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$SRCROOT/scripts/stamp-version\" watch
+";
+			showEnvVarsInLog = 0;
+		};
+		F982B08E053E8253FEE014DE = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Stamp Version";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$SRCROOT/scripts/stamp-version\" phone
+";
+			showEnvVarsInLog = 0;
+		};
 		3703356EB7B4D718DD8008FB = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -416,12 +460,13 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Run Steady";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.runsteady.app;
 				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "Run Steady shows your heart rate and distance during a run.";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Run Steady shows your heart rate, its zone (from your date of birth) and distance during a run.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Run Steady saves your run-walk workouts and routes to Apple Health.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Run Steady records the route of your run.";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				SKIP_INSTALL = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 			};
 		};
 		0E6555D70500B55F30AADCB0 = {
@@ -450,6 +495,7 @@
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Run Steady saves how hard each run felt to Apple Health.";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 			};
 		};
 		2702B75D3C95830E553FE4E7 = {
@@ -523,12 +569,13 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Run Steady";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.runsteady.app;
 				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "Run Steady shows your heart rate and distance during a run.";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Run Steady shows your heart rate, its zone (from your date of birth) and distance during a run.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Run Steady saves your run-walk workouts and routes to Apple Health.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Run Steady records the route of your run.";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				SKIP_INSTALL = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 			};
 		};
 		969595A508627F35A110362C = {
@@ -572,6 +619,7 @@
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Run Steady saves how hard each run felt to Apple Health.";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 			};
 		};
 		B9A9240978751ABC12C37CD6 = {

@@ -17,6 +17,17 @@ extension Color {
     static let warmColor = Color(hex: 0xFFAE1A)
     static let coolColor = Color(hex: 0x7B6CFF)
     static let ink = Color(hex: 0x10231A)
+
+    /// Heart rate zone 1–5: easy blues and greens up to warm orange and red.
+    static func zone(_ zone: Int) -> Color {
+        switch zone {
+        case ...1: Color(hex: 0x9AA8B8)
+        case 2: .walkColor
+        case 3: .brand
+        case 4: .warmColor
+        default: Color(hex: 0xFF4D6A)
+        }
+    }
 }
 
 extension SegmentKind {

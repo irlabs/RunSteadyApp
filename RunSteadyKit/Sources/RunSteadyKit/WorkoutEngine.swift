@@ -19,6 +19,8 @@ public struct WorkoutEngine: Sendable {
 
     public enum Event: Hashable, Sendable {
         case targetReached(SegmentKind)
+        /// Still over target and next not tapped yet: repeats every `reminderEvery` seconds.
+        case reminder(SegmentKind)
     }
 
     public let schedule: Schedule
@@ -27,9 +29,13 @@ public struct WorkoutEngine: Sendable {
     public private(set) var isPaused = false
     public private(set) var isFinished = false
     private var targetAnnounced = false
+    /// Seconds between reminders once the target is reached; nil for none.
+    public let reminderEvery: TimeInterval?
+    private var nextReminderAt: TimeInterval = .infinity
 
-    public init(schedule: Schedule) {
+    public init(schedule: Schedule, reminderEvery: TimeInterval? = nil) {
         self.schedule = schedule
+        self.reminderEvery = reminderEvery
         current = schedule.warmUp > 0
             ? ActiveSegment(kind: .warmUp, round: 0, target: schedule.warmUp)
             : ActiveSegment(kind: .run, round: 1, target: schedule.run)
@@ -52,7 +58,13 @@ public struct WorkoutEngine: Sendable {
         current.elapsedExact += dt
         if !targetAnnounced, current.isOverTarget {
             targetAnnounced = true
+            if let reminderEvery { nextReminderAt = Double(current.target) + reminderEvery }
             return [.targetReached(current.kind)]
+        }
+        if let reminderEvery, current.elapsedExact >= nextReminderAt {
+            // One reminder per tick; after a long tick the next one is a full interval later.
+            nextReminderAt = current.elapsedExact + reminderEvery
+            return [.reminder(current.kind)]
         }
         return []
     }
@@ -99,6 +111,7 @@ public struct WorkoutEngine: Sendable {
         }
         current = ActiveSegment(kind: kind, round: round, target: target)
         targetAnnounced = false
+        nextReminderAt = .infinity
     }
 
     private mutating func closeCurrent() {

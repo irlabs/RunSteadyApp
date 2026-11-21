@@ -47,8 +47,10 @@ struct TodayView: View {
                 header
                 HeroCard(suggestion: position)
                 if let pending { checkInCard(pending) }
-                if let offer { SuggestionCard(suggestion: offer) }
+                if let offer, !plan.isManual { SuggestionCard(suggestion: offer) }
                 nextSessionCard
+                // F14: with a schedule of their own, the plan's suggestion sits quietly underneath.
+                if let offer, plan.isManual { SuggestionCard(suggestion: offer, compact: true) }
                 weekStats
                 if let status = model.watchStatus { WatchStatusLine(status: status) }
             }
@@ -180,7 +182,7 @@ struct WatchStatusLine: View {
     private var text: String {
         switch status {
         case .upToDate: "Both apps up to date · \(phone.label)"
-        case .outdated(let watch): "Watch app not yet on \(phone.label) · has \(watch.label)"
+        case .differs(let watch): "Watch app differs from this phone's build · phone \(phone.label) · watch \(watch.label)"
         case .tooOld(let watch): "Watch app too old (\(watch.label)) · needs \(phone.label)"
         case .unknown: "Watch app version unknown · open Run Steady on your watch"
         case .notInstalled: "Watch app not installed · \(phone.label)"
@@ -190,7 +192,7 @@ struct WatchStatusLine: View {
     private var symbol: String {
         switch status {
         case .upToDate: "checkmark.circle"
-        case .outdated, .unknown: "arrow.triangle.2.circlepath"
+        case .differs, .unknown: "arrow.triangle.2.circlepath"
         case .tooOld: "exclamationmark.triangle.fill"
         case .notInstalled: "applewatch.slash"
         }
@@ -269,10 +271,14 @@ struct HeroCard: View {
 }
 
 /// "After a run, the app suggests the next schedule, which the user can accept or ignore."
+/// `compact` (F14) is the quiet version under a manual schedule: no reason until tapped, and
+/// "Ignore" keeps the runner's own schedule.
 struct SuggestionCard: View {
     @EnvironmentObject private var model: AppModel
     let suggestion: Suggestion
+    var compact = false
     var onDecided: () -> Void = {}
+    @State private var showReason = false
 
     var body: some View {
         Card {
@@ -283,25 +289,48 @@ struct SuggestionCard: View {
             }
             Text("Week \(suggestion.stageIndex + 1) · Session \(suggestion.sessionInStage)")
                 .font(.subheadline.weight(.semibold)).foregroundStyle(.secondary)
-            ScheduleSummary(schedule: suggestion.schedule)
-            Text(suggestion.reason).font(.subheadline).foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-            // An early step-up defaults to staying steady, so that button gets the emphasis.
-            let early = suggestion.decision == .advanceEarly
-            HStack(spacing: 10) {
-                Button(early ? "Stay steady" : "Keep mine") {
-                    model.keepCurrent(insteadOf: suggestion)
-                    onDecided()
+            if compact {
+                Text(suggestion.schedule.summary).font(.headline)
+                SegmentTimeline(schedule: suggestion.schedule, height: 14)
+                if showReason {
+                    Text(suggestion.reason).font(.subheadline).foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .transition(.opacity.combined(with: .move(edge: .top)))
+                        .accessibilityIdentifier("suggestionReason")
+                } else {
+                    Label("Why?", systemImage: "info.circle")
+                        .font(.footnote.weight(.semibold)).foregroundStyle(Color.brand)
                 }
-                .buttonStyle(early ? PillButtonStyle() : PillButtonStyle(color: .secondary, filled: false))
-                .accessibilityIdentifier("keepMineButton")
-                Button(early ? "Try it" : "Use this") {
-                    model.apply(ActivePlan(suggestion))
-                    onDecided()
-                }
-                .buttonStyle(early ? PillButtonStyle(color: .secondary, filled: false) : PillButtonStyle())
-                .accessibilityIdentifier("useSuggestionButton")
+            } else {
+                ScheduleSummary(schedule: suggestion.schedule)
+                Text(suggestion.reason).font(.subheadline).foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
+            buttons
+        }
+        .contentShape(Rectangle())
+        .onTapGesture { if compact { withAnimation(.snappy) { showReason.toggle() } } }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier(compact ? "compactSuggestion" : "suggestionCard")
+    }
+
+    @ViewBuilder private var buttons: some View {
+        // An early step-up defaults to staying steady, so that button gets the emphasis.
+        let early = suggestion.decision == .advanceEarly && !compact
+        HStack(spacing: 10) {
+            Button(compact ? "Ignore" : early ? "Stay steady" : "Keep mine") {
+                // Ignoring under a manual schedule keeps that schedule, offer or not.
+                model.keepCurrent(insteadOf: suggestion, staying: compact)
+                onDecided()
+            }
+            .buttonStyle(early ? PillButtonStyle() : PillButtonStyle.secondary)
+            .accessibilityIdentifier("keepMineButton")
+            Button(early ? "Try it" : "Use this") {
+                model.apply(ActivePlan(suggestion))
+                onDecided()
+            }
+            .buttonStyle(early ? PillButtonStyle.secondary : PillButtonStyle())
+            .accessibilityIdentifier("useSuggestionButton")
         }
     }
 }

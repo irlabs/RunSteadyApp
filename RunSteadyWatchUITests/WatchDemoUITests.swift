@@ -6,30 +6,47 @@ final class WatchDemoUITests: XCTestCase {
 
     override func setUp() {
         continueAfterFailure = false
-        app.launchArguments = ["-inMemory", "YES", "-demoStage", "1", "-demoSession", "3", "-timeScale", "40"]
+    }
+
+    /// Week 2, session 3, fast-forwarded, welcome already done, zones for a 50-year-old.
+    private func launch(_ overrides: [String: String] = [:]) {
+        let defaults = ["inMemory": "YES", "demoStage": "1", "demoSession": "3", "timeScale": "40",
+                        "welcomeDone": "YES", "demoAge": "50"]
+        app.launchArguments = defaults.merging(overrides) { $1 }.sorted { $0.key < $1.key }
+            .flatMap { ["-\($0.key)", $0.value] }
         app.launch()
     }
 
     private func waitForTarget(extra: TimeInterval = 0.4) {
-        let over = NSPredicate(format: "label CONTAINS 'over'")
+        let over = NSPredicate(format: "label BEGINSWITH 'Over'")
         let reached = expectation(for: over, evaluatedWith: app.staticTexts["statusLabel"])
         wait(for: [reached], timeout: 20)
         Thread.sleep(forTimeInterval: extra)
     }
 
     func testFullSession() {
+        launch()
         let next = app.buttons["nextButton"]
         XCTAssertTrue(app.buttons["startButton"].waitForExistence(timeout: 15))
+        XCTAssertEqual(app.staticTexts["startDuration"].label, "≈ 34 min")
+        XCTAssertFalse(app.staticTexts["welcomeBack"].exists)
         Thread.sleep(forTimeInterval: 2.5)
         app.buttons["startButton"].tap()
 
-        // Warm-up: start the run early, before the target is reached.
+        // Warm-up: start the run early, before the target is reached. The big time counts down.
         XCTAssertTrue(next.waitForExistence(timeout: 5))
+        let clock = app.staticTexts["segmentClock"]
+        XCTAssertFalse(clock.label.hasPrefix("+"))
         Thread.sleep(forTimeInterval: 4)
         next.tap()
 
         for round in 1...6 {
             waitForTarget(extra: round == 2 ? 1.6 : 0.4) // round 2: linger past the target
+            if round == 2 {
+                // Past the target the big time counts up with a plus; heart rate shows its zone.
+                XCTAssertTrue(clock.label.hasPrefix("+"), clock.label)
+                XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label CONTAINS 'bpm · Z'")).firstMatch.exists)
+            }
             next.tap() // -> walk
             if round == 3 {
                 // Pause and resume from the controls page.
@@ -80,6 +97,7 @@ final class WatchDemoUITests: XCTestCase {
 
     /// Hidden diagnostics: long-press the tortoise, check permissions, try a voice, send a fake run.
     func testDiagnostics() {
+        launch()
         let tortoise = app.otherElements["tortoise"].exists ? app.otherElements["tortoise"] : app.buttons["tortoise"]
         XCTAssertTrue(tortoise.waitForExistence(timeout: 15))
         Thread.sleep(forTimeInterval: 2)
@@ -105,6 +123,24 @@ final class WatchDemoUITests: XCTestCase {
         reveal(app.buttons["logLink"]).tap()
         let logged = NSPredicate(format: "label CONTAINS 'Fake run' OR label CONTAINS 'Test workout'")
         XCTAssertTrue(app.staticTexts.matching(logged).firstMatch.waitForExistence(timeout: 5))
+        Thread.sleep(forTimeInterval: 2)
+    }
+
+    /// F15: after two weeks without a run the watch steps back a week by itself.
+    func testWelcomeBackAfterAGap() {
+        launch(["demoStage": "3", "demoSession": "2", "demoGapDays": "14"])
+        let line = app.staticTexts["welcomeBack"]
+        XCTAssertTrue(line.waitForExistence(timeout: 15))
+        XCTAssertEqual(line.label, "Welcome back, it's been 2 weeks → Week 3")
+        XCTAssertTrue(app.staticTexts["Week 3 · Session 1"].exists)
+        Thread.sleep(forTimeInterval: 2.5)
+    }
+
+    /// F1: the first launch shows the welcome screen (Continue asks for Health and location).
+    func testWelcomeScreenOnFirstLaunch() {
+        launch(["welcomeDone": "NO"])
+        XCTAssertTrue(app.buttons["welcomeContinue"].waitForExistence(timeout: 15))
+        XCTAssertFalse(app.buttons["startButton"].exists)
         Thread.sleep(forTimeInterval: 2)
     }
 }

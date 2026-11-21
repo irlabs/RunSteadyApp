@@ -15,9 +15,18 @@ final class WorkoutManager: ObservableObject {
     @Published private(set) var pace: Double?
     @Published private(set) var lastRecord: SessionRecord?
     @Published private(set) var savedToHealth = false
+    /// The plan was adjusted on the watch after a break (F15); shown on the start screen.
+    @Published private(set) var welcomeBack: GapAdjustment?
+    /// F9: from the phone, or from the watch's own date of birth.
+    @Published var zones: HeartRateZones?
+
+    /// F4: chime + haptic again every this many seconds (workout time) until next is tapped.
+    static let reminderInterval: TimeInterval = 6
 
     var onFinish: ((SessionRecord) -> Void)?
-    private var queuedPlan: ActivePlan?
+    /// Back on the start screen after a run: time to work out the next plan again.
+    var onBackToStart: (() -> Void)?
+    private var queued: (plan: ActivePlan, welcomeBack: GapAdjustment?)?
 
     /// > 1 fast-forwards workout time (Simulator demos only).
     private let timeScale: Double
@@ -51,7 +60,7 @@ final class WorkoutManager: ObservableObject {
 
     func start() {
         sensor = Self.makeSensor()
-        engine = WorkoutEngine(schedule: plan.schedule)
+        engine = WorkoutEngine(schedule: plan.schedule, reminderEvery: Self.reminderInterval)
         distance = 0; heartRate = nil; pace = nil
         clock = 0; paceSamples = []; heartRateSum = 0; heartRateTime = 0; nextKilometre = 1
         startedAt = Date()
@@ -91,14 +100,29 @@ final class WorkoutManager: ObservableObject {
     func dismissSummary() {
         engine = nil
         screen = .start
-        if let queuedPlan { plan = queuedPlan }
-        queuedPlan = nil
+        // The run just finished, so any break is over.
+        welcomeBack = nil
+        if let queued { plan = queued.plan }
+        queued = nil
+        onBackToStart?()
     }
 
-    /// A new plan from the phone. Mid-run (or on the summary) the current plan stays, since the
-    /// session record still needs it; the new one takes over back on the start screen.
-    func receive(_ newPlan: ActivePlan) {
-        if screen == .start { plan = newPlan } else { queuedPlan = newPlan }
+    /// A new plan (from the phone, or the stored one after a break). Mid-run (or on the summary) the
+    /// current plan stays, since the session record still needs it; the new one takes over back on
+    /// the start screen.
+    func receive(_ newPlan: ActivePlan, welcomeBack: GapAdjustment? = nil) {
+        if screen == .start {
+            plan = newPlan
+            self.welcomeBack = welcomeBack
+        } else {
+            queued = (newPlan, nil)
+        }
+    }
+
+    /// Zone 1–5 of the current heart rate, if zones are known.
+    var heartRateZone: Int? {
+        guard let zones, let heartRate else { return nil }
+        return zones.zone(for: heartRate)
     }
 
     private func tick() {
@@ -117,8 +141,11 @@ final class WorkoutManager: ObservableObject {
         updatePace()
         self.engine = engine
 
-        if events.contains(where: { if case .targetReached = $0 { true } else { false } }) {
-            cues.targetReached()
+        for event in events {
+            switch event {
+            case .targetReached: cues.targetReached()
+            case .reminder: cues.reminder()
+            }
         }
         if distance >= Double(nextKilometre) * 1000 {
             if announceKilometres {

@@ -24,13 +24,22 @@ struct StartView: View {
                     }
                 }
 
+                if let back = manager.welcomeBack {
+                    // F15: the watch stepped back on its own after a break.
+                    Text("Welcome back, it's been \(GapRule.describe(days: back.gapDays)) → Week \((back.plan.stageIndex ?? 0) + 1)")
+                        .font(.system(size: 13, weight: .semibold)).foregroundStyle(Color.warmColor)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityIdentifier("welcomeBack")
+                }
+
                 VStack(alignment: .leading, spacing: 6) {
                     Text(manager.plan.schedule.summary)
                         .font(.system(size: 15, weight: .semibold))
-                        .fixedSize(horizontal: false, vertical: true)
+                        .lineLimit(1).minimumScaleFactor(0.7)
                     SegmentTimeline(schedule: manager.plan.schedule, height: 10)
-                    Text("≈ \(manager.plan.schedule.totalSeconds / 60) min with warm-up and cool-down")
+                    Text("≈ \(manager.plan.schedule.totalSeconds / 60) min")
                         .font(.caption2).foregroundStyle(.secondary)
+                        .accessibilityIdentifier("startDuration")
                 }
                 .padding(10)
                 .background(Color.white.opacity(0.1), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
@@ -96,12 +105,15 @@ private struct TimerPage: View {
                         .accessibilityIdentifier("roundLabel")
                 }
 
-                Text(Format.clock(segment.elapsed))
+                // F2: counts down to 0:00, then up from +0:01 in the segment colour.
+                Text(Format.segmentClock(target: segment.target, elapsed: segment.elapsed))
                     .font(.system(size: 50, weight: .bold))
                     .monospacedDigit()
+                    .minimumScaleFactor(0.7).lineLimit(1)
                     .foregroundStyle(segment.isOverTarget ? color : .white)
                     .opacity(engine.isPaused ? 0.4 : 1)
                     .frame(height: 50)
+                    .accessibilityIdentifier("segmentClock")
 
                 GeometryReader { geo in
                     ZStack(alignment: .leading) {
@@ -116,10 +128,17 @@ private struct TimerPage: View {
                     .foregroundStyle(segment.isOverTarget ? color : .secondary)
                     .accessibilityIdentifier("statusLabel")
 
+                // F8: total time · heart rate (with zone) · pace while running, distance while walking.
                 HStack(spacing: 0) {
-                    Metric(value: Format.pace(secondsPerKm: manager.pace), unit: "min/km")
-                    Metric(value: manager.heartRate.map { "\(Int($0))" } ?? "––", unit: "bpm")
-                    Metric(value: Format.km(meters: manager.distance), unit: "km")
+                    Metric(value: Format.clock(engine.totalElapsed), unit: "total")
+                    Metric(value: manager.heartRate.map { "\(Int($0))" } ?? "––",
+                           unit: manager.heartRateZone.map { "bpm · Z\($0)" } ?? "bpm",
+                           dot: manager.heartRateZone.map(Color.zone))
+                        .accessibilityIdentifier("heartRateMetric")
+                    switch segment.kind {
+                    case .run, .warmUp: Metric(value: Format.pace(secondsPerKm: manager.pace), unit: "min/km")
+                    case .walk, .coolDown: Metric(value: Format.km(meters: manager.distance), unit: "km")
+                    }
                 }
                 .padding(.top, 1)
 
@@ -167,7 +186,7 @@ private struct TimerPage: View {
     private func statusText(_ engine: WorkoutEngine) -> String {
         if engine.isPaused { return "Paused" }
         let segment = engine.current
-        return segment.isOverTarget ? "+\(Format.clock(segment.overrun)) over · tap next" : "of \(Format.clock(segment.target))"
+        return segment.isOverTarget ? "Over target · tap next" : "target \(Format.clock(segment.target))"
     }
 
     private func nextKind(_ engine: WorkoutEngine) -> SegmentKind? {
@@ -191,10 +210,17 @@ private struct TimerPage: View {
 private struct Metric: View {
     let value: String
     let unit: String
+    /// F9: heart rate zone colour.
+    var dot: Color?
+
     var body: some View {
         VStack(spacing: -1) {
-            Text(value).font(.system(size: 16, weight: .semibold)).monospacedDigit()
-            Text(unit).font(.system(size: 9, weight: .medium)).foregroundStyle(.secondary)
+            HStack(spacing: 3) {
+                if let dot { Circle().fill(dot).frame(width: 7, height: 7) }
+                Text(value).font(.system(size: 16, weight: .semibold)).monospacedDigit()
+                    .lineLimit(1).minimumScaleFactor(0.7)
+            }
+            Text(unit).font(.system(size: 9, weight: .medium)).foregroundStyle(.secondary).lineLimit(1)
         }
         .frame(maxWidth: .infinity)
     }

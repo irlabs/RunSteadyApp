@@ -49,12 +49,17 @@ struct PillButtonStyle: ButtonStyle {
     var color: Color = .brand
     var filled = true
 
+    /// F13: the secondary choice. Outlined in the brand colour so it reads as a real, enabled option.
+    static let secondary = PillButtonStyle(color: .brand, filled: false)
+
     func makeBody(configuration: Configuration) -> some View {
+        let shape = RoundedRectangle(cornerRadius: 18, style: .continuous)
         configuration.label
             .font(.headline)
             .foregroundStyle(filled ? .white : color)
             .frame(maxWidth: .infinity, minHeight: 50)
-            .background(filled ? color : color.opacity(0.14), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+            .background(filled ? color : color.opacity(0.08), in: shape)
+            .overlay { if !filled { shape.strokeBorder(color, lineWidth: 1.5) } }
             .opacity(configuration.isPressed ? 0.75 : 1)
             .scaleEffect(configuration.isPressed ? 0.98 : 1)
             .animation(.easeOut(duration: 0.15), value: configuration.isPressed)

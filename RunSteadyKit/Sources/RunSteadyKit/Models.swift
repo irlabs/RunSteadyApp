@@ -143,6 +143,8 @@ public struct CheckIn: Codable, Hashable, Sendable {
     public var date: Date
     /// Reasons per `Deviation.id`. Optional so check-ins stored before this field still decode.
     public var reasons: [Deviation.ID: DeviationReason]?
+    /// How hard the run felt, 1–10 (`Effort`). Optional so older check-ins still decode.
+    public var effort: Int?
 
     public init(feeling: Feeling, comfortable: Bool, knee: PainLevel, note: String? = nil, date: Date = .now) {
         self.feeling = feeling
@@ -210,6 +212,11 @@ public enum Format {
     public static func pace(secondsPerKm: Double?) -> String {
         guard let p = secondsPerKm, p.isFinite, p > 0, p < 3600 else { return "–:––" }
         return clock(Int(p.rounded()))
+    }
+
+    /// The big watch time (F2): counts down to "0:00" at the target, then up from "+0:01".
+    public static func segmentClock(target: Int, elapsed: Int) -> String {
+        elapsed <= target ? clock(target - elapsed) : "+" + clock(elapsed - target)
     }
 
     public static func km(meters: Double) -> String {

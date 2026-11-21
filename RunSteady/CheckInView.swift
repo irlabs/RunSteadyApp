@@ -2,9 +2,10 @@ import RunSteadyKit
 import SwiftData
 import SwiftUI
 
-/// Post-run check-in as a short chat. The structured answers (three fixed questions, reasons for
-/// deviations, one-off or not) feed the rule layer; the coach (language model or scripted fallback)
-/// only words the wrap-up and answers follow-ups.
+/// Post-run check-in as a short chat. The structured answers (effort slider, two fixed questions,
+/// reasons for deviations, one-off or not) feed the rule layer; the coach (language model or
+/// scripted fallback) only words the wrap-up and answers follow-ups. A typed answer instead of a
+/// button counts as no tap for the rules; it goes to the coach and the note extractor (F12).
 struct CheckInView: View {
     @EnvironmentObject private var model: AppModel
     @Environment(\.dismiss) private var dismiss
@@ -13,9 +14,12 @@ struct CheckInView: View {
     @Query private var plans: [StoredPlan]
     let session: StoredSession
 
-    private enum Step: Equatable { case feeling, comfort, knee, reason(Deviation), easier, wrapUp, chat }
-    @State private var step = Step.feeling
+    private enum Step: Equatable { case effort, comfort, knee, reason(Deviation), easier, wrapUp, chat }
+    /// A free-text answer to one of the questions, with the question it answered.
+    private struct TypedAnswer { let question: String; let text: String }
+    @State private var step = Step.effort
     @State private var messages: [ChatMessage] = []
+    @State private var effort = Double(Effort.initial)
     @State private var feeling = Feeling.okay
     @State private var comfortable = true
     @State private var knee = PainLevel.none
@@ -27,6 +31,8 @@ struct CheckInView: View {
     @State private var keepEasier: Bool?
     @State private var thinking = false
     @State private var draft = ""
+    @State private var typedAnswer = ""
+    @State private var typedAnswers: [TypedAnswer] = []
     @State private var coachContext: CoachContext?
     @State private var offer: Suggestion?
     @FocusState private var typing: Bool
@@ -78,7 +84,7 @@ struct CheckInView: View {
         var intro = "Welcome back! \(record.roundsDone) rounds, \(Format.km(meters: record.distanceMeters)) km in \(Format.clock(record.duration))."
         if record.extraRounds > 0 { intro += " That's \(record.extraRounds) more than planned." }
         say(intro)
-        say("How did it go overall?")
+        say("How hard did it feel? 1 is very easy, 10 is all out.")
     }
 
     private func say(_ text: String) {
@@ -89,23 +95,25 @@ struct CheckInView: View {
         withAnimation(.snappy) { messages.append(ChatMessage(role: .user, text: text)) }
     }
 
-    private func choose(feeling value: Feeling) {
-        feeling = value
-        answer(value.title)
+    /// F11: the slider's score sets Great / Okay / Tough for the rules.
+    private func chooseEffort() {
+        let score = Int(effort)
+        feeling = Feeling(effort: score)
+        answer("\(score) · \(Effort.label(score))")
         say("Was the pace comfortable? Could you have kept chatting?")
         step = .comfort
     }
 
-    private func choose(comfortable value: Bool) {
+    private func choose(comfortable value: Bool, typed: Bool = false) {
         comfortable = value
-        answer(value ? "Yes, comfortable" : "Not really")
+        if !typed { answer(value ? "Yes, comfortable" : "Not really") }
         say("Any trouble with knees or muscles?")
         step = .knee
     }
 
-    private func choose(knee value: PainLevel) {
+    private func choose(knee value: PainLevel, typed: Bool = false) {
         knee = value
-        answer(value.title)
+        if !typed { answer(value.title) }
         guard let record = session.record else { return }
         // A manual run is compared with what the plan would have run, to spot an easier one.
         let planned = record.stageIndex == nil ? others.suggestion(structuralDeclinedAt: declinedAt).schedule : nil
@@ -115,16 +123,35 @@ struct CheckInView: View {
         askNext()
     }
 
-    private func choose(reason: DeviationReason?, for deviation: Deviation) {
-        answer(reason?.title ?? "Skip")
+    private func choose(reason: DeviationReason?, for deviation: Deviation, typed: Bool = false) {
+        if !typed { answer(reason?.title ?? "Skip") }
         reasons[deviation.id] = reason
         askNext()
     }
 
-    private func choose(keepEasier value: Bool) {
-        answer(value ? "Keep it easier" : "One-off")
+    private func choose(keepEasier value: Bool?, typed: Bool = false) {
+        if !typed, let value { answer(value ? "Keep it easier" : "One-off") }
         keepEasier = value
         askNext()
+    }
+
+    /// F12: a typed answer moves on as if nothing was tapped (comfortable, no issues, no reason,
+    /// back to the plan), so it never changes the schedule. The coach reads it, and the note
+    /// extractor may turn it into a note (an injury note only makes the plan more careful).
+    private func sendTypedAnswer() {
+        let text = typedAnswer.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !text.isEmpty else { return }
+        typedAnswer = ""
+        typing = false
+        typedAnswers.append(TypedAnswer(question: messages.last(where: { $0.role == .coach })?.text ?? "", text: text))
+        answer(text)
+        switch step {
+        case .comfort: choose(comfortable: true, typed: true)
+        case .knee: choose(knee: .none, typed: true)
+        case .reason(let deviation): choose(reason: nil, for: deviation, typed: true)
+        case .easier: choose(keepEasier: nil, typed: true)
+        case .effort, .wrapUp, .chat: break
+        }
     }
 
     /// At most two reason questions, then "One-off or keep it easier?" after an easier manual run.
@@ -144,12 +171,34 @@ struct CheckInView: View {
 
     private func finish() {
         guard let record = session.record else { return }
+        let score = Int(effort)
         var checkIn = CheckIn(feeling: feeling, comfortable: comfortable, knee: knee)
         checkIn.reasons = reasons.isEmpty ? nil : reasons
+        checkIn.effort = score
+        let typed = typedAnswers
+        if !typed.isEmpty { checkIn.note = typed.map(\.text).joined(separator: " ") }
         session.checkIn = checkIn
         try? context.save()
         Store.noteKnee(knee, sessionID: session.id, in: context)
+        EffortWriter.shared.save(score: score, for: record)
+        step = .wrapUp
+        Task {
+            // Typed answers first: a note they open (an injury) can still make the plan more careful.
+            if !typed.isEmpty {
+                thinking = true
+                for answer in typed { await extractNotes(from: answer.text, previous: answer.question) }
+            }
+            wrapUp(record: record, checkIn: checkIn)
+        }
+    }
 
+    private func extractNotes(from text: String, previous: String?) async {
+        let open = Store.openNotes(in: context).map { brief($0, askNow: false) }
+        guard let extraction = await model.coach.extractNotes(from: text, previous: previous, openNotes: open) else { return }
+        Store.apply(extraction, sessionID: session.id, in: context)
+    }
+
+    private func wrapUp(record: SessionRecord, checkIn: CheckIn) {
         // The rule layer decides; the coach explains.
         let suggestion = currentSuggestion()
         switch keepEasier {
@@ -164,7 +213,6 @@ struct CheckInView: View {
             notes: notes.map { brief($0, askNow: asking.contains($0)) },
             recentRuns: RunSummary.recent(others.compactMap { s in s.record.map { ($0, s.checkIn) } }, now: .now),
             keepEasier: keepEasier)
-        step = .wrapUp
         Task {
             await coachReply(coachContext)
             // Follow-up notes are asked about once.
@@ -193,10 +241,8 @@ struct CheckInView: View {
         }
         Task { await coachReply(coachContext) }
         // A second, separate call: what's worth remembering from this message.
-        let open = Store.openNotes(in: context).map { brief($0, askNow: false) }
         Task {
-            guard let extraction = await model.coach.extractNotes(from: text, previous: previous, openNotes: open) else { return }
-            Store.apply(extraction, sessionID: session.id, in: context)
+            await extractNotes(from: text, previous: previous)
             refreshSuggestion()
         }
     }
@@ -241,14 +287,8 @@ struct CheckInView: View {
     @ViewBuilder private var inputBar: some View {
         VStack(spacing: 10) {
             switch step {
-            case .feeling:
-                HStack(spacing: 8) {
-                    ForEach(Feeling.allCases, id: \.self) { value in
-                        Button { choose(feeling: value) } label: { Label(value.title, systemImage: value.symbol) }
-                            .buttonStyle(ReplyStyle(color: value == .tough ? .warmColor : .brand))
-                            .accessibilityIdentifier("feeling-\(value.rawValue)")
-                    }
-                }
+            case .effort:
+                EffortPicker(effort: $effort, onDone: chooseEffort)
             case .comfort:
                 HStack(spacing: 8) {
                     Button("Yes, comfortable") { choose(comfortable: true) }
@@ -299,11 +339,75 @@ struct CheckInView: View {
                     .accessibilityIdentifier("chatSend")
                 }
             }
+            switch step {
+            case .comfort, .knee, .reason, .easier: typedAnswerRow
+            case .effort, .wrapUp, .chat: EmptyView()
+            }
         }
         .padding(.horizontal, 16).padding(.vertical, 10)
         .frame(maxWidth: .infinity)
         .background(Color.pageBackground)
         .animation(.snappy, value: step)
+    }
+
+    /// F12: next to the answer buttons, room to say it in your own words.
+    @ViewBuilder private var typedAnswerRow: some View {
+        HStack(spacing: 8) {
+            TextField("Or type your answer", text: $typedAnswer)
+                .focused($typing)
+                .submitLabel(.send)
+                .onSubmit(sendTypedAnswer)
+                .padding(.horizontal, 14).padding(.vertical, 10)
+                .background(Color.cardBackground, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                .accessibilityIdentifier("typedAnswerField")
+            if !typedAnswer.trimmingCharacters(in: .whitespaces).isEmpty {
+                Button(action: sendTypedAnswer) {
+                    Image(systemName: "arrow.up").font(.subheadline.weight(.heavy)).foregroundStyle(.white)
+                        .frame(width: 38, height: 38).background(Color.brand, in: Circle())
+                }
+                .accessibilityIdentifier("typedAnswerSend")
+            }
+        }
+    }
+}
+
+/// F11: how hard did it feel, 1–10, starting at 5.
+private struct EffortPicker: View {
+    @Binding var effort: Double
+    var onDone: () -> Void
+
+    var body: some View {
+        let score = Int(effort)
+        VStack(spacing: 10) {
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                Text("\(score)").font(.system(size: 34, weight: .heavy)).monospacedDigit()
+                    .foregroundStyle(color(score))
+                    .contentTransition(.numericText())
+                Text(Effort.label(score)).font(.headline).foregroundStyle(.secondary)
+                Spacer()
+            }
+            .animation(.snappy, value: score)
+            Slider(value: $effort, in: Double(Effort.range.lowerBound)...Double(Effort.range.upperBound), step: 1) {
+                Text("Effort")
+            } minimumValueLabel: {
+                Text("1").font(.caption.weight(.bold)).foregroundStyle(.secondary)
+            } maximumValueLabel: {
+                Text("10").font(.caption.weight(.bold)).foregroundStyle(.secondary)
+            }
+            .tint(color(score))
+            .accessibilityIdentifier("effortSlider")
+            Button("That's it", action: onDone)
+                .buttonStyle(ReplyStyle(color: .brand))
+                .accessibilityIdentifier("effortDone")
+        }
+    }
+
+    private func color(_ score: Int) -> Color {
+        switch Feeling(effort: score) {
+        case .great: .brand
+        case .okay: .warmColor
+        case .tough: .heart
+        }
     }
 }
 

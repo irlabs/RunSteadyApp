@@ -6,26 +6,50 @@ import WatchKit
 /// while a cue is pending and restored once the user taps next or the announcement ends.
 @MainActor
 final class Cues: NSObject, AVSpeechSynthesizerDelegate {
+    /// F5, chosen in the voice lab on the Series 5: Daniel (en-GB), a little slower, full volume.
+    static let voiceIdentifier = "com.apple.voice.compact.en-GB.Daniel"
+    static let rate: Float = 0.45
+    static let volume: Float = 1.0
+
     private let synthesizer = AVSpeechSynthesizer()
     private var player: AVAudioPlayer?
     private lazy var chime = Self.makeChime()
+    /// The target was reached and next isn't tapped yet: other audio stays ducked between reminders.
+    private var awaitingTap = false
 
     override init() {
         super.init()
         synthesizer.delegate = self
     }
 
+    /// Daniel when this watch has him, otherwise the default British English voice.
+    static var voice: AVSpeechSynthesisVoice? {
+        AVSpeechSynthesisVoice(identifier: voiceIdentifier) ?? AVSpeechSynthesisVoice(language: "en-GB")
+    }
+
     func targetReached() {
-        WKInterfaceDevice.current().play(.notification)
+        awaitingTap = true
         duck()
-        player = try? AVAudioPlayer(data: chime)
-        player?.play()
+        chimeAndTap()
+    }
+
+    /// F4: the same chime and haptic every few seconds until next is tapped.
+    func reminder() {
+        guard awaitingTap else { return }
+        chimeAndTap()
     }
 
     /// The user tapped next: let their audio come back up.
     func acknowledged() {
+        awaitingTap = false
         guard !synthesizer.isSpeaking else { return }
         unduck()
+    }
+
+    private func chimeAndTap() {
+        WKInterfaceDevice.current().play(.notification)
+        player = try? AVAudioPlayer(data: chime)
+        player?.play()
     }
 
     func announce(kilometre: Int, paceSecondsPerKm: Double?) {
@@ -36,7 +60,9 @@ final class Cues: NSObject, AVSpeechSynthesizerDelegate {
             text += " Pace \(total / 60) minutes \(total % 60) per kilometre."
         }
         let utterance = AVSpeechUtterance(string: text)
-        utterance.voice = AVSpeechSynthesisVoice(language: "en-GB")
+        utterance.voice = Self.voice
+        utterance.rate = Self.rate
+        utterance.volume = Self.volume
         synthesizer.speak(utterance)
     }
 
@@ -52,7 +78,10 @@ final class Cues: NSObject, AVSpeechSynthesizerDelegate {
     }
 
     nonisolated func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
-        Task { @MainActor in self.unduck() }
+        Task { @MainActor in
+            // A spoken kilometre during overtime must not bring the music back up before the tap.
+            if !self.awaitingTap { self.unduck() }
+        }
     }
 
     private func duck() {

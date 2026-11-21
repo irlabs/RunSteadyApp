@@ -19,9 +19,15 @@ import Testing
         #expect(WatchAppStatus.evaluate(phone: phone, watch: watch, watchAppInstalled: true) == .upToDate)
     }
 
-    @Test func differentBuildWithCompatibleProtocolIsOutdated() {
+    @Test func olderBuildWithCompatibleProtocolDiffers() {
         let watch = AppVersion(version: "1.0", build: "261110.0900", syncProtocol: SyncProtocol.minimumWatch)
-        #expect(WatchAppStatus.evaluate(phone: phone, watch: watch, watchAppInstalled: true) == .outdated(watch: watch))
+        #expect(WatchAppStatus.evaluate(phone: phone, watch: watch, watchAppInstalled: true) == .differs(watch: watch))
+    }
+
+    /// A watch built from newer code than the phone (e.g. installed from the watch scheme after an edit).
+    @Test func newerBuildDiffersToo() {
+        let watch = AppVersion(version: "1.1", build: "261121.085727", syncProtocol: SyncProtocol.current)
+        #expect(WatchAppStatus.evaluate(phone: phone, watch: watch, watchAppInstalled: true) == .differs(watch: watch))
     }
 
     @Test func protocolBelowMinimumIsTooOld() {

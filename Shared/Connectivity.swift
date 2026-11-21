@@ -2,9 +2,11 @@ import Foundation
 import RunSteadyKit
 import WatchConnectivity
 
-/// Phone ↔ watch sync. Sessions travel watch → phone as queued user-info transfers
-/// (delivered whenever the watch is back in range); the active plan travels
-/// phone → watch as application context (latest value wins). The phone re-sends its latest
+/// Phone ↔ watch sync. Sessions travel watch → phone twice: as a live message when the phone is
+/// reachable (wakes the phone app even after a force-quit) and as a queued user-info transfer
+/// (delivered whenever the watch is back in range). The phone dedupes by id. The active plan
+/// (plus `PlanInfo`: gap clock, decision, heart rate zones) travels phone → watch as application
+/// context (latest value wins). The phone re-sends its latest
 /// plan whenever the session (re)activates or the watch state changes, so one failed send
 /// does not leave the watch on a stale schedule.
 /// The watch publishes its `AppVersion` the same way (watch → phone application context), so the
@@ -16,6 +18,7 @@ final class Connectivity: NSObject, WCSessionDelegate {
     static let shared = Connectivity()
     private let lock = NSLock()
     private var latestPlan: ActivePlan?
+    private var latestInfo: PlanInfo?
     private var activationRequested = false
 
     /// Real sessions that arrived before anyone listened (e.g. a background launch before the
@@ -24,7 +27,7 @@ final class Connectivity: NSObject, WCSessionDelegate {
     var onSession: (@MainActor (SessionRecord) -> Void)? {
         didSet { Task { @MainActor in self.flushPendingSessions() } }
     }
-    var onPlan: (@MainActor (ActivePlan) -> Void)?
+    var onPlan: (@MainActor (ActivePlan, PlanInfo?) -> Void)?
     /// Phone only: the watch app reported its version, or its install state changed.
     var onWatchState: (@MainActor (_ watch: AppVersion?, _ installed: Bool) -> Void)?
     /// A diagnostics test run (`SessionRecord.isTest`), with the path it came by and when it was sent.
@@ -107,13 +110,17 @@ final class Connectivity: NSObject, WCSessionDelegate {
     #endif
 
     /// Remembers `plan` and pushes it now if possible; otherwise it goes out on the next activation.
-    func send(_ plan: ActivePlan) {
-        lock.withLock { latestPlan = plan }
+    func send(_ plan: ActivePlan, info: PlanInfo? = nil) {
+        lock.withLock {
+            latestPlan = plan
+            latestInfo = info
+        }
         pushLatestPlan()
     }
 
     private func pushLatestPlan() {
-        guard let plan = lock.withLock({ latestPlan }), WCSession.isSupported() else { return }
+        let (latest, info) = lock.withLock { (latestPlan, latestInfo) }
+        guard let plan = latest, WCSession.isSupported() else { return }
         let session = WCSession.default
         guard session.activationState == .activated else {
             Diag.log("WC", "Plan send deferred: session not activated")
@@ -126,7 +133,9 @@ final class Connectivity: NSObject, WCSessionDelegate {
         }
         #endif
         do {
-            try session.updateApplicationContext(["plan": try JSONEncoder().encode(plan)])
+            var context: [String: Any] = ["plan": try JSONEncoder().encode(plan)]
+            if let info { context["planInfo"] = try JSONEncoder().encode(info) }
+            try session.updateApplicationContext(context)
         } catch {
             Diag.log("WC", "Plan send failed: \(error.localizedDescription)")
         }
@@ -252,8 +261,9 @@ final class Connectivity: NSObject, WCSessionDelegate {
             Task { @MainActor in self.onTestAck?(id, kind, path) }
         }
         if let data = message["plan"] as? Data, let plan = try? JSONDecoder().decode(ActivePlan.self, from: data) {
-            Diag.log("WC", "Plan via \(path): \(plan.title)")
-            Task { @MainActor in self.onPlan?(plan) }
+            let info = (message["planInfo"] as? Data).flatMap { try? JSONDecoder().decode(PlanInfo.self, from: $0) }
+            Diag.log("WC", "Plan via \(path): \(plan.title)\(info?.zones == nil ? "" : ", with zones")")
+            Task { @MainActor in self.onPlan?(plan, info) }
         }
         #if os(iOS)
         if let data = message["appVersion"] as? Data, let version = try? JSONDecoder().decode(AppVersion.self, from: data) {

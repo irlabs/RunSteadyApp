@@ -18,6 +18,8 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         }
         Connectivity.shared.activate()
         HealthObserver.shared.start()
+        // F11: effort scores waiting for their watch workout to reach Health.
+        Task { await EffortWriter.shared.writePending() }
         observeLifecycle()
         return true
     }
@@ -110,7 +112,8 @@ final class TestRunReceiver {
 }
 
 /// F1 and F10b on the phone: asks for Health access and watches for new workouts with
-/// HealthKit background delivery. Test workouts (metadata `RunSteadyTest`) are only announced.
+/// HealthKit background delivery. A new real workout retries pending effort scores (F11);
+/// test workouts (metadata `RunSteadyTest`) are only announced.
 final class HealthObserver: @unchecked Sendable {
     static let shared = HealthObserver()
     static let testKey = "RunSteadyTest"
@@ -118,6 +121,9 @@ final class HealthObserver: @unchecked Sendable {
     private let anchorKey = "spikeWorkoutAnchor"
     private let lock = NSLock()
     private var observing = false
+    /// One anchored query at a time (the spike saw two wakes handle the same workout twice).
+    private var fetching = false
+    private var fetchAgain = false
 
     var shareTypes: Set<HKSampleType> { [HKObjectType.workoutType(), HKQuantityType(.workoutEffortScore)] }
     var readTypes: Set<HKObjectType> { [HKObjectType.workoutType(), HKCharacteristicType(.dateOfBirth)] }
@@ -169,6 +175,12 @@ final class HealthObserver: @unchecked Sendable {
         readDateOfBirth()
     }
 
+    /// nil without a grant or without a birth year in Health.
+    func dateOfBirth() -> DateComponents? {
+        guard let c = try? store.dateOfBirthComponents(), c.year != nil else { return nil }
+        return c
+    }
+
     func readDateOfBirth() {
         do {
             let c = try store.dateOfBirthComponents()
@@ -179,14 +191,36 @@ final class HealthObserver: @unchecked Sendable {
     }
 
     private func fetchNewWorkouts(_ completion: @escaping () -> Void) {
+        let busy = lock.withLock { () -> Bool in
+            if fetching { fetchAgain = true; return true }
+            fetching = true
+            return false
+        }
+        // A query is running already; it runs once more when done, so this wake is covered.
+        if busy { completion(); return }
+        runAnchoredQuery {
+            completion()
+            Task { await EffortWriter.shared.writePending() }
+        }
+    }
+
+    private func runAnchoredQuery(_ done: @escaping () -> Void) {
         let anchor = UserDefaults.standard.data(forKey: anchorKey)
             .flatMap { try? NSKeyedUnarchiver.unarchivedObject(ofClass: HKQueryAnchor.self, from: $0) }
         // First run: only the last two days, not the whole Health history.
         let predicate = anchor == nil ? HKQuery.predicateForSamples(withStart: .now.addingTimeInterval(-2 * 86_400), end: nil) : nil
         let query = HKAnchoredObjectQuery(type: .workoutType(), predicate: predicate, anchor: anchor,
                                           limit: HKObjectQueryNoLimit) { [weak self] _, added, deleted, newAnchor, error in
-            defer { completion() }
-            guard let self else { return }
+            guard let self else { return done() }
+            defer {
+                let again = self.lock.withLock { () -> Bool in
+                    let again = self.fetchAgain
+                    self.fetchAgain = false
+                    if !again { self.fetching = false }
+                    return again
+                }
+                if again { self.runAnchoredQuery(done) } else { done() }
+            }
             if let error {
                 Diag.log("HealthKit", "Workout query failed: \(error.localizedDescription)")
                 return
@@ -207,7 +241,7 @@ final class HealthObserver: @unchecked Sendable {
         let minutes = Int(workout.duration / 60)
         let late = Diag.delay(since: workout.endDate)
         guard let runID = workout.metadata?[Self.testKey] as? String else {
-            Diag.log("HealthKit", "Workout \(workout.uuid.short) from \(source), \(minutes) min, ended \(late) ago (real run, ignored for now)")
+            Diag.log("HealthKit", "Workout \(workout.uuid.short) from \(source), \(minutes) min, ended \(late) ago")
             return
         }
         Diag.log("HealthKit", "TEST workout \(workout.uuid.short) from \(source), \(late) after it ended, app \(Diag.phase)")

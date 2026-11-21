@@ -43,25 +43,69 @@ final class AppModel: ObservableObject {
         }
         Connectivity.shared.activate()
         // Push the current plan on every launch; it goes out once the session is active.
-        if !isDemo { Connectivity.shared.send(storedPlan.plan) }
-        if !isDemo {
-            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, _ in
-                Diag.log("Notify", "Authorization granted: \(granted)")
-            }
-        }
+        pushPlan()
+        if !isDemo { Task { await askPermissions() } }
+    }
+
+    /// F1: Health first (workouts, date of birth, effort score), then notifications. Each only asks
+    /// once; later launches return at once. The phone's grant doesn't cover the watch, which asks itself.
+    private func askPermissions() async {
+        await HealthObserver.shared.requestAuthorization() // also registers the observer again
+        refreshZones()
+        let granted = (try? await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound])) ?? false
+        Diag.log("Notify", "Authorization granted: \(granted)")
+        await EffortWriter.shared.writePending()
     }
 
     func recheckWatch() { Connectivity.shared.refreshWatchState() }
 
     var storedPlan: StoredPlan { Store.storedPlan(in: container.mainContext) }
 
+    // MARK: Heart rate zones (F9)
+
+    private let zonesKey = "heartRateZones"
+
+    /// Worked out here from the phone's date of birth and sent to the watch with the plan.
+    var zones: HeartRateZones? {
+        UserDefaults.standard.data(forKey: zonesKey).flatMap { try? JSONDecoder().decode(HeartRateZones.self, from: $0) }
+    }
+
+    private func refreshZones() {
+        guard let birth = HealthObserver.shared.dateOfBirth(), let zones = HeartRateZones(birth: birth) else { return }
+        guard zones != self.zones else { return }
+        UserDefaults.standard.set(try? JSONEncoder().encode(zones), forKey: zonesKey)
+        Diag.log("Zones", "Max heart rate \(zones.maxHeartRate), zones from \(zones.lowerBounds.map(String.init).joined(separator: "/")) bpm")
+        pushPlan()
+    }
+
+    // MARK: Plan
+
+    /// Sends the active plan with what the watch needs to handle a break on its own (F15) and the zones.
+    func pushPlan() {
+        guard !isDemo else { return }
+        let stored = storedPlan
+        let info = PlanInfo(decidedAt: stored.updatedAt, decision: decision(for: stored.plan), zones: zones)
+        Connectivity.shared.send(stored.plan, info: info)
+    }
+
+    /// Why the rules chose `plan`, when it is today's suggestion; nil lets the watch infer it.
+    private func decision(for plan: ActivePlan) -> Decision? {
+        guard !plan.isManual else { return nil }
+        let context = container.mainContext
+        let sessions = (try? context.fetch(FetchDescriptor<StoredSession>())) ?? []
+        let injury = Store.openNotes(in: context).contains { $0.kind == .injury }
+        let suggestion = sessions.suggestion(structuralDeclinedAt: storedPlan.structuralDeclinedAt, hasOpenInjury: injury)
+        return ActivePlan(suggestion) == plan ? suggestion.decision : nil
+    }
+
     /// Make `plan` the active one and push it to the watch.
     func apply(_ plan: ActivePlan) {
         let stored = storedPlan
         stored.plan = plan
-        stored.dismissedSuggestion = nil
+        // F14: an ignored suggestion stays ignored while the runner edits their own schedule.
+        if !plan.isManual { stored.dismissedSuggestion = nil }
         try? container.mainContext.save()
-        Connectivity.shared.send(plan)
+        pushPlan()
     }
 
     /// - Parameter staying: keep the active plan exactly as it is (e.g. "Keep it easier" after a manual run),
@@ -73,7 +117,10 @@ final class AppModel: ObservableObject {
             if alternative != storedPlan.plan { apply(alternative) }
         }
         storedPlan.dismissedSuggestion = suggestion.key
+        // A decision too: the watch's gap clock starts again from here.
+        storedPlan.updatedAt = .now
         try? container.mainContext.save()
+        pushPlan()
     }
 
     /// On the automatic plan, moving on with identical intervals needs no decision. For an offer with a
@@ -95,9 +142,16 @@ final class AppModel: ObservableObject {
         return true
     }
 
-    /// A session arrived from the watch (it is back in range): store it and prompt the check-in.
+    /// A session arrived from the watch: store it and prompt the check-in, once. It usually arrives
+    /// twice (message, then userInfo a moment later); the second copy is dropped here (F10).
     private func receive(_ record: SessionRecord) {
         guard !record.isTestRun else { return } // Diagnostics test runs never land in History.
+        let id = record.id
+        let known = (try? container.mainContext.fetchCount(FetchDescriptor<StoredSession>(predicate: #Predicate { $0.id == id }))) ?? 0
+        guard known == 0 else {
+            Diag.log("Run", "Session \(record.shortID) already stored, no second check-in prompt")
+            return
+        }
         Store.upsert(record, in: container.mainContext)
         let content = UNMutableNotificationContent()
         content.title = "Welcome back!"

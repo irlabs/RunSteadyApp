@@ -31,12 +31,9 @@ final class HealthKitSensor: NSObject, WorkoutSensor {
     let savesToHealth = true
 
     func start() async {
-        let share: Set<HKSampleType> = [HKObjectType.workoutType(), HKSeriesType.workoutRoute()]
-        let read: Set<HKObjectType> = [
-            HKQuantityType(.heartRate), HKQuantityType(.distanceWalkingRunning), HKQuantityType(.activeEnergyBurned),
-        ]
         do {
-            try await store.requestAuthorization(toShare: share, read: read)
+            // Normally answered on the welcome screen already; then this returns at once.
+            try await store.requestAuthorization(toShare: WatchHealth.shareTypes, read: WatchHealth.readTypes)
 
             let config = HKWorkoutConfiguration()
             config.activityType = .running
@@ -59,7 +56,7 @@ final class HealthKitSensor: NSObject, WorkoutSensor {
             session.startActivity(with: now)
             try await builder.beginCollection(at: now)
         } catch {
-            print("HealthKit workout could not start: \(error)")
+            Diag.log("HealthKit", "Workout could not start: \(error.localizedDescription)")
         }
     }
 
@@ -77,7 +74,7 @@ final class HealthKitSensor: NSObject, WorkoutSensor {
                 try await routeBuilder?.finishRoute(with: workout, metadata: nil)
             }
         } catch {
-            print("HealthKit workout could not be saved: \(error)")
+            Diag.log("HealthKit", "Workout could not be saved: \(error.localizedDescription)")
         }
     }
 }

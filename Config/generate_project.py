@@ -106,6 +106,7 @@ settings = {
         "INFOPLIST_KEY_NSHealthUpdateUsageDescription": "Run Steady saves how hard each run felt to Apple Health.",
         "LD_RUNPATH_SEARCH_PATHS": "$(inherited) @executable_path/Frameworks",
         "ENABLE_PREVIEWS": "YES",
+        "ENABLE_USER_SCRIPT_SANDBOXING": "NO",  # Stamp Version edits the built Info.plist
     },
     "RunSteadyWatch": {
         **watch,
@@ -118,12 +119,13 @@ settings = {
         "INFOPLIST_KEY_CFBundleDisplayName": "Run Steady",
         "INFOPLIST_KEY_WKCompanionAppBundleIdentifier": BUNDLE,
         "INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp": "YES",
-        "INFOPLIST_KEY_NSHealthShareUsageDescription": "Run Steady shows your heart rate and distance during a run.",
+        "INFOPLIST_KEY_NSHealthShareUsageDescription": "Run Steady shows your heart rate, its zone (from your date of birth) and distance during a run.",
         "INFOPLIST_KEY_NSHealthUpdateUsageDescription": "Run Steady saves your run-walk workouts and routes to Apple Health.",
         "INFOPLIST_KEY_NSLocationWhenInUseUsageDescription": "Run Steady records the route of your run.",
         "LD_RUNPATH_SEARCH_PATHS": "$(inherited) @executable_path/Frameworks",
         "SKIP_INSTALL": "YES",
         "ENABLE_PREVIEWS": "YES",
+        "ENABLE_USER_SCRIPT_SANDBOXING": "NO",  # Stamp Version edits the built Info.plist
     },
     "RunSteadyUITests": {
         **ios,
@@ -206,9 +208,21 @@ embed_phase = add("embed:watch", {"isa": "PBXCopyFilesBuildPhase", "buildActionM
                                   "dstPath": "$(CONTENTS_FOLDER_PATH)/Watch", "dstSubfolderSpec": 16, "files": [embed_file],
                                   "name": "Embed Watch Content", "runOnlyForDeploymentPostprocessing": 0})
 
-target("RunSteadyWatch", "com.apple.product-type.application", ["Shared", "RunSteadyWatch"], uses_package=True)
+
+
+def stamp_phase(which):
+    """Shared, unique version per build for phone + watch (see scripts/stamp-version)."""
+    return add("stamp:" + which, {"isa": "PBXShellScriptBuildPhase", "alwaysOutOfDate": 1, "buildActionMask": 2147483647,
+                                  "files": [], "inputFileListPaths": [], "inputPaths": [], "name": "Stamp Version",
+                                  "outputFileListPaths": [], "outputPaths": [], "runOnlyForDeploymentPostprocessing": 0,
+                                  "shellPath": "/bin/sh", "shellScript": f'"$SRCROOT/scripts/stamp-version" {which}\n',
+                                  "showEnvVarsInLog": 0})
+
+
+target("RunSteadyWatch", "com.apple.product-type.application", ["Shared", "RunSteadyWatch"], uses_package=True,
+       extra_phases=[stamp_phase("watch")])
 target("RunSteady", "com.apple.product-type.application", ["Shared", "RunSteady"], deps=["RunSteadyWatch"],
-       uses_package=True, extra_phases=[embed_phase])
+       uses_package=True, extra_phases=[embed_phase, stamp_phase("phone")])
 target("RunSteadyUITests", "com.apple.product-type.bundle.ui-testing", ["RunSteadyUITests"], deps=["RunSteady"])
 target("RunSteadyWatchUITests", "com.apple.product-type.bundle.ui-testing", ["RunSteadyWatchUITests"], deps=["RunSteadyWatch"])
 

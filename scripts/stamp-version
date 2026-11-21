@@ -1,0 +1,35 @@
+#!/bin/bash
+# Xcode build phase (added by Config/generate_project.py), so it runs for every build: Xcode GUI,
+# scripts/build and the test schemes alike. The build number says which code an app was built
+# from: the time of the newest change to the app sources (yymmdd.HHMMSS). Building the phone
+# scheme and then the watch scheme from the same code gives both the same number, so the phone
+# can tell whether the watch runs the same code.
+#   stamp-version watch   VERSION file + that build number
+#   stamp-version phone   copies both from the embedded watch app (runs after "Embed Watch Content")
+# Saving a file without changing it also counts as a change. Deleting a file alone doesn't.
+set -euo pipefail
+
+PLIST="$TARGET_BUILD_DIR/$INFOPLIST_PATH"
+pb() { /usr/libexec/PlistBuddy "$@"; }
+
+case "${1:-}" in
+  watch)
+    VERSION="$(tr -d '[:space:]' < "$SRCROOT/VERSION")"
+    cd "$SRCROOT"
+    NEWEST="$(find Shared RunSteady RunSteadyWatch RunSteadyKit/Sources RunSteadyKit/Package.swift Config VERSION \
+                   RunSteady.xcodeproj/project.pbxproj -type f -not -name .DS_Store -print0 \
+              | xargs -0 stat -f %m | sort -n | tail -1)"
+    BUILD="$(date -r "$NEWEST" +%y%m%d.%H%M%S)"
+    ;;
+  phone)
+    WATCH_PLIST="$TARGET_BUILD_DIR/$CONTENTS_FOLDER_PATH/Watch/RunSteadyWatch.app/Info.plist"
+    [ -f "$WATCH_PLIST" ] || { echo "error: no embedded watch app at $WATCH_PLIST" >&2; exit 1; }
+    VERSION="$(pb -c "Print :CFBundleShortVersionString" "$WATCH_PLIST")"
+    BUILD="$(pb -c "Print :CFBundleVersion" "$WATCH_PLIST")"
+    ;;
+  *)
+    echo "usage: stamp-version watch|phone" >&2; exit 2 ;;
+esac
+
+pb -c "Set :CFBundleShortVersionString $VERSION" -c "Set :CFBundleVersion $BUILD" "$PLIST"
+echo "Run Steady $1 app: v$VERSION ($BUILD)"

@@ -38,8 +38,9 @@ public enum WatchAppStatus: Equatable, Sendable {
     /// Installed, but it has not reported its version yet (never opened since this check existed).
     case unknown
     case upToDate
-    /// Older (or just different) build that still speaks a protocol the phone accepts.
-    case outdated(watch: AppVersion)
+    /// Built from different code than this phone app (older or newer), but it still speaks a
+    /// protocol the phone accepts. Build numbers name the code they were built from.
+    case differs(watch: AppVersion)
     /// Speaks a sync protocol below `SyncProtocol.minimumWatch`: runs and plans won't sync correctly.
     case tooOld(watch: AppVersion)
 
@@ -49,7 +50,7 @@ public enum WatchAppStatus: Equatable, Sendable {
         guard let watch else { return .unknown }
         // Compatibility first: a too-old protocol is a problem whatever the build.
         if watch.syncProtocol < SyncProtocol.minimumWatch { return .tooOld(watch: watch) }
-        // Same build number = same binary pair (both stamped by one `scripts/build`).
-        return watch.build == phone.build ? .upToDate : .outdated(watch: watch)
+        // Same build number = built from the same code (scripts/stamp-version: time of the newest source change).
+        return watch.build == phone.build ? .upToDate : .differs(watch: watch)
     }
 }
