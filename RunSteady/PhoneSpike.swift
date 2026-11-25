@@ -66,6 +66,10 @@ final class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         Diag.log("Notify", "Tapped: \(response.notification.request.content.title)")
+        if response.actionIdentifier == UNNotificationDefaultActionIdentifier,
+           let id = RunRouter.sessionID(in: response.notification.request) {
+            Task { @MainActor in RunRouter.shared.open(id) }
+        }
         completionHandler()
     }
 

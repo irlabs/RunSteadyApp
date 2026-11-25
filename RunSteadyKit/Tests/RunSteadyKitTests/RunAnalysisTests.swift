@@ -39,14 +39,16 @@ private func kinds(_ deviations: [Deviation]) -> [Deviation.Kind] { deviations.m
     }
 
     @Test func walkExtendedCollectsLongRoundsAndAllExtraTime() {
-        let r = record(runs: [180, 180, 180], walks: [180, 130, 170])
+        // 4 rounds: walks 1–3 are planned, the one after run 4 is cool-down (G7).
+        let four = Schedule(name: "T4", warmUp: 300, run: 180, walk: 120, rounds: 4, coolDown: 300)
+        let r = record(four, runs: [180, 180, 180, 180], walks: [180, 130, 170, 400])
         let d = RunAnalysis.deviations(in: r)
         #expect(kinds(d) == [.walkExtended])
         #expect(d[0].rounds == [1, 3])
-        #expect(d[0].seconds == 120) // includes the 10 s of round 2
+        #expect(d[0].seconds == 120) // includes the 10 s of round 2, not the closing walk
     }
 
-    // Week 2 shape: 6 × 2 min run / 2 min walk, 12 min planned walking.
+    // Week 2 shape: 6 × 2 min run / 2 min walk, 10 min planned walking (no walk after the last run).
     private let week2 = Schedule(name: "W2", warmUp: 300, run: 120, walk: 120, rounds: 6, coolDown: 300)
 
     @Test func oneModeratelyLongWalkIsNotEnough() {
@@ -56,8 +58,8 @@ private func kinds(_ deviations: [Deviation]) -> [Deviation.Kind] { deviations.m
     }
 
     @Test func twoLongWalksNeedEnoughTotalTime() {
-        let short = record(week2, runs: Array(repeating: 120, count: 6), walks: [150, 150, 120, 120, 120, 120])
-        #expect(RunAnalysis.deviations(in: short).isEmpty) // 60 s < max(60, 72)
+        let short = record(week2, runs: Array(repeating: 120, count: 6), walks: [145, 145, 120, 120, 120, 120])
+        #expect(RunAnalysis.deviations(in: short).isEmpty) // 50 s < max(60, 60)
         let long = record(week2, runs: Array(repeating: 120, count: 6), walks: [160, 160, 120, 120, 120, 120])
         #expect(kinds(RunAnalysis.deviations(in: long)) == [.walkExtended]) // 80 s
     }
@@ -75,13 +77,13 @@ private func kinds(_ deviations: [Deviation]) -> [Deviation.Kind] { deviations.m
     }
 
     @Test func totalOverAQuarterCountsEvenWithoutLongRounds() {
-        // Week 6 shape: 2 × 12 min run / 1 min walk. 18 s over each (under the noise floor), 30% in total.
-        let week6 = Schedule(name: "W6", warmUp: 300, run: 720, walk: 60, rounds: 2, coolDown: 300)
-        let r = record(week6, runs: [720, 720], walks: [78, 78])
+        // 4 × 5 min run / 1 min walk. 19 s over each (under the noise floor), 32% in total.
+        let short = Schedule(name: "S", warmUp: 300, run: 300, walk: 60, rounds: 4, coolDown: 300)
+        let r = record(short, runs: [300, 300, 300, 300], walks: [79, 79, 79])
         let d = RunAnalysis.deviations(in: r)
         #expect(kinds(d) == [.walkExtended])
         #expect(d[0].rounds.isEmpty)
-        #expect(d[0].seconds == 36)
+        #expect(d[0].seconds == 57)
     }
 
     @Test func fewRoundsNeedOnlyOneLongWalk() {

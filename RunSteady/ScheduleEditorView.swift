@@ -53,6 +53,7 @@ struct ScheduleEditorView: View {
                         var mine = schedule
                         mine.name = "My schedule"
                         model.apply(ActivePlan(schedule: mine))
+                        model.settleChoice()
                         dismiss()
                     }
                     .buttonStyle(PillButtonStyle())
@@ -62,7 +63,7 @@ struct ScheduleEditorView: View {
 
                     if plan.isManual {
                         Button("Back to the automatic plan") {
-                            model.apply(ActivePlan(suggestion))
+                            model.accept(suggestion)
                             dismiss()
                         }
                         .buttonStyle(PillButtonStyle(color: .coolColor, filled: false))

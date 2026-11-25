@@ -53,7 +53,8 @@ enum DemoData {
             add(.walk, round, schedule.walk, speed: 1.55)
         }
         add(.coolDown, 0, schedule.coolDown, speed: 1.35)
+        // As the watch records it (G7): the walk after the last run is cool-down.
         return SessionRecord(startedAt: date, schedule: schedule, stageIndex: stage, sessionInStage: session,
-                             segments: segments, distanceMeters: distance, averageHeartRate: Double(124 + (seed * 5) % 11))
+                             segments: schedule.mergingClosingWalk(segments), distanceMeters: distance, averageHeartRate: Double(124 + (seed * 5) % 11))
     }
 }

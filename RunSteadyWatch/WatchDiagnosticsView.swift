@@ -4,6 +4,7 @@ import SwiftUI
 /// Hidden device-check screen (long-press the tortoise on the start screen). Phase 0 spike, kept for later checks.
 struct WatchDiagnosticsView: View {
     @ObservedObject private var store = DiagStore.shared
+    @State private var cues = Cues()
     private let spike = WatchSpike.shared
 
     var body: some View {
@@ -13,6 +14,16 @@ struct WatchDiagnosticsView: View {
                     .accessibilityIdentifier("checkPermissions")
                 Button("Read birth date") { spike.readDateOfBirth() }
                 Button("Request here") { Task { await spike.requestHere() } }
+            }
+            Section {
+                ForEach(Cues.HapticTest.allCases) { pattern in
+                    Button(pattern.rawValue) { cues.test(pattern) }
+                        .accessibilityIdentifier("haptic-\(pattern)")
+                }
+            } header: {
+                Text("Haptic (G2)")
+            } footer: {
+                Text("Which ones do you feel? Logged.")
             }
             Section("Voice (F5)") {
                 NavigationLink("Voice lab") { VoiceLabView() }

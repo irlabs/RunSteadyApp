@@ -64,13 +64,17 @@ final class WatchModel: ObservableObject {
             // arrives in every other case. The phone dedupes by id. Never resend based on the reply.
             Connectivity.shared.send(record, viaMessage: true)
         }
-        Connectivity.shared.onPlan = { [weak self] plan, info in
+        // G8: a plan that arrived while the app was launching waits in the inbox and lands here.
+        Connectivity.shared.plans.handler = { [weak self] received in
             guard let self, !self.isDemo else { return }
-            stored.plan = plan
+            stored.plan = received.plan
             try? context.save()
-            self.planInfo = info
+            self.planInfo = received.info
             self.refreshPlan()
             self.refreshZones()
+            // G9: tell the phone which plan the watch holds now.
+            Connectivity.shared.report(PlanReceipt(plan: received.plan, decidedAt: received.info?.decidedAt,
+                                                   reportedAt: .now))
         }
         manager.onBackToStart = { [weak self] in self?.refreshPlan() }
         Connectivity.shared.activate()

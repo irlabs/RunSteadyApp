@@ -102,8 +102,9 @@ private let schedule = Schedule(name: "Test", warmUp: 300, run: 60, walk: 120, r
     }
 
     @Test func scheduleTotals() {
-        #expect(schedule.totalSeconds == 300 + 2 * 180 + 300)
-        #expect(schedule.plannedSegments.map(\.kind) == [.warmUp, .run, .walk, .run, .walk, .coolDown])
+        // G7: no walk after the last run.
+        #expect(schedule.totalSeconds == 300 + 60 + 120 + 60 + 300)
+        #expect(schedule.plannedSegments.map(\.kind) == [.warmUp, .run, .walk, .run, .coolDown])
     }
 
     @Test func formatting() {

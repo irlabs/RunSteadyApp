@@ -41,16 +41,31 @@ struct TodayView: View {
         return s
     }
 
+    /// G11: the latest run's check-in was closed before the next session was chosen. Its card stays,
+    /// and reopens the conversation at its end with the choice (instead of a separate suggestion card).
+    private var awaitingChoice: StoredSession? {
+        guard offer != nil, let latest = sessions.first, latest.checkIn != nil, latest.openChoice != nil,
+              latest.startedAt > Date().addingTimeInterval(-3 * 86_400) else { return nil }
+        return latest
+    }
+
+    /// G9: what the watch reported back about the next session.
+    private var watchPlanStatus: WatchPlanStatus {
+        .evaluate(plan: plan, decidedAt: plans.first?.updatedAt ?? .distantPast,
+                  watch: model.watchPlan, sentAt: model.planSentAt)
+    }
+
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
                 header
                 HeroCard(suggestion: position)
                 if let pending { checkInCard(pending) }
-                if let offer, !plan.isManual { SuggestionCard(suggestion: offer) }
+                if let session = awaitingChoice { choiceCard(session) }
+                if let offer, !plan.isManual, awaitingChoice == nil { SuggestionCard(suggestion: offer) }
                 nextSessionCard
                 // F14: with a schedule of their own, the plan's suggestion sits quietly underneath.
-                if let offer, plan.isManual { SuggestionCard(suggestion: offer, compact: true) }
+                if let offer, plan.isManual, awaitingChoice == nil { SuggestionCard(suggestion: offer, compact: true) }
                 weekStats
                 if let status = model.watchStatus { WatchStatusLine(status: status) }
             }
@@ -58,6 +73,8 @@ struct TodayView: View {
             .padding(.bottom, 24)
             .animation(.snappy, value: offer?.key)
             .animation(.snappy, value: pending?.id)
+            .animation(.snappy, value: awaitingChoice?.id)
+            .animation(.snappy, value: watchPlanStatus)
         }
         .background(Color.pageBackground)
         .sheet(isPresented: $editing) { ScheduleEditorView(plan: plan, suggestion: suggestion) }
@@ -124,6 +141,25 @@ struct TodayView: View {
         }
     }
 
+    /// G11: the check-in is answered, the next session not chosen yet.
+    private func choiceCard(_ session: StoredSession) -> some View {
+        Card(color: .brand) {
+            HStack(spacing: 12) {
+                Image(systemName: "arrow.triangle.branch").font(.title2)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Choose your next session").font(.title3.weight(.bold))
+                    Text("Steady suggests \(offer.map { "week \($0.stageIndex + 1), session \($0.sessionInStage)" } ?? "a change"). "
+                         + "Use it or keep yours.")
+                        .font(.subheadline).opacity(0.9)
+                }
+            }
+            .foregroundStyle(.white)
+            Button("Back to the check-in") { checkInSession = session }
+                .buttonStyle(WhiteButtonStyle(textColor: .brand))
+                .accessibilityIdentifier("chooseNextButton")
+        }
+    }
+
     private var nextSessionCard: some View {
         Card {
             HStack {
@@ -138,8 +174,7 @@ struct TodayView: View {
             Text(plan.title).font(.subheadline.weight(.semibold)).foregroundStyle(.secondary)
             ScheduleSummary(schedule: plan.schedule)
             HStack(spacing: 10) {
-                Label("Ready on your watch", systemImage: "applewatch")
-                    .font(.footnote.weight(.semibold)).foregroundStyle(.secondary)
+                watchPlanLine
                 Spacer()
                 Button {
                     editing = true
@@ -149,6 +184,32 @@ struct TodayView: View {
                         .background(Color.brand.opacity(0.14), in: Capsule())
                 }
                 .accessibilityIdentifier("editScheduleButton")
+            }
+        }
+    }
+
+    /// G9: only what the watch confirmed; nothing before it has reported.
+    @ViewBuilder private var watchPlanLine: some View {
+        switch watchPlanStatus {
+        case .unknown:
+            EmptyView()
+        case .onWatch:
+            Label("On your watch", systemImage: "applewatch")
+                .font(.footnote.weight(.semibold)).foregroundStyle(.secondary)
+                .accessibilityIdentifier("watchPlanLine")
+        case .sending:
+            Label("Sending to your watch…", systemImage: "applewatch.radiowaves.left.and.right")
+                .font(.footnote.weight(.semibold)).foregroundStyle(.secondary)
+                .accessibilityIdentifier("watchPlanLine")
+        case .older(let held):
+            VStack(alignment: .leading, spacing: 6) {
+                Label("Watch has an older session: \(held.title)", systemImage: "exclamationmark.applewatch")
+                    .font(.footnote.weight(.semibold)).foregroundStyle(.orange)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("watchPlanLine")
+                Button("Resend") { model.resendPlan() }
+                    .font(.footnote.weight(.bold))
+                    .accessibilityIdentifier("resendPlanButton")
             }
         }
     }
@@ -277,6 +338,8 @@ struct SuggestionCard: View {
     @EnvironmentObject private var model: AppModel
     let suggestion: Suggestion
     var compact = false
+    /// G10: in the check-in the buttons are pinned below the conversation instead.
+    var showsButtons = true
     var onDecided: () -> Void = {}
     @State private var showReason = false
 
@@ -306,7 +369,7 @@ struct SuggestionCard: View {
                 Text(suggestion.reason).font(.subheadline).foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
-            buttons
+            if showsButtons { buttons }
         }
         .contentShape(Rectangle())
         .onTapGesture { if compact { withAnimation(.snappy) { showReason.toggle() } } }
@@ -320,13 +383,13 @@ struct SuggestionCard: View {
         HStack(spacing: 10) {
             Button(compact ? "Ignore" : early ? "Stay steady" : "Keep mine") {
                 // Ignoring under a manual schedule keeps that schedule, offer or not.
-                model.keepCurrent(insteadOf: suggestion, staying: compact)
+                model.decline(suggestion)
                 onDecided()
             }
             .buttonStyle(early ? PillButtonStyle() : PillButtonStyle.secondary)
             .accessibilityIdentifier("keepMineButton")
             Button(early ? "Try it" : "Use this") {
-                model.apply(ActivePlan(suggestion))
+                model.accept(suggestion)
                 onDecided()
             }
             .buttonStyle(early ? PillButtonStyle.secondary : PillButtonStyle())

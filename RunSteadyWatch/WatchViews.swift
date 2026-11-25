@@ -128,12 +128,12 @@ private struct TimerPage: View {
                     .foregroundStyle(segment.isOverTarget ? color : .secondary)
                     .accessibilityIdentifier("statusLabel")
 
-                // F8: total time · heart rate (with zone) · pace while running, distance while walking.
+                // F8: total time · heart rate (zone dot only, G3) · pace while running, distance while walking.
                 HStack(spacing: 0) {
                     Metric(value: Format.clock(engine.totalElapsed), unit: "total")
-                    Metric(value: manager.heartRate.map { "\(Int($0))" } ?? "––",
-                           unit: manager.heartRateZone.map { "bpm · Z\($0)" } ?? "bpm",
+                    Metric(value: manager.heartRate.map { "\(Int($0))" } ?? "––", unit: "bpm",
                            dot: manager.heartRateZone.map(Color.zone))
+                        .accessibilityValue(manager.heartRateZone.map { "zone \($0)" } ?? "")
                         .accessibilityIdentifier("heartRateMetric")
                     switch segment.kind {
                     case .run, .warmUp: Metric(value: Format.pace(secondsPerKm: manager.pace), unit: "min/km")

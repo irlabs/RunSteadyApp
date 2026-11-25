@@ -6,6 +6,10 @@ import SwiftUI
 /// reasons for deviations, one-off or not) feed the rule layer; the coach (language model or
 /// scripted fallback) only words the wrap-up and answers follow-ups. A typed answer instead of a
 /// button counts as no tap for the rules; it goes to the coach and the note extractor (F12).
+///
+/// Once the answers are in, the conversation is kept on the session (G11). Closing it settles
+/// nothing: while the next session waits for "Use this" / "Keep mine" (G10, pinned at the bottom),
+/// Today offers to reopen it at its end.
 struct CheckInView: View {
     @EnvironmentObject private var model: AppModel
     @Environment(\.dismiss) private var dismiss
@@ -19,7 +23,8 @@ struct CheckInView: View {
     private struct TypedAnswer { let question: String; let text: String }
     @State private var step = Step.effort
     @State private var messages: [ChatMessage] = []
-    @State private var effort = Double(Effort.initial)
+    /// G5: nil until the slider is dragged.
+    @State private var effort: Int?
     @State private var feeling = Feeling.okay
     @State private var comfortable = true
     @State private var knee = PainLevel.none
@@ -46,16 +51,24 @@ struct CheckInView: View {
                             ForEach(messages) { Bubble(message: $0) }
                             if thinking { TypingBubble() }
                             if let offer {
-                                SuggestionCard(suggestion: offer) { withAnimation { self.offer = nil } }
+                                // G10: the proposal in the conversation; its buttons are pinned below.
+                                SuggestionCard(suggestion: offer, showsButtons: false)
                                     .padding(.top, 4)
                             }
                             Color.clear.frame(height: 1).id("bottom")
                         }
                         .padding(16)
                     }
-                    .onChange(of: messages.count) { scroll(proxy) }
-                    .onChange(of: thinking) { scroll(proxy) }
-                    .onChange(of: offer?.key) { scroll(proxy) }
+                    .defaultScrollAnchor(.bottom, for: .initialOffset)
+                    // G6: at (or near) the bottom, stay there when the content or the room for it changes:
+                    // a new message, answer buttons appearing, the keyboard. Scrolled up: leave it alone.
+                    .onScrollGeometryChange(for: ScrollMetrics.self) { geo in
+                        ScrollMetrics(content: geo.contentSize.height, container: geo.containerSize.height,
+                                      toBottom: geo.contentSize.height - geo.visibleRect.maxY)
+                    } action: { old, new in
+                        guard old.toBottom <= 60, old.content != new.content || old.container != new.container else { return }
+                        withAnimation(.snappy) { proxy.scrollTo("bottom", anchor: .bottom) }
+                    }
                 }
                 inputBar
             }
@@ -63,8 +76,16 @@ struct CheckInView: View {
             .navigationTitle("Check-in")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") { dismiss() }.fontWeight(.bold).accessibilityIdentifier("checkInDone")
+                // G11: closing settles nothing; Today brings the conversation back while a choice is open.
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button { dismiss() } label: {
+                        Image(systemName: "xmark")
+                            .font(.subheadline.weight(.heavy)).foregroundStyle(.primary)
+                            .frame(width: 34, height: 34)
+                            .background(Color(.tertiarySystemFill), in: Circle())
+                    }
+                    .accessibilityLabel("Close")
+                    .accessibilityIdentifier("checkInClose")
                 }
             }
         }
@@ -72,14 +93,20 @@ struct CheckInView: View {
         .onAppear(perform: begin)
     }
 
-    private func scroll(_ proxy: ScrollViewProxy) {
-        withAnimation(.snappy) { proxy.scrollTo("bottom", anchor: .bottom) }
+    private struct ScrollMetrics: Equatable {
+        var content: CGFloat
+        var container: CGFloat
+        var toBottom: CGFloat
     }
 
     // MARK: Conversation
 
     private func begin() {
         guard messages.isEmpty, let record = session.record else { return }
+        if let checkIn = session.checkIn {
+            resume(record: record, checkIn: checkIn)
+            return
+        }
         Store.resolveStaleNotes(in: context)
         var intro = "Welcome back! \(record.roundsDone) rounds, \(Format.km(meters: record.distanceMeters)) km in \(Format.clock(record.duration))."
         if record.extraRounds > 0 { intro += " That's \(record.extraRounds) more than planned." }
@@ -87,17 +114,39 @@ struct CheckInView: View {
         say("How hard did it feel? 1 is very easy, 10 is all out.")
     }
 
-    private func say(_ text: String) {
-        withAnimation(.snappy) { messages.append(ChatMessage(role: .coach, text: text)) }
+    /// G11: back into a finished check-in, at the end of the conversation, with the choice of the
+    /// next session if that is still open.
+    private func resume(record: SessionRecord, checkIn: CheckIn) {
+        messages = session.chat
+        effort = checkIn.effort
+        feeling = checkIn.feeling
+        comfortable = checkIn.comfortable
+        knee = checkIn.knee
+        reasons = checkIn.reasons ?? [:]
+        deviations = RunAnalysis.deviations(in: record, plannedSchedule: plannedSchedule(for: record))
+        let suggestion = currentSuggestion()
+        coachContext = makeContext(record: record, checkIn: checkIn, suggestion: suggestion, asking: [], isWrapUp: false)
+        offer = model.needsDecision(suggestion) ? suggestion : nil
+        step = .chat
+        if messages.isEmpty { say("Your check-in is saved. Anything to add or ask?") }
     }
 
-    private func answer(_ text: String) {
-        withAnimation(.snappy) { messages.append(ChatMessage(role: .user, text: text)) }
+    private func say(_ text: String) { post(ChatMessage(role: .coach, text: text)) }
+
+    private func answer(_ text: String) { post(ChatMessage(role: .user, text: text)) }
+
+    /// After the answers are saved, every message is kept on the session too (G11). Straight on the
+    /// model object, so a reply that arrives after the sheet was closed is still there next time.
+    private func post(_ message: ChatMessage) {
+        withAnimation(.snappy) { messages.append(message) }
+        guard session.checkIn != nil else { return }
+        session.chat.append(message)
+        try? context.save()
     }
 
-    /// F11: the slider's score sets Great / Okay / Tough for the rules.
+    /// F11 / G5: the slider's score sets Great / Okay / Tough for the rules.
     private func chooseEffort() {
-        let score = Int(effort)
+        guard let score = effort else { return }
         feeling = Feeling(effort: score)
         answer("\(score) · \(Effort.label(score))")
         say("Was the pace comfortable? Could you have kept chatting?")
@@ -115,9 +164,7 @@ struct CheckInView: View {
         knee = value
         if !typed { answer(value.title) }
         guard let record = session.record else { return }
-        // A manual run is compared with what the plan would have run, to spot an easier one.
-        let planned = record.stageIndex == nil ? others.suggestion(structuralDeclinedAt: declinedAt).schedule : nil
-        deviations = RunAnalysis.deviations(in: record, plannedSchedule: planned)
+        deviations = RunAnalysis.deviations(in: record, plannedSchedule: plannedSchedule(for: record))
         questions = CheckInQuestions.select(deviations)
         askEasier = CheckInQuestions.asksEasier(deviations)
         askNext()
@@ -170,14 +217,15 @@ struct CheckInView: View {
     }
 
     private func finish() {
-        guard let record = session.record else { return }
-        let score = Int(effort)
+        guard let record = session.record, let score = effort else { return }
         var checkIn = CheckIn(feeling: feeling, comfortable: comfortable, knee: knee)
         checkIn.reasons = reasons.isEmpty ? nil : reasons
         checkIn.effort = score
         let typed = typedAnswers
         if !typed.isEmpty { checkIn.note = typed.map(\.text).joined(separator: " ") }
         session.checkIn = checkIn
+        // G11: from here on the conversation is kept.
+        session.chat = messages
         try? context.save()
         Store.noteKnee(knee, sessionID: session.id, in: context)
         EffortWriter.shared.save(score: score, for: record)
@@ -206,26 +254,46 @@ struct CheckInView: View {
         case false?: model.apply(ActivePlan(suggestion))
         case nil: break
         }
-        let notes = Store.openNotes(in: context)
-        let asking = notes.filter { $0.followUp && $0.sessionID != session.id }
-        let coachContext = CoachContext(
-            record: record, checkIn: checkIn, suggestion: suggestion, deviations: deviations,
-            notes: notes.map { brief($0, askNow: asking.contains($0)) },
-            recentRuns: RunSummary.recent(others.compactMap { s in s.record.map { ($0, s.checkIn) } }, now: .now),
-            keepEasier: keepEasier)
+        let asking = Store.openNotes(in: context).filter { $0.followUp && $0.sessionID != session.id }
+        let coachContext = makeContext(record: record, checkIn: checkIn, suggestion: suggestion, asking: asking, isWrapUp: true)
         Task {
             await coachReply(coachContext)
             // Follow-up notes are asked about once.
             for note in asking { note.followUp = false }
             try? context.save()
-            if keepEasier == nil, model.followSilently(suggestion) {
-                withAnimation(.snappy) { offer = suggestion }
+            if keepEasier == nil {
+                model.followSilently(suggestion)
+                if model.needsDecision(suggestion) { showOffer(suggestion) }
             }
             var chat = coachContext
             chat.isWrapUp = false
             self.coachContext = chat
             step = .chat
         }
+    }
+
+    private func makeContext(record: SessionRecord, checkIn: CheckIn, suggestion: Suggestion,
+                             asking: [CoachNote], isWrapUp: Bool) -> CoachContext {
+        var result = CoachContext(
+            record: record, checkIn: checkIn, suggestion: suggestion, deviations: deviations,
+            notes: Store.openNotes(in: context).map { brief($0, askNow: asking.contains($0)) },
+            recentRuns: RunSummary.recent(others.compactMap { s in s.record.map { ($0, s.checkIn) } }, now: .now),
+            keepEasier: keepEasier)
+        result.isWrapUp = isWrapUp
+        return result
+    }
+
+    /// The choice of the next session; Today keeps it open for this run until it is made (G11).
+    private func showOffer(_ suggestion: Suggestion?) {
+        withAnimation(.snappy) { offer = suggestion }
+        session.openChoice = suggestion?.key
+        try? context.save()
+    }
+
+    /// G10: either choice settles the next session, closes the check-in and goes back to Today.
+    private func decide(_ suggestion: Suggestion, accept: Bool) {
+        if accept { model.accept(suggestion) } else { model.decline(suggestion) }
+        dismiss()
     }
 
     private func send() {
@@ -255,8 +323,8 @@ struct CheckInView: View {
         coachContext.suggestion = updated
         self.coachContext = coachContext
         guard offer != nil else { return }
-        let needsDecision = model.followSilently(updated)
-        withAnimation(.snappy) { offer = needsDecision ? updated : nil }
+        model.followSilently(updated)
+        showOffer(model.needsDecision(updated) ? updated : nil)
     }
 
     private func coachReply(_ coachContext: CoachContext) async {
@@ -271,6 +339,11 @@ struct CheckInView: View {
     /// All sessions except this one.
     private var others: [StoredSession] { sessions.filter { $0.id != session.id } }
     private var declinedAt: Date? { plans.first?.structuralDeclinedAt }
+
+    /// A manual run is compared with what the plan would have run, to spot an easier one.
+    private func plannedSchedule(for record: SessionRecord) -> Schedule? {
+        record.stageIndex == nil ? others.suggestion(structuralDeclinedAt: declinedAt).schedule : nil
+    }
 
     private func currentSuggestion() -> Suggestion {
         let injury = Store.openNotes(in: context).contains { $0.kind == .injury }
@@ -325,6 +398,7 @@ struct CheckInView: View {
             case .wrapUp:
                 EmptyView()
             case .chat:
+                if let offer { decisionBar(offer) }
                 HStack(spacing: 8) {
                     TextField("Anything to add or ask?", text: $draft, axis: .vertical)
                         .focused($typing)
@@ -348,6 +422,21 @@ struct CheckInView: View {
         .frame(maxWidth: .infinity)
         .background(Color.pageBackground)
         .animation(.snappy, value: step)
+        .animation(.snappy, value: offer?.key)
+    }
+
+    /// G10: the choice of the next session, the same labels as the suggestion card.
+    private func decisionBar(_ suggestion: Suggestion) -> some View {
+        let early = suggestion.decision == .advanceEarly
+        return HStack(spacing: 10) {
+            Button(early ? "Stay steady" : "Keep mine") { decide(suggestion, accept: false) }
+                .buttonStyle(early ? PillButtonStyle() : PillButtonStyle.secondary)
+                .accessibilityIdentifier("keepMineButton")
+            Button(early ? "Try it" : "Use this") { decide(suggestion, accept: true) }
+                .buttonStyle(early ? PillButtonStyle.secondary : PillButtonStyle())
+                .accessibilityIdentifier("useSuggestionButton")
+        }
+        .transition(.move(edge: .bottom).combined(with: .opacity))
     }
 
     /// F12: next to the answer buttons, room to say it in your own words.
@@ -371,47 +460,7 @@ struct CheckInView: View {
     }
 }
 
-/// F11: how hard did it feel, 1–10, starting at 5.
-private struct EffortPicker: View {
-    @Binding var effort: Double
-    var onDone: () -> Void
-
-    var body: some View {
-        let score = Int(effort)
-        VStack(spacing: 10) {
-            HStack(alignment: .firstTextBaseline, spacing: 8) {
-                Text("\(score)").font(.system(size: 34, weight: .heavy)).monospacedDigit()
-                    .foregroundStyle(color(score))
-                    .contentTransition(.numericText())
-                Text(Effort.label(score)).font(.headline).foregroundStyle(.secondary)
-                Spacer()
-            }
-            .animation(.snappy, value: score)
-            Slider(value: $effort, in: Double(Effort.range.lowerBound)...Double(Effort.range.upperBound), step: 1) {
-                Text("Effort")
-            } minimumValueLabel: {
-                Text("1").font(.caption.weight(.bold)).foregroundStyle(.secondary)
-            } maximumValueLabel: {
-                Text("10").font(.caption.weight(.bold)).foregroundStyle(.secondary)
-            }
-            .tint(color(score))
-            .accessibilityIdentifier("effortSlider")
-            Button("That's it", action: onDone)
-                .buttonStyle(ReplyStyle(color: .brand))
-                .accessibilityIdentifier("effortDone")
-        }
-    }
-
-    private func color(_ score: Int) -> Color {
-        switch Feeling(effort: score) {
-        case .great: .brand
-        case .okay: .warmColor
-        case .tough: .heart
-        }
-    }
-}
-
-private struct ReplyStyle: ButtonStyle {
+struct ReplyStyle: ButtonStyle {
     let color: Color
     func makeBody(configuration: Configuration) -> some View {
         configuration.label

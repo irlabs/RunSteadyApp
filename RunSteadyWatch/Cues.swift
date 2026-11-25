@@ -6,9 +6,9 @@ import WatchKit
 /// while a cue is pending and restored once the user taps next or the announcement ends.
 @MainActor
 final class Cues: NSObject, AVSpeechSynthesizerDelegate {
-    /// F5, chosen in the voice lab on the Series 5: Daniel (en-GB), a little slower, full volume.
+    /// F5, chosen in the voice lab on the Series 5: Daniel (en-GB), full volume. G1: back to the normal rate.
     static let voiceIdentifier = "com.apple.voice.compact.en-GB.Daniel"
-    static let rate: Float = 0.45
+    static let rate: Float = 0.5
     static let volume: Float = 1.0
 
     private let synthesizer = AVSpeechSynthesizer()
@@ -46,10 +46,60 @@ final class Cues: NSObject, AVSpeechSynthesizerDelegate {
         unduck()
     }
 
+    /// G2: the haptic first, the chime a moment later. On the Series 5 a haptic that started together
+    /// with the chime was not felt (a guess at the cause; the diagnostics screen tests it on the device).
+    static let chimeDelay: Duration = .milliseconds(300)
+
     private func chimeAndTap() {
         WKInterfaceDevice.current().play(.notification)
+        Task {
+            try? await Task.sleep(for: Self.chimeDelay)
+            // Next tapped in between: no chime for a segment that's already over.
+            guard awaitingTap else { return }
+            playChime()
+        }
+    }
+
+    private func playChime() {
         player = try? AVAudioPlayer(data: chime)
         player?.play()
+    }
+
+    // MARK: G2 haptic check (diagnostics)
+
+    enum HapticTest: String, CaseIterable, Identifiable {
+        case hapticOnly = "Haptic only"
+        case hapticDucked = "Haptic, audio ducked"
+        case chimeOnly = "Chime only"
+        case together = "Both at once (old)"
+        case hapticThenChime = "Haptic, then chime (new)"
+        var id: String { rawValue }
+    }
+
+    /// Plays one pattern; all but "Haptic only" go through the same ducking audio session as a run.
+    func test(_ pattern: HapticTest) {
+        Diag.log("Haptic", "Test: \(pattern.rawValue)")
+        if pattern != .hapticOnly { duck() }
+        switch pattern {
+        case .hapticOnly, .hapticDucked:
+            WKInterfaceDevice.current().play(.notification)
+        case .chimeOnly:
+            playChime()
+        case .together:
+            WKInterfaceDevice.current().play(.notification)
+            playChime()
+        case .hapticThenChime:
+            WKInterfaceDevice.current().play(.notification)
+            Task {
+                try? await Task.sleep(for: Self.chimeDelay)
+                playChime()
+            }
+        }
+        guard pattern != .hapticOnly else { return }
+        Task {
+            try? await Task.sleep(for: .seconds(2))
+            if !awaitingTap, !synthesizer.isSpeaking { unduck() }
+        }
     }
 
     func announce(kilometre: Int, paceSecondsPerKm: Double?) {

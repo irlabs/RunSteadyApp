@@ -5,289 +5,262 @@
 	};
 	objectVersion = 77;
 	objects = {
-		15AB322AEA594F97915DA33E = {
-			isa = PBXBuildFile;
-			fileRef = A61FC3D0640F284004DFF45D;
-			settings = {
-				ATTRIBUTES = (
-					RemoveHeadersOnCopy,
-				);
-			};
-		};
-		5595741ECE9545C67589D9C7 = {
-			isa = PBXBuildFile;
-			productRef = 075388220A861DED3E59841A;
-		};
-		BC92375DA127A557608A21C4 = {
-			isa = PBXBuildFile;
-			productRef = 33B305047D69FA2482F79B6E;
-		};
-		6F3F874D36097EDEF0BFF441 = {
+
+/* Begin PBXBuildFile section */
+		15AB322AEA594F97915DA33E /* RunSteadyWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = A61FC3D0640F284004DFF45D /* RunSteadyWatch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		5595741ECE9545C67589D9C7 /* RunSteadyKit in Frameworks */ = {isa = PBXBuildFile; productRef = 075388220A861DED3E59841A /* RunSteadyKit */; };
+		BC92375DA127A557608A21C4 /* RunSteadyKit in Frameworks */ = {isa = PBXBuildFile; productRef = 33B305047D69FA2482F79B6E /* RunSteadyKit */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		6F3F874D36097EDEF0BFF441 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 46F86FAA6BBF9AC94A7E4595;
+			containerPortal = 46F86FAA6BBF9AC94A7E4595 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 82629E199B3E8A610AB01BC9;
 			remoteInfo = RunSteady;
 		};
-		AFEC41AB32DC240972C04898 = {
+		AFEC41AB32DC240972C04898 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 46F86FAA6BBF9AC94A7E4595;
+			containerPortal = 46F86FAA6BBF9AC94A7E4595 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = F616E859B20A93D5ADA63666;
 			remoteInfo = RunSteadyWatch;
 		};
-		DACD2663451EA9DCDB61154D = {
+		DACD2663451EA9DCDB61154D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 46F86FAA6BBF9AC94A7E4595;
+			containerPortal = 46F86FAA6BBF9AC94A7E4595 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = F616E859B20A93D5ADA63666;
 			remoteInfo = RunSteadyWatch;
 		};
-		ECBFB3498CE100477E8DDB7E = {
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		ECBFB3498CE100477E8DDB7E /* Embed Watch Content */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
 			dstSubfolderSpec = 16;
 			files = (
-				15AB322AEA594F97915DA33E,
+				15AB322AEA594F97915DA33E /* RunSteadyWatch.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		15DAB397FC9889C53844415A = {
-			isa = PBXFileReference;
-			lastKnownFileType = text.plist.entitlements;
-			path = RunSteady.entitlements;
-			sourceTree = "<group>";
-		};
-		97D2CC4EF1011BAFC535EF0A = {
-			isa = PBXFileReference;
-			explicitFileType = wrapper.cfbundle;
-			includeInIndex = 0;
-			path = RunSteadyWatchUITests.xctest;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		A61FC3D0640F284004DFF45D = {
-			isa = PBXFileReference;
-			explicitFileType = wrapper.application;
-			includeInIndex = 0;
-			path = RunSteadyWatch.app;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		B014A6D43A38A45ED9DAF488 = {
-			isa = PBXFileReference;
-			explicitFileType = wrapper.application;
-			includeInIndex = 0;
-			path = RunSteady.app;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		B1FA352A4500E6719110CA3C = {
-			isa = PBXFileReference;
-			lastKnownFileType = text.plist.entitlements;
-			path = RunSteadyWatch.entitlements;
-			sourceTree = "<group>";
-		};
-		DC1B2106DFE78185ABEEDE84 = {
-			isa = PBXFileReference;
-			explicitFileType = wrapper.cfbundle;
-			includeInIndex = 0;
-			path = RunSteadyUITests.xctest;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		F969A12750531D3625430123 = {
-			isa = PBXFileReference;
-			lastKnownFileType = text.plist.xml;
-			path = "Watch-Info.plist";
-			sourceTree = "<group>";
-		};
-		19AA90C05D5E51C61B554CC6 = {
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		15DAB397FC9889C53844415A /* RunSteady.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RunSteady.entitlements; sourceTree = "<group>"; };
+		97D2CC4EF1011BAFC535EF0A /* RunSteadyWatchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunSteadyWatchUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A61FC3D0640F284004DFF45D /* RunSteadyWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RunSteadyWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B014A6D43A38A45ED9DAF488 /* RunSteady.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RunSteady.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1FA352A4500E6719110CA3C /* RunSteadyWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RunSteadyWatch.entitlements; sourceTree = "<group>"; };
+		DC1B2106DFE78185ABEEDE84 /* RunSteadyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunSteadyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F969A12750531D3625430123 /* Watch-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Watch-Info.plist"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		19AA90C05D5E51C61B554CC6 /* Shared */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Shared;
 			sourceTree = "<group>";
 		};
-		2D0B1F543853F61DBF79C81A = {
+		2D0B1F543853F61DBF79C81A /* RunSteadyWatchUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = RunSteadyWatchUITests;
 			sourceTree = "<group>";
 		};
-		7D52121BBDDA1FF227FD0489 = {
+		7D52121BBDDA1FF227FD0489 /* RunSteady */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = RunSteady;
 			sourceTree = "<group>";
 		};
-		CB84471C46AAB93CA3D8B4B8 = {
+		CB84471C46AAB93CA3D8B4B8 /* RunSteadyWatch */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = RunSteadyWatch;
 			sourceTree = "<group>";
 		};
-		DC04050C454A65F6ED84FEF3 = {
+		DC04050C454A65F6ED84FEF3 /* RunSteadyUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = RunSteadyUITests;
 			sourceTree = "<group>";
 		};
-		2D3321804222F9B8CC7CD244 = {
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2D3321804222F9B8CC7CD244 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5595741ECE9545C67589D9C7,
+				5595741ECE9545C67589D9C7 /* RunSteadyKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		66A0976B37DAB079C63EE821 = {
+		66A0976B37DAB079C63EE821 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BC92375DA127A557608A21C4,
+				BC92375DA127A557608A21C4 /* RunSteadyKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7CC3F89D57D93BFEB6485A95 = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DC9A02726A5DE79F24D537BE = {
+		7CC3F89D57D93BFEB6485A95 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		2F3A6B1E78F896718625FF06 = {
+		DC9A02726A5DE79F24D537BE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2F3A6B1E78F896718625FF06 /* Products */ = {
 			isa = PBXGroup;
+			children = (
+				B014A6D43A38A45ED9DAF488 /* RunSteady.app */,
+				A61FC3D0640F284004DFF45D /* RunSteadyWatch.app */,
+				DC1B2106DFE78185ABEEDE84 /* RunSteadyUITests.xctest */,
+				97D2CC4EF1011BAFC535EF0A /* RunSteadyWatchUITests.xctest */,
+			);
 			name = Products;
 			sourceTree = "<group>";
-			children = (
-				B014A6D43A38A45ED9DAF488,
-				A61FC3D0640F284004DFF45D,
-				DC1B2106DFE78185ABEEDE84,
-				97D2CC4EF1011BAFC535EF0A,
-			);
 		};
 		518DA81DB9B99529C0C0AEBE = {
 			isa = PBXGroup;
-			sourceTree = "<group>";
 			children = (
-				19AA90C05D5E51C61B554CC6,
-				7D52121BBDDA1FF227FD0489,
-				CB84471C46AAB93CA3D8B4B8,
-				DC04050C454A65F6ED84FEF3,
-				2D0B1F543853F61DBF79C81A,
-				BD13AA3ACFF3D0C2ED6E4720,
-				2F3A6B1E78F896718625FF06,
+				19AA90C05D5E51C61B554CC6 /* Shared */,
+				7D52121BBDDA1FF227FD0489 /* RunSteady */,
+				CB84471C46AAB93CA3D8B4B8 /* RunSteadyWatch */,
+				DC04050C454A65F6ED84FEF3 /* RunSteadyUITests */,
+				2D0B1F543853F61DBF79C81A /* RunSteadyWatchUITests */,
+				BD13AA3ACFF3D0C2ED6E4720 /* Config */,
+				2F3A6B1E78F896718625FF06 /* Products */,
 			);
+			sourceTree = "<group>";
 		};
-		BD13AA3ACFF3D0C2ED6E4720 = {
+		BD13AA3ACFF3D0C2ED6E4720 /* Config */ = {
 			isa = PBXGroup;
+			children = (
+				F969A12750531D3625430123 /* Watch-Info.plist */,
+				B1FA352A4500E6719110CA3C /* RunSteadyWatch.entitlements */,
+				15DAB397FC9889C53844415A /* RunSteady.entitlements */,
+			);
 			path = Config;
 			sourceTree = "<group>";
-			children = (
-				F969A12750531D3625430123,
-				B1FA352A4500E6719110CA3C,
-				15DAB397FC9889C53844415A,
-			);
 		};
-		0C25B3D4D6EE44D021CD07B1 = {
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0C25B3D4D6EE44D021CD07B1 /* RunSteadyUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5E250100C6D52B09C0F15329;
+			buildConfigurationList = 5E250100C6D52B09C0F15329 /* Build configuration list for PBXNativeTarget "RunSteadyUITests" */;
 			buildPhases = (
-				DDEC0002E8FD997881FC70DF,
-				7CC3F89D57D93BFEB6485A95,
-				2DB70A096B43741D4CA3050B,
+				DDEC0002E8FD997881FC70DF /* Sources */,
+				7CC3F89D57D93BFEB6485A95 /* Frameworks */,
+				2DB70A096B43741D4CA3050B /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				107E28B061D855773AB3A959,
+				107E28B061D855773AB3A959 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				DC04050C454A65F6ED84FEF3,
+				DC04050C454A65F6ED84FEF3 /* RunSteadyUITests */,
 			);
 			name = RunSteadyUITests;
 			packageProductDependencies = (
 			);
 			productName = RunSteadyUITests;
-			productReference = DC1B2106DFE78185ABEEDE84;
+			productReference = DC1B2106DFE78185ABEEDE84 /* RunSteadyUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
-		82629E199B3E8A610AB01BC9 = {
+		82629E199B3E8A610AB01BC9 /* RunSteady */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3BA67DD7AA0645387B65E42B;
+			buildConfigurationList = 3BA67DD7AA0645387B65E42B /* Build configuration list for PBXNativeTarget "RunSteady" */;
 			buildPhases = (
-				3703356EB7B4D718DD8008FB,
-				2D3321804222F9B8CC7CD244,
-				A3F537897EB52380DC3D4E5D,
-				ECBFB3498CE100477E8DDB7E,
-				F982B08E053E8253FEE014DE,
+				3703356EB7B4D718DD8008FB /* Sources */,
+				2D3321804222F9B8CC7CD244 /* Frameworks */,
+				A3F537897EB52380DC3D4E5D /* Resources */,
+				ECBFB3498CE100477E8DDB7E /* Embed Watch Content */,
+				F982B08E053E8253FEE014DE /* Stamp Version */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				6E1D32A114DD09B381D190A7,
+				6E1D32A114DD09B381D190A7 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				19AA90C05D5E51C61B554CC6,
-				7D52121BBDDA1FF227FD0489,
+				19AA90C05D5E51C61B554CC6 /* Shared */,
+				7D52121BBDDA1FF227FD0489 /* RunSteady */,
 			);
 			name = RunSteady;
 			packageProductDependencies = (
-				075388220A861DED3E59841A,
+				075388220A861DED3E59841A /* RunSteadyKit */,
 			);
 			productName = RunSteady;
-			productReference = B014A6D43A38A45ED9DAF488;
+			productReference = B014A6D43A38A45ED9DAF488 /* RunSteady.app */;
 			productType = "com.apple.product-type.application";
 		};
-		E7725242B31CE8D193332197 = {
+		E7725242B31CE8D193332197 /* RunSteadyWatchUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C676B6E5EDAD2F79A86ECD4E;
+			buildConfigurationList = C676B6E5EDAD2F79A86ECD4E /* Build configuration list for PBXNativeTarget "RunSteadyWatchUITests" */;
 			buildPhases = (
-				AB3162D70F2BCE2A37599E1E,
-				DC9A02726A5DE79F24D537BE,
-				8C51C64298996053174E4A93,
+				AB3162D70F2BCE2A37599E1E /* Sources */,
+				DC9A02726A5DE79F24D537BE /* Frameworks */,
+				8C51C64298996053174E4A93 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				12A4A40E8ACBA9BADC14BF6A,
+				12A4A40E8ACBA9BADC14BF6A /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				2D0B1F543853F61DBF79C81A,
+				2D0B1F543853F61DBF79C81A /* RunSteadyWatchUITests */,
 			);
 			name = RunSteadyWatchUITests;
 			packageProductDependencies = (
 			);
 			productName = RunSteadyWatchUITests;
-			productReference = 97D2CC4EF1011BAFC535EF0A;
+			productReference = 97D2CC4EF1011BAFC535EF0A /* RunSteadyWatchUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
-		F616E859B20A93D5ADA63666 = {
+		F616E859B20A93D5ADA63666 /* RunSteadyWatch */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 442D3810BC951FE4AB82333C;
+			buildConfigurationList = 442D3810BC951FE4AB82333C /* Build configuration list for PBXNativeTarget "RunSteadyWatch" */;
 			buildPhases = (
-				F006694E9266BC59ED091CED,
-				66A0976B37DAB079C63EE821,
-				4CDBAB436A5A006B4F2F9AD7,
-				B1894019B5EBFDC3312FC815,
+				F006694E9266BC59ED091CED /* Sources */,
+				66A0976B37DAB079C63EE821 /* Frameworks */,
+				4CDBAB436A5A006B4F2F9AD7 /* Resources */,
+				B1894019B5EBFDC3312FC815 /* Stamp Version */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				19AA90C05D5E51C61B554CC6,
-				CB84471C46AAB93CA3D8B4B8,
+				19AA90C05D5E51C61B554CC6 /* Shared */,
+				CB84471C46AAB93CA3D8B4B8 /* RunSteadyWatch */,
 			);
 			name = RunSteadyWatch;
 			packageProductDependencies = (
-				33B305047D69FA2482F79B6E,
+				33B305047D69FA2482F79B6E /* RunSteadyKit */,
 			);
 			productName = RunSteadyWatch;
-			productReference = A61FC3D0640F284004DFF45D;
+			productReference = A61FC3D0640F284004DFF45D /* RunSteadyWatch.app */;
 			productType = "com.apple.product-type.application";
 		};
-		46F86FAA6BBF9AC94A7E4595 = {
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		46F86FAA6BBF9AC94A7E4595 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
@@ -302,7 +275,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 7EF2517A8FE63F4681EC5EEA;
+			buildConfigurationList = 7EF2517A8FE63F4681EC5EEA /* Build configuration list for PBXProject "RunSteady" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -312,48 +285,54 @@
 			mainGroup = 518DA81DB9B99529C0C0AEBE;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				EFE90A8E604A7C840E88D03A,
+				EFE90A8E604A7C840E88D03A /* XCLocalSwiftPackageReference "RunSteadyKit" */,
 			);
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 2F3A6B1E78F896718625FF06;
+			productRefGroup = 2F3A6B1E78F896718625FF06 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				82629E199B3E8A610AB01BC9,
-				F616E859B20A93D5ADA63666,
-				0C25B3D4D6EE44D021CD07B1,
-				E7725242B31CE8D193332197,
+				82629E199B3E8A610AB01BC9 /* RunSteady */,
+				F616E859B20A93D5ADA63666 /* RunSteadyWatch */,
+				0C25B3D4D6EE44D021CD07B1 /* RunSteadyUITests */,
+				E7725242B31CE8D193332197 /* RunSteadyWatchUITests */,
 			);
 		};
-		2DB70A096B43741D4CA3050B = {
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2DB70A096B43741D4CA3050B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4CDBAB436A5A006B4F2F9AD7 = {
+		4CDBAB436A5A006B4F2F9AD7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		8C51C64298996053174E4A93 = {
+		8C51C64298996053174E4A93 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A3F537897EB52380DC3D4E5D = {
+		A3F537897EB52380DC3D4E5D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B1894019B5EBFDC3312FC815 = {
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		B1894019B5EBFDC3312FC815 /* Stamp Version */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -370,11 +349,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/scripts/stamp-version\" watch
-";
+			shellScript = "\"$SRCROOT/scripts/stamp-version\" watch\n";
 			showEnvVarsInLog = 0;
 		};
-		F982B08E053E8253FEE014DE = {
+		F982B08E053E8253FEE014DE /* Stamp Version */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -391,330 +369,360 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/scripts/stamp-version\" phone
-";
+			shellScript = "\"$SRCROOT/scripts/stamp-version\" phone\n";
 			showEnvVarsInLog = 0;
 		};
-		3703356EB7B4D718DD8008FB = {
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3703356EB7B4D718DD8008FB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		AB3162D70F2BCE2A37599E1E = {
+		AB3162D70F2BCE2A37599E1E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DDEC0002E8FD997881FC70DF = {
+		DDEC0002E8FD997881FC70DF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F006694E9266BC59ED091CED = {
+		F006694E9266BC59ED091CED /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		107E28B061D855773AB3A959 = {
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		107E28B061D855773AB3A959 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 82629E199B3E8A610AB01BC9;
-			targetProxy = 6F3F874D36097EDEF0BFF441;
+			target = 82629E199B3E8A610AB01BC9 /* RunSteady */;
+			targetProxy = 6F3F874D36097EDEF0BFF441 /* PBXContainerItemProxy */;
 		};
-		12A4A40E8ACBA9BADC14BF6A = {
+		12A4A40E8ACBA9BADC14BF6A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = F616E859B20A93D5ADA63666;
-			targetProxy = AFEC41AB32DC240972C04898;
+			target = F616E859B20A93D5ADA63666 /* RunSteadyWatch */;
+			targetProxy = AFEC41AB32DC240972C04898 /* PBXContainerItemProxy */;
 		};
-		6E1D32A114DD09B381D190A7 = {
+		6E1D32A114DD09B381D190A7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = F616E859B20A93D5ADA63666;
-			targetProxy = DACD2663451EA9DCDB61154D;
+			target = F616E859B20A93D5ADA63666 /* RunSteadyWatch */;
+			targetProxy = DACD2663451EA9DCDB61154D /* PBXContainerItemProxy */;
 		};
-		00397BE474643CDD25E6A8E7 = {
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		00397BE474643CDD25E6A8E7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			name = Release;
 			buildSettings = {
-				SWIFT_VERSION = 5.0;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = PPCJ48FDZ3;
-				CURRENT_PROJECT_VERSION = 1;
-				MARKETING_VERSION = 1.0;
-				GENERATE_INFOPLIST_FILE = YES;
-				SDKROOT = watchos;
-				WATCHOS_DEPLOYMENT_TARGET = 10.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				PRODUCT_BUNDLE_IDENTIFIER = com.runsteady.app.watchkitapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				INFOPLIST_FILE = "Config/Watch-Info.plist";
 				CODE_SIGN_ENTITLEMENTS = Config/RunSteadyWatch.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PPCJ48FDZ3;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Config/Watch-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Run Steady";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.runsteady.app;
-				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Run Steady shows your heart rate, its zone (from your date of birth) and distance during a run.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Run Steady saves your run-walk workouts and routes to Apple Health.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Run Steady records the route of your run.";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				SKIP_INSTALL = YES;
-				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
-			};
-		};
-		0E6555D70500B55F30AADCB0 = {
-			isa = XCBuildConfiguration;
-			name = Release;
-			buildSettings = {
-				SWIFT_VERSION = 5.0;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = PPCJ48FDZ3;
-				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.runsteady.app;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.0;
-				GENERATE_INFOPLIST_FILE = YES;
-				SDKROOT = iphoneos;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				TARGETED_DEVICE_FAMILY = 1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.runsteady.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.runsteady.app.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+		0E6555D70500B55F30AADCB0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				INFOPLIST_KEY_CFBundleDisplayName = "Run Steady";
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				CODE_SIGN_ENTITLEMENTS = Config/RunSteady.entitlements;
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "Run Steady reads your workouts and date of birth to follow up on runs and set heart rate zones.";
-				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Run Steady saves how hard each run felt to Apple Health.";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PPCJ48FDZ3;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Run Steady";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Run Steady reads your workouts and date of birth to follow up on runs and set heart rate zones.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Run Steady saves how hard each run felt to Apple Health.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.runsteady.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
+			name = Release;
 		};
-		2702B75D3C95830E553FE4E7 = {
+		2702B75D3C95830E553FE4E7 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PPCJ48FDZ3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.runsteady.app.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = RunSteady;
+			};
 			name = Debug;
+		};
+		34EB0A4D599B3C37E3DD48CA /* Release */ = {
+			isa = XCBuildConfiguration;
 			buildSettings = {
-				SWIFT_VERSION = 5.0;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = PPCJ48FDZ3;
 				CURRENT_PROJECT_VERSION = 1;
-				MARKETING_VERSION = 1.0;
+				DEVELOPMENT_TEAM = PPCJ48FDZ3;
 				GENERATE_INFOPLIST_FILE = YES;
-				SDKROOT = iphoneos;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.runsteady.app.uitests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_TARGET_NAME = RunSteady;
-			};
-		};
-		34EB0A4D599B3C37E3DD48CA = {
-			isa = XCBuildConfiguration;
-			name = Release;
-			buildSettings = {
-				SWIFT_VERSION = 5.0;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = PPCJ48FDZ3;
-				CURRENT_PROJECT_VERSION = 1;
-				MARKETING_VERSION = 1.0;
-				GENERATE_INFOPLIST_FILE = YES;
 				SDKROOT = iphoneos;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.runsteady.app.uitests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_TARGET_NAME = RunSteady;
 			};
-		};
-		4C95F91A6D5CD87BB5DB8FDD = {
-			isa = XCBuildConfiguration;
 			name = Release;
+		};
+		4C95F91A6D5CD87BB5DB8FDD /* Release */ = {
+			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_MODULES = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_COMPILATION_MODE = wholemodule;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
+			name = Release;
 		};
-		5DAC00E6812646757057DB55 = {
+		5DAC00E6812646757057DB55 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			name = Debug;
 			buildSettings = {
-				SWIFT_VERSION = 5.0;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = PPCJ48FDZ3;
-				CURRENT_PROJECT_VERSION = 1;
-				MARKETING_VERSION = 1.0;
-				GENERATE_INFOPLIST_FILE = YES;
-				SDKROOT = watchos;
-				WATCHOS_DEPLOYMENT_TARGET = 10.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				PRODUCT_BUNDLE_IDENTIFIER = com.runsteady.app.watchkitapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				INFOPLIST_FILE = "Config/Watch-Info.plist";
 				CODE_SIGN_ENTITLEMENTS = Config/RunSteadyWatch.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PPCJ48FDZ3;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Config/Watch-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Run Steady";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.runsteady.app;
-				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Run Steady shows your heart rate, its zone (from your date of birth) and distance during a run.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Run Steady saves your run-walk workouts and routes to Apple Health.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Run Steady records the route of your run.";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.runsteady.app;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.runsteady.app.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
-				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
 			};
-		};
-		969595A508627F35A110362C = {
-			isa = XCBuildConfiguration;
 			name = Debug;
+		};
+		969595A508627F35A110362C /* Debug */ = {
+			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_MODULES = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				ENABLE_TESTABILITY = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
-		};
-		B170D3F88C3500E86FB4046F = {
-			isa = XCBuildConfiguration;
 			name = Debug;
+		};
+		B170D3F88C3500E86FB4046F /* Debug */ = {
+			isa = XCBuildConfiguration;
 			buildSettings = {
-				SWIFT_VERSION = 5.0;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = PPCJ48FDZ3;
-				CURRENT_PROJECT_VERSION = 1;
-				MARKETING_VERSION = 1.0;
-				GENERATE_INFOPLIST_FILE = YES;
-				SDKROOT = iphoneos;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				TARGETED_DEVICE_FAMILY = 1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.runsteady.app;
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				INFOPLIST_KEY_CFBundleDisplayName = "Run Steady";
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				CODE_SIGN_ENTITLEMENTS = Config/RunSteady.entitlements;
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "Run Steady reads your workouts and date of birth to follow up on runs and set heart rate zones.";
-				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Run Steady saves how hard each run felt to Apple Health.";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PPCJ48FDZ3;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Run Steady";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Run Steady reads your workouts and date of birth to follow up on runs and set heart rate zones.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Run Steady saves how hard each run felt to Apple Health.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.runsteady.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
-		};
-		B9A9240978751ABC12C37CD6 = {
-			isa = XCBuildConfiguration;
 			name = Debug;
-			buildSettings = {
-				SWIFT_VERSION = 5.0;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = PPCJ48FDZ3;
-				CURRENT_PROJECT_VERSION = 1;
-				MARKETING_VERSION = 1.0;
-				GENERATE_INFOPLIST_FILE = YES;
-				SDKROOT = watchos;
-				WATCHOS_DEPLOYMENT_TARGET = 10.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				PRODUCT_BUNDLE_IDENTIFIER = com.runsteady.app.watchuitests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_TARGET_NAME = RunSteadyWatch;
-			};
 		};
-		DD08F4A1EAC4A0BD857CF268 = {
+		B9A9240978751ABC12C37CD6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			name = Release;
 			buildSettings = {
-				SWIFT_VERSION = 5.0;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = PPCJ48FDZ3;
 				CURRENT_PROJECT_VERSION = 1;
-				MARKETING_VERSION = 1.0;
+				DEVELOPMENT_TEAM = PPCJ48FDZ3;
 				GENERATE_INFOPLIST_FILE = YES;
-				SDKROOT = watchos;
-				WATCHOS_DEPLOYMENT_TARGET = 10.0;
-				TARGETED_DEVICE_FAMILY = 4;
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.runsteady.app.watchuitests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
 				TEST_TARGET_NAME = RunSteadyWatch;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
 			};
+			name = Debug;
 		};
-		3BA67DD7AA0645387B65E42B = {
+		DD08F4A1EAC4A0BD857CF268 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PPCJ48FDZ3;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.runsteady.app.watchuitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = RunSteadyWatch;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3BA67DD7AA0645387B65E42B /* Build configuration list for PBXNativeTarget "RunSteady" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				B170D3F88C3500E86FB4046F,
-				0E6555D70500B55F30AADCB0,
+				B170D3F88C3500E86FB4046F /* Debug */,
+				0E6555D70500B55F30AADCB0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		442D3810BC951FE4AB82333C = {
+		442D3810BC951FE4AB82333C /* Build configuration list for PBXNativeTarget "RunSteadyWatch" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				5DAC00E6812646757057DB55,
-				00397BE474643CDD25E6A8E7,
+				5DAC00E6812646757057DB55 /* Debug */,
+				00397BE474643CDD25E6A8E7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5E250100C6D52B09C0F15329 = {
+		5E250100C6D52B09C0F15329 /* Build configuration list for PBXNativeTarget "RunSteadyUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2702B75D3C95830E553FE4E7,
-				34EB0A4D599B3C37E3DD48CA,
+				2702B75D3C95830E553FE4E7 /* Debug */,
+				34EB0A4D599B3C37E3DD48CA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7EF2517A8FE63F4681EC5EEA = {
+		7EF2517A8FE63F4681EC5EEA /* Build configuration list for PBXProject "RunSteady" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				969595A508627F35A110362C,
-				4C95F91A6D5CD87BB5DB8FDD,
+				969595A508627F35A110362C /* Debug */,
+				4C95F91A6D5CD87BB5DB8FDD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C676B6E5EDAD2F79A86ECD4E = {
+		C676B6E5EDAD2F79A86ECD4E /* Build configuration list for PBXNativeTarget "RunSteadyWatchUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				B9A9240978751ABC12C37CD6,
-				DD08F4A1EAC4A0BD857CF268,
+				B9A9240978751ABC12C37CD6 /* Debug */,
+				DD08F4A1EAC4A0BD857CF268 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EFE90A8E604A7C840E88D03A = {
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		EFE90A8E604A7C840E88D03A /* XCLocalSwiftPackageReference "RunSteadyKit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = RunSteadyKit;
 		};
-		075388220A861DED3E59841A = {
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		075388220A861DED3E59841A /* RunSteadyKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = RunSteadyKit;
 		};
-		33B305047D69FA2482F79B6E = {
+		33B305047D69FA2482F79B6E /* RunSteadyKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = RunSteadyKit;
 		};
+/* End XCSwiftPackageProductDependency section */
 	};
-	rootObject = 46F86FAA6BBF9AC94A7E4595;
+	rootObject = 46F86FAA6BBF9AC94A7E4595 /* Project object */;
 }

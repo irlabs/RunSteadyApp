@@ -36,7 +36,8 @@ public enum RunAnalysis {
     public static func deviations(in record: SessionRecord, plannedSchedule: Schedule? = nil) -> [Deviation] {
         let schedule = record.schedule
         let planned = schedule.rounds
-        let intervals = record.segments.filter { $0.kind == .run || $0.kind == .walk }
+        // The walk after the last run is cool-down (G7), also in records from older watch builds.
+        let intervals = schedule.mergingClosingWalk(record.segments).filter { $0.kind == .run || $0.kind == .walk }
         var result: [Deviation] = []
 
         let longRuns = intervals.filter {
@@ -46,14 +47,18 @@ public enum RunAnalysis {
             result.append(Deviation(kind: .runExtended, rounds: longRuns.map(\.round),
                                     seconds: longRuns.reduce(0) { $0 + $1.overrun }))
         }
-        if let walks = walkExtended(intervals.filter { $0.kind == .walk && $0.round <= planned }, schedule: schedule) {
+        // Planned walks are the ones between planned runs. A walk after the last planned run that
+        // another run follows belongs to the extra round.
+        if let walks = walkExtended(intervals.filter { $0.kind == .walk && $0.round < planned }, schedule: schedule) {
             result.append(walks)
         }
 
-        let extra = intervals.filter { $0.round > planned }
-        let extraSeconds = extra.reduce(0) { $0 + $1.actual }
-        if isNotable(difference: extraSeconds, target: schedule.run) {
-            result.append(Deviation(kind: .extraRounds, rounds: Array(Set(extra.map(\.round))).sorted(), seconds: extraSeconds))
+        let extra = intervals.filter { $0.round > planned || ($0.kind == .walk && $0.round == planned) }
+        let extraRuns = extra.filter { $0.kind == .run }
+        // Judged on the extra running, so a stray tap on next before the cool-down is noise.
+        if isNotable(difference: extraRuns.reduce(0) { $0 + $1.actual }, target: schedule.run) {
+            result.append(Deviation(kind: .extraRounds, rounds: extraRuns.map(\.round),
+                                    seconds: extra.reduce(0) { $0 + $1.actual }))
         }
 
         // Missing run time in the planned rounds: runs never started, or the last run cut short.
@@ -85,7 +90,7 @@ public enum RunAnalysis {
     /// Walk breaks count as extended when they ran long in enough rounds and by enough in total,
     /// or one walk ran far over, or all walks together ran well over. See TASKS.md decisions.
     static func walkExtended(_ walks: [SegmentRecord], schedule: Schedule) -> Deviation? {
-        let plannedWalking = schedule.walk * schedule.rounds
+        let plannedWalking = schedule.totalWalkSeconds
         guard plannedWalking > 0 else { return nil }
         let longRounds = walks.filter { isNotable(difference: $0.actual - $0.target, target: $0.target) }.map(\.round)
         let extra = walks.reduce(0) { $0 + $1.overrun }

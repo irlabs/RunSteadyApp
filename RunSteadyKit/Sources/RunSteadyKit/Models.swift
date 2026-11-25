@@ -20,7 +20,8 @@ public struct PlannedSegment: Hashable, Sendable {
     public let target: Int
 }
 
-/// A run-walk session: warm-up, `rounds` × (run, walk), cool-down. All durations in seconds.
+/// A run-walk session: warm-up, `rounds` runs with a walk between each two, cool-down.
+/// The last run has no walk after it: the cool-down follows. All durations in seconds.
 public struct Schedule: Codable, Hashable, Sendable {
     public var name: String
     public var warmUp: Int
@@ -40,9 +41,10 @@ public struct Schedule: Codable, Hashable, Sendable {
 
     public var plannedSegments: [PlannedSegment] {
         var result = [PlannedSegment(kind: .warmUp, round: 0, target: warmUp)]
-        for round in 1...max(1, rounds) {
+        let last = max(1, rounds)
+        for round in 1...last {
             result.append(PlannedSegment(kind: .run, round: round, target: run))
-            if walk > 0 { result.append(PlannedSegment(kind: .walk, round: round, target: walk)) }
+            if walk > 0, round < last { result.append(PlannedSegment(kind: .walk, round: round, target: walk)) }
         }
         result.append(PlannedSegment(kind: .coolDown, round: 0, target: coolDown))
         return result.filter { $0.target > 0 }
@@ -50,6 +52,26 @@ public struct Schedule: Codable, Hashable, Sendable {
 
     public var totalSeconds: Int { plannedSegments.reduce(0) { $0 + $1.target } }
     public var totalRunSeconds: Int { run * rounds }
+    /// Walk breaks between the runs: one fewer than the rounds.
+    public var totalWalkSeconds: Int { walk * max(0, rounds - 1) }
+
+    /// The segments as recorded, with the walk after the last run counted as cool-down (G7).
+    /// The watch still offers a walk after the last planned run; when no run follows it, that walk
+    /// adds to the cool-down, or becomes the cool-down when the run ended without one. A walk that
+    /// another run follows stays: it belongs to the extra round. Safe to apply more than once.
+    public func mergingClosingWalk(_ segments: [SegmentRecord]) -> [SegmentRecord] {
+        guard let lastRun = segments.lastIndex(where: { $0.kind == .run }),
+              segments[lastRun].round >= rounds,
+              lastRun + 1 < segments.count, segments[lastRun + 1].kind == .walk else { return segments }
+        var result = segments
+        let walk = result.remove(at: lastRun + 1)
+        if let coolDown = result.firstIndex(where: { $0.kind == .coolDown }) {
+            result[coolDown].actual += walk.actual
+        } else {
+            result.append(SegmentRecord(kind: .coolDown, round: 0, target: coolDown, actual: walk.actual))
+        }
+        return result
+    }
 
     /// e.g. "5 × 3 min run / 2 min walk"
     public var summary: String {

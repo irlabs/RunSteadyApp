@@ -28,7 +28,8 @@ final class WatchDemoUITests: XCTestCase {
         launch()
         let next = app.buttons["nextButton"]
         XCTAssertTrue(app.buttons["startButton"].waitForExistence(timeout: 15))
-        XCTAssertEqual(app.staticTexts["startDuration"].label, "≈ 34 min")
+        // G7: no walk after the last run, so week 2 is 2 min shorter.
+        XCTAssertEqual(app.staticTexts["startDuration"].label, "≈ 32 min")
         XCTAssertFalse(app.staticTexts["welcomeBack"].exists)
         Thread.sleep(forTimeInterval: 2.5)
         app.buttons["startButton"].tap()
@@ -43,9 +44,10 @@ final class WatchDemoUITests: XCTestCase {
         for round in 1...6 {
             waitForTarget(extra: round == 2 ? 1.6 : 0.4) // round 2: linger past the target
             if round == 2 {
-                // Past the target the big time counts up with a plus; heart rate shows its zone.
+                // Past the target the big time counts up with a plus. G3: the zone is a dot, no "Z3" label.
                 XCTAssertTrue(clock.label.hasPrefix("+"), clock.label)
-                XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label CONTAINS 'bpm · Z'")).firstMatch.exists)
+                XCTAssertTrue(app.staticTexts["bpm"].exists)
+                XCTAssertFalse(app.staticTexts.matching(NSPredicate(format: "label CONTAINS 'bpm · Z'")).firstMatch.exists)
             }
             next.tap() // -> walk
             if round == 3 {
@@ -108,6 +110,10 @@ final class WatchDemoUITests: XCTestCase {
         check.tap()
         Thread.sleep(forTimeInterval: 1.5)
 
+        // G2: haptic and chime checks.
+        reveal(app.buttons["haptic-hapticThenChime"]).tap()
+        Thread.sleep(forTimeInterval: 1)
+
         reveal(app.buttons["voiceLab"]).tap()
         XCTAssertTrue(app.buttons["rateToggle"].waitForExistence(timeout: 5))
         let before = app.buttons["rateToggle"].label
@@ -121,7 +127,7 @@ final class WatchDemoUITests: XCTestCase {
         reveal(app.buttons["fakeRun"]).tap()
         Thread.sleep(forTimeInterval: 1)
         reveal(app.buttons["logLink"]).tap()
-        let logged = NSPredicate(format: "label CONTAINS 'Fake run' OR label CONTAINS 'Test workout'")
+        let logged = NSPredicate(format: "label CONTAINS 'Fake run' OR label CONTAINS 'Test workout' OR label CONTAINS 'Haptic'")
         XCTAssertTrue(app.staticTexts.matching(logged).firstMatch.waitForExistence(timeout: 5))
         Thread.sleep(forTimeInterval: 2)
     }

@@ -10,7 +10,9 @@ import Testing
         var segments = [SegmentRecord(kind: .warmUp, round: 0, target: 300, actual: 300)]
         for round in 1...schedule.rounds {
             segments.append(SegmentRecord(kind: .run, round: round, target: 120, actual: 120))
-            segments.append(SegmentRecord(kind: .walk, round: round, target: 120, actual: 120 + walkOverrun))
+            if round < schedule.rounds {
+                segments.append(SegmentRecord(kind: .walk, round: round, target: 120, actual: 120 + walkOverrun))
+            }
         }
         segments.append(SegmentRecord(kind: .coolDown, round: 0, target: 300, actual: 300))
         return SessionRecord(startedAt: t0.addingTimeInterval(-daysAgo * 86_400), schedule: schedule,
@@ -23,7 +25,7 @@ import Testing
         checkIn.reasons = [Deviation.Kind.walkExtended.rawValue: .neededRest]
         let line = RunSummary.line(record(daysAgo: 2, walkOverrun: 30), checkIn: checkIn, now: t0)
         #expect(line == "2 days ago: week 2 session 3, 6 of 6 rounds, 3.21 km, Great, comfortable, No issues. "
-                + "Walk breaks ran long (+3:00): Needed the rest.")
+                + "Walk breaks ran long (+2:30): Needed the rest.")
     }
 
     @Test func manualRunsWithoutCheckIn() {

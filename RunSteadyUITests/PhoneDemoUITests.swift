@@ -26,10 +26,17 @@ final class PhoneDemoUITests: XCTestCase {
         // Check-in chat
         app.buttons["checkInButton"].tap()
         pause(2)
-        // Effort slider (F11): slide down to an easy 3, which counts as "Great".
-        let slider = app.sliders["effortSlider"]
+        // Effort slider (G5): starts empty, a tap does nothing, a drag to an easy 3 ("Great") sets it.
+        let slider = app.descendants(matching: .any).matching(identifier: "effortSlider").firstMatch
         XCTAssertTrue(slider.waitForExistence(timeout: 5))
-        slider.adjust(toNormalizedSliderPosition: 0.22)
+        XCTAssertFalse(app.buttons["effortDone"].exists)
+        slider.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        pause(0.8)
+        XCTAssertFalse(app.buttons["effortDone"].exists)
+        slider.coordinate(withNormalizedOffset: CGVector(dx: 0.7, dy: 0.5))
+            .press(forDuration: 0.1, thenDragTo: slider.coordinate(withNormalizedOffset: CGVector(dx: 0.25, dy: 0.5)),
+                   withVelocity: .slow, thenHoldForDuration: 0.4)
+        XCTAssertTrue(app.buttons["effortDone"].waitForExistence(timeout: 3))
         pause(1.2)
         app.buttons["effortDone"].tap()
         XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH '3 · '")).firstMatch.waitForExistence(timeout: 3))
@@ -50,23 +57,35 @@ final class PhoneDemoUITests: XCTestCase {
             let feltGood = app.buttons["reason-feltGood"]
             (feltGood.exists ? feltGood : skip).tap()
         }
-        // The same offer also appears on Today underneath the sheet; tap the one in the chat.
-        // With a coach key, typed answers add a note-extraction call before the wrap-up, so wait for both.
-        let offers = app.buttons.matching(identifier: "useSuggestionButton")
-        let both = expectation(for: NSPredicate(format: "count >= 2"), evaluatedWith: offers)
-        wait(for: [both], timeout: 45)
+        // G10: the choice of the next session is pinned under the conversation.
+        // With a coach key, typed answers add a note-extraction call before the wrap-up, so wait long.
+        let use = app.buttons["useSuggestionButton"]
+        XCTAssertTrue(use.waitForExistence(timeout: 45))
         pause(3)
-        offers.element(boundBy: offers.count - 1).tap()
-        pause(1)
         let field = app.textFields["chatField"]
         field.tap()
         field.typeText("Felt easy, so I did an extra round.")
         app.buttons["chatSend"].tap()
         pause(4)
-        app.buttons["checkInDone"].tap()
+        // G11: closing settles nothing. Today keeps the card and reopens the conversation at its end.
+        app.buttons["checkInClose"].tap()
+        let choose = app.buttons["chooseNextButton"]
+        XCTAssertTrue(choose.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Week 2 · Session 3"].exists) // next session not changed yet
+        pause(2)
+        choose.tap()
+        XCTAssertTrue(use.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label == 'Felt easy, so I did an extra round.'"))
+            .firstMatch.exists)
+        pause(2)
+        use.tap() // applies it and closes the check-in
 
-        // Today now shows the accepted next step
+        // Today now shows the accepted next step; the watch confirms it (G9, simulated in the demo).
         XCTAssertTrue(app.staticTexts["Week 3"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["chooseNextButton"].exists)
+        let line = app.staticTexts["watchPlanLine"]
+        let confirmed = expectation(for: NSPredicate(format: "label == 'On your watch'"), evaluatedWith: line)
+        wait(for: [confirmed], timeout: 8)
         pause(2.5)
 
         // Manual schedule overrides the plan
@@ -123,6 +142,25 @@ final class PhoneDemoUITests: XCTestCase {
         app.buttons["coachNotesButton"].tap()
         XCTAssertTrue(app.staticTexts["Left knee a bit stiff afterwards."].waitForExistence(timeout: 5))
         pause(2.5)
+    }
+
+    /// G4: tapping the check-in notification opens the run's summary full screen (here via -demoOpenRun).
+    func testRunSummaryFromNotification() {
+        app.terminate()
+        app.launchArguments = ["-demoSeed", "YES", "-demoOpenRun", "YES"]
+        app.launch()
+        let start = app.buttons["startCheckInButton"]
+        XCTAssertTrue(start.waitForExistence(timeout: 15))
+        XCTAssertTrue(app.staticTexts["Steady does it!"].exists)
+        pause(2.5)
+        start.tap()
+        XCTAssertTrue(app.descendants(matching: .any).matching(identifier: "effortSlider").firstMatch
+            .waitForExistence(timeout: 5))
+        pause(1.5)
+        // Closing before the answers are in keeps the run waiting for its check-in on Today.
+        app.buttons["checkInClose"].tap()
+        XCTAssertTrue(app.buttons["checkInButton"].waitForExistence(timeout: 5))
+        pause(1.5)
     }
 
     /// Hidden diagnostics: long-press the title on Today, then show the log.

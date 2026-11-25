@@ -10,6 +10,11 @@ final class StoredSession {
     var startedAt: Date
     var payload: Data
     var checkInPayload: Data?
+    /// The check-in conversation from the answers on (phone only, G11), so it can be reopened at its end.
+    /// Optional, so stores from before it still open.
+    var chatPayload: Data?
+    /// Key of the suggestion this check-in left to choose (G11). Cleared by any choice of the next session.
+    var openChoice: String?
 
     init(_ record: SessionRecord, checkIn: CheckIn? = nil) {
         id = record.id
@@ -167,3 +172,12 @@ extension Array where Element == StoredSession {
                                            hasOpenInjury: hasOpenInjury)
     }
 }
+
+#if os(iOS)
+extension StoredSession {
+    var chat: [ChatMessage] {
+        get { chatPayload.flatMap { try? JSONDecoder().decode([ChatMessage].self, from: $0) } ?? [] }
+        set { chatPayload = try? JSONEncoder().encode(newValue) }
+    }
+}
+#endif

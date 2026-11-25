@@ -9,8 +9,12 @@ import WatchConnectivity
 /// context (latest value wins). The phone re-sends its latest
 /// plan whenever the session (re)activates or the watch state changes, so one failed send
 /// does not leave the watch on a stale schedule.
-/// The watch publishes its `AppVersion` the same way (watch → phone application context), so the
-/// phone always has the version of the watch app that last ran, even when it is out of range.
+/// The watch publishes its `AppVersion` and the plan it holds (`PlanReceipt`, G9) the same way
+/// (watch → phone application context), so the phone always knows what the watch app last had,
+/// even when it is out of range.
+///
+/// Plans and receipts land in an `Inbox` (G8): the app delegate activates the session at launch,
+/// before the app model listens, and a plan delivered in that moment used to be dropped.
 ///
 /// Every event is written to the diagnostics log (`Diag`), with the delivery path and, for
 /// sessions, the delay since the watch sent it.
@@ -27,7 +31,14 @@ final class Connectivity: NSObject, WCSessionDelegate {
     var onSession: (@MainActor (SessionRecord) -> Void)? {
         didSet { Task { @MainActor in self.flushPendingSessions() } }
     }
-    var onPlan: (@MainActor (ActivePlan, PlanInfo?) -> Void)?
+    struct ReceivedPlan {
+        let plan: ActivePlan
+        let info: PlanInfo?
+    }
+    /// Watch: plans from the phone. Held until the watch model listens (G8).
+    @MainActor let plans = Inbox<ReceivedPlan>()
+    /// Phone: what the watch reports it holds (G9). Held until the app model listens.
+    @MainActor let watchPlans = Inbox<PlanReceipt>()
     /// Phone only: the watch app reported its version, or its install state changed.
     var onWatchState: (@MainActor (_ watch: AppVersion?, _ installed: Bool) -> Void)?
     /// A diagnostics test run (`SessionRecord.isTest`), with the path it came by and when it was sent.
@@ -110,15 +121,16 @@ final class Connectivity: NSObject, WCSessionDelegate {
     #endif
 
     /// Remembers `plan` and pushes it now if possible; otherwise it goes out on the next activation.
-    func send(_ plan: ActivePlan, info: PlanInfo? = nil) {
+    /// With `viaMessage` (the resend button, G9) it also goes as a live message when the watch is reachable.
+    func send(_ plan: ActivePlan, info: PlanInfo? = nil, viaMessage: Bool = false) {
         lock.withLock {
             latestPlan = plan
             latestInfo = info
         }
-        pushLatestPlan()
+        pushLatestPlan(viaMessage: viaMessage)
     }
 
-    private func pushLatestPlan() {
+    private func pushLatestPlan(viaMessage: Bool = false) {
         let (latest, info) = lock.withLock { (latestPlan, latestInfo) }
         guard let plan = latest, WCSession.isSupported() else { return }
         let session = WCSession.default
@@ -135,20 +147,39 @@ final class Connectivity: NSObject, WCSessionDelegate {
         do {
             var context: [String: Any] = ["plan": try JSONEncoder().encode(plan)]
             if let info { context["planInfo"] = try JSONEncoder().encode(info) }
+            // Every push differs, so the watch gets it (and confirms it) even when the plan is unchanged.
+            context["sentAt"] = Date().timeIntervalSince1970
             try session.updateApplicationContext(context)
+            Diag.log("WC", "Plan sent: \(plan.title)")
+            if viaMessage, session.isReachable {
+                session.sendMessage(context, replyHandler: nil) { error in
+                    Diag.log("WC", "Plan message failed: \(error.localizedDescription)")
+                }
+            }
         } catch {
             Diag.log("WC", "Plan send failed: \(error.localizedDescription)")
         }
     }
 
     #if os(watchOS)
-    private func publishVersion() {
+    private let receiptKey = "planReceipt"
+
+    /// G9: the plan this watch now holds. Kept, so it is reported again after a relaunch.
+    func report(_ receipt: PlanReceipt) {
+        UserDefaults.standard.set(try? JSONEncoder().encode(receipt), forKey: receiptKey)
+        publishState()
+    }
+
+    /// The app version and the plan receipt, in one context (each update replaces the whole context).
+    private func publishState() {
         guard WCSession.default.activationState == .activated,
               let data = try? JSONEncoder().encode(Self.ownVersion) else { return }
+        var context: [String: Any] = ["appVersion": data]
+        if let receipt = UserDefaults.standard.data(forKey: receiptKey) { context["planReceipt"] = receipt }
         do {
-            try WCSession.default.updateApplicationContext(["appVersion": data])
+            try WCSession.default.updateApplicationContext(context)
         } catch {
-            Diag.log("WC", "Version publish failed: \(error.localizedDescription)")
+            Diag.log("WC", "State publish failed: \(error.localizedDescription)")
         }
     }
     #endif
@@ -195,7 +226,8 @@ final class Connectivity: NSObject, WCSessionDelegate {
         handle(session.receivedApplicationContext, path: "context (on activation)")
         pushLatestPlan()
         #if os(watchOS)
-        publishVersion()
+        // After a plan that came with the activation has been taken (main actor), so the report has it.
+        Task { @MainActor in self.publishState() }
         #else
         refreshWatchState()
         #endif
@@ -263,13 +295,17 @@ final class Connectivity: NSObject, WCSessionDelegate {
         if let data = message["plan"] as? Data, let plan = try? JSONDecoder().decode(ActivePlan.self, from: data) {
             let info = (message["planInfo"] as? Data).flatMap { try? JSONDecoder().decode(PlanInfo.self, from: $0) }
             Diag.log("WC", "Plan via \(path): \(plan.title)\(info?.zones == nil ? "" : ", with zones")")
-            Task { @MainActor in self.onPlan?(plan, info) }
+            Task { @MainActor in self.plans.receive(ReceivedPlan(plan: plan, info: info)) }
         }
         #if os(iOS)
         if let data = message["appVersion"] as? Data, let version = try? JSONDecoder().decode(AppVersion.self, from: data) {
             Diag.log("WC", "Watch version via \(path): \(version.label)")
             lock.withLock { lastWatchVersion = version }
             reportWatchState(.default)
+        }
+        if let data = message["planReceipt"] as? Data, let receipt = try? JSONDecoder().decode(PlanReceipt.self, from: data) {
+            Diag.log("WC", "Watch holds \(receipt.plan.title) via \(path)")
+            Task { @MainActor in self.watchPlans.receive(receipt) }
         }
         #endif
     }

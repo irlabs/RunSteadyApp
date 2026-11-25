@@ -169,7 +169,8 @@ final class WorkoutManager: ObservableObject {
         timer = nil
         let record = SessionRecord(
             startedAt: startedAt, schedule: plan.schedule, stageIndex: plan.stageIndex, sessionInStage: plan.sessionInStage,
-            segments: engine.completed, distanceMeters: distance,
+            // G7: the walk after the last run counts as cool-down.
+            segments: plan.schedule.mergingClosingWalk(engine.completed), distanceMeters: distance,
             averageHeartRate: heartRateTime > 0 ? heartRateSum / heartRateTime : nil)
         lastRecord = record
         savedToHealth = sensor.savesToHealth

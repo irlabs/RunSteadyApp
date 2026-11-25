@@ -26,6 +26,9 @@ final class AppModel: ObservableObject {
     let isDemo: Bool
     /// Whether the watch runs the same build as this phone app. `nil` in demo mode.
     @Published private(set) var watchStatus: WatchAppStatus?
+    /// G9: the plan the watch reports it holds, and when this app last sent its own.
+    @Published private(set) var watchPlan: PlanReceipt?
+    @Published private(set) var planSentAt: Date?
 
     init() {
         isDemo = UserDefaults.standard.bool(forKey: "demoSeed")
@@ -39,6 +42,17 @@ final class AppModel: ObservableObject {
         if !isDemo {
             Connectivity.shared.onWatchState = { [weak self] watch, installed in
                 self?.watchStatus = .evaluate(phone: Connectivity.ownVersion, watch: watch, watchAppInstalled: installed)
+            }
+            Connectivity.shared.watchPlans.handler = { [weak self] receipt in self?.watchPlan = receipt }
+        } else {
+            // Demo: the watch holds the seeded plan.
+            let stored = storedPlan
+            watchPlan = PlanReceipt(plan: stored.plan, decidedAt: stored.updatedAt, reportedAt: .now)
+            // -demoOpenRun YES: as if the check-in notification for the latest run was tapped (G4).
+            if UserDefaults.standard.bool(forKey: "demoOpenRun"),
+               let latest = try? container.mainContext.fetch(
+                   FetchDescriptor<StoredSession>(sortBy: [SortDescriptor(\.startedAt, order: .reverse)])).first {
+                RunRouter.shared.open(latest.id)
             }
         }
         Connectivity.shared.activate()
@@ -81,11 +95,28 @@ final class AppModel: ObservableObject {
     // MARK: Plan
 
     /// Sends the active plan with what the watch needs to handle a break on its own (F15) and the zones.
-    func pushPlan() {
-        guard !isDemo else { return }
+    /// - Parameter viaMessage: also as a live message (the resend button, G9).
+    func pushPlan(viaMessage: Bool = false) {
         let stored = storedPlan
+        guard !isDemo else {
+            // Demo: the watch confirms a moment later.
+            let receipt = PlanReceipt(plan: stored.plan, decidedAt: stored.updatedAt, reportedAt: .now)
+            planSentAt = .now
+            Task {
+                try? await Task.sleep(for: .seconds(1.5))
+                watchPlan = receipt
+            }
+            return
+        }
         let info = PlanInfo(decidedAt: stored.updatedAt, decision: decision(for: stored.plan), zones: zones)
-        Connectivity.shared.send(stored.plan, info: info)
+        planSentAt = .now
+        Connectivity.shared.send(stored.plan, info: info, viaMessage: viaMessage)
+    }
+
+    /// G9: the watch reported an older plan.
+    func resendPlan() {
+        Diag.log("Plan", "Resend: watch holds \(watchPlan?.plan.title ?? "?"), phone \(storedPlan.plan.title)")
+        pushPlan(viaMessage: true)
     }
 
     /// Why the rules chose `plan`, when it is today's suggestion; nil lets the watch infer it.
@@ -106,6 +137,35 @@ final class AppModel: ObservableObject {
         if !plan.isManual { stored.dismissedSuggestion = nil }
         try? container.mainContext.save()
         pushPlan()
+    }
+
+    /// The suggestion still waits for "Use this" / "Keep mine": it differs from the active plan and
+    /// wasn't declined. The same test as the offer on Today.
+    func needsDecision(_ suggestion: Suggestion) -> Bool {
+        ActivePlan(suggestion) != storedPlan.plan && storedPlan.dismissedSuggestion != suggestion.key
+    }
+
+    /// "Use this" / "Try it".
+    func accept(_ suggestion: Suggestion) {
+        apply(ActivePlan(suggestion))
+        settleChoice()
+    }
+
+    /// "Keep mine" / "Stay steady" / "Ignore". With a schedule of their own, the runner keeps it
+    /// even when the offer has a fallback.
+    func decline(_ suggestion: Suggestion) {
+        keepCurrent(insteadOf: suggestion, staying: storedPlan.plan.isManual)
+        settleChoice()
+    }
+
+    /// The runner chose their next session (on a card, in the check-in or in the editor): no check-in
+    /// waits for that choice any more (G11).
+    func settleChoice() {
+        let open = (try? container.mainContext.fetch(
+            FetchDescriptor<StoredSession>(predicate: #Predicate { $0.openChoice != nil }))) ?? []
+        guard !open.isEmpty else { return }
+        open.forEach { $0.openChoice = nil }
+        try? container.mainContext.save()
     }
 
     /// - Parameter staying: keep the active plan exactly as it is (e.g. "Keep it easier" after a manual run),
@@ -157,14 +217,44 @@ final class AppModel: ObservableObject {
         content.title = "Welcome back!"
         content.body = "How was your run? Three quick questions from Steady."
         content.sound = .default
+        // G4: tapping it opens this run's summary.
+        content.userInfo = [RunRouter.sessionKey: record.id.uuidString]
         UNUserNotificationCenter.current().add(UNNotificationRequest(identifier: record.id.uuidString, content: content, trigger: nil)) { error in
             Diag.log("Notify", "Check-in prompt for \(record.shortID) (app \(Diag.phase)): \(error.map { "failed: \($0.localizedDescription)" } ?? "ok")")
         }
     }
 }
 
+/// G4: which run's summary to show full screen, after the check-in notification was tapped.
+@MainActor
+final class RunRouter: ObservableObject {
+    static let shared = RunRouter()
+    static let sessionKey = "sessionID"
+
+    struct Request: Identifiable, Equatable { let id: UUID }
+    @Published var request: Request?
+
+    func open(_ sessionID: UUID) {
+        Diag.log("Notify", "Open run \(sessionID.short)")
+        request = Request(id: sessionID)
+    }
+
+    /// The session id a check-in notification carries. Older ones only had it as their identifier.
+    nonisolated static func sessionID(in request: UNNotificationRequest) -> UUID? {
+        if let id = (request.content.userInfo[sessionKey] as? String).flatMap(UUID.init(uuidString:)) { return id }
+        return UUID(uuidString: request.identifier)
+    }
+}
+
 struct RootView: View {
+    @ObservedObject private var router = RunRouter.shared
+
     var body: some View {
+        tabs
+            .fullScreenCover(item: $router.request) { RunSummaryCover(sessionID: $0.id) }
+    }
+
+    private var tabs: some View {
         TabView {
             TodayView()
                 .tabItem { Label("Today", systemImage: "figure.run") }

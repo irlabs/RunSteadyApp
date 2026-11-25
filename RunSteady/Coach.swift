@@ -1,9 +1,9 @@
 import Foundation
 import RunSteadyKit
 
-struct ChatMessage: Identifiable, Hashable {
-    enum Role { case coach, user }
-    let id = UUID()
+struct ChatMessage: Identifiable, Hashable, Codable {
+    enum Role: String, Codable { case coach, user }
+    var id = UUID()
     let role: Role
     var text: String
 }
